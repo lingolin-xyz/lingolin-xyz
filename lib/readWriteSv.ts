@@ -27,7 +27,7 @@ async function main() {
     console.log("dataWritten", dataWritten)
 
     const newIds = [
-      ...new Set(dataWritten.map((item) => item.data.created).flat()),
+      ...new Set(dataWritten.map((item: any) => item.data.created).flat()),
     ]
     console.log("created ids:", newIds)
 
