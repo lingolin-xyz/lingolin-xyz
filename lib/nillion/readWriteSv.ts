@@ -1,7 +1,7 @@
 // @ts-expect-error - secretvaults is not typed
 import { SecretVaultWrapper } from "secretvaults"
 import { v4 as uuidv4 } from "uuid"
-import { orgConfig } from "./nillion"
+import { orgConfig } from "./orgConfig"
 
 const SCHEMA_ID = "YOUR_SCHEMA_ID"
 
