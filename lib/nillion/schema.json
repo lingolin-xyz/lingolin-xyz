@@ -11,13 +11,8 @@
         "coerce": true
       },
       "word": {
-        "type": "object",
-        "properties": {
-          "%share": {
-            "type": "string"
-          }
-        },
-        "required": ["%share"]
+        "type": "string",
+        "required": ["word"]
       },
       "translation": {
         "type": "string",

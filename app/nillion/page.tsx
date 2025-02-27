@@ -50,7 +50,7 @@ const NillionPage = () => {
   const callToSearchByWord = async () => {
     const res = await axios.post("/api/nillion/searchByWord")
     console.log("searching by word:")
-    console.log(res.data.trans)
+    console.log(res.data.translations)
   }
 
   return (

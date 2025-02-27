@@ -21,7 +21,7 @@ export async function writeToNodes(
       {
         key,
         translation: translation.translation,
-        word: { "%share": translation.word },
+        word: translation.word,
         _id: crypto.randomUUID(),
       },
     ])
@@ -55,6 +55,9 @@ export async function readFromNodes(
     translation: record.translation,
     word: record.word,
   }))
+
+  console.log(" 💜  the translations i have are...", translations)
+
   return translations
 }
 
