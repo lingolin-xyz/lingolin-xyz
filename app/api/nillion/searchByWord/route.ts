@@ -6,9 +6,10 @@ export async function POST(req: Request) {
 
   // const trans = await readFromNodes()
 
-  const theWordToSearch = "yt3950nidb"
-  const translations = await getTranslationByWord(theWordToSearch)
-  console.log({ translations })
+  const theWordToSearch = "fv4atnehj05"
+  const translations = await readFromNodes(null, "maola")
+  //   const translations = await getTranslationByWord(theWordToSearch)
+  //   console.log({ translations })
 
   return NextResponse.json({ results: translations })
 }

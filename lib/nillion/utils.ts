@@ -33,13 +33,27 @@ export async function writeToNodes(
   }
 }
 
-export async function readFromNodes() {
+export async function readFromNodes(
+  wordFilter?: string | null,
+  translationFilter?: string | null
+) {
   await nillion.init()
-  const data = await nillion.readFromNodes({})
+  const filter = wordFilter ? { word: wordFilter } : ({} as any)
+  if (translationFilter) {
+    filter.translation = translationFilter
+  }
+
+  console.log(" 💜  the filter i have is..." + JSON.stringify(filter))
+
+  const data = await nillion.readFromNodes(filter)
+
+  console.log(" 💜  the data i have is...", data)
+
   const translations = data.map((record: any) => ({
     id: record._id,
     key: record.key,
     translation: record.translation,
+    word: record.word,
   }))
   return translations
 }

@@ -15,8 +15,8 @@ export async function POST(req: Request) {
   const randonWord = Math.random().toString(36).substring(2, 15)
 
   await writeToNodes(randonWord, {
-    word: randonWord,
-    translation: "peperrrrrr",
+    word: "manolo",
+    translation: "maola",
   })
 
   console.log(" 💚  SAVEDDDDDDDD!", randonWord)
