@@ -1,0 +1,24 @@
+{
+  "variables": {
+    "word": {
+      "type": "string",
+      "description": "The encrypted value of the word to find its translation"
+    }
+  },
+  "pipeline": [
+    {
+      "$match": {
+        "word.%share": "##word"
+      }
+    },
+    {
+      "$project": {
+        "_id": 1,
+        "word": {
+          "%share": "$word.%share"
+        },
+        "translation": 1
+      }
+    }
+  ]
+}
