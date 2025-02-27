@@ -42,6 +42,16 @@ const NillionPage = () => {
     })
   }
 
+  const callToFlushData = async () => {
+    const res = await axios.post("/api/nillion/flush")
+    console.log({ res })
+  }
+
+  const callToSearchByWord = async () => {
+    const res = await axios.post("/api/nillion/searchByWord")
+    console.log({ res })
+  }
+
   return (
     <div className="bg-orange-200 p-12 rounded-3xl mt-12 flex flex-col gap-3 items-center justify-center">
       <HugeTitle>Nillion playground</HugeTitle>
@@ -54,6 +64,12 @@ const NillionPage = () => {
         </Button>
         <Button onClick={callToReadTranslations} size="lg">
           Read translations
+        </Button>
+        <Button onClick={callToSearchByWord} size="lg">
+          search by word
+        </Button>
+        <Button onClick={callToFlushData} size="lg">
+          Flush data
         </Button>
       </div>
     </div>

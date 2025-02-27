@@ -1,14 +1,14 @@
-import { readFromNodes } from "@/lib/nillion/utils"
+import { getTranslationByWord, readFromNodes } from "@/lib/nillion/utils"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
-  //   const body = await req.json()
-  //   const { text, userId } = body
-
   console.log(" 🥚 Read translations API started!!")
 
-  const translations = await readFromNodes()
-  console.log({ translations })
+  // const trans = await readFromNodes()
 
-  return NextResponse.json({ translations })
+  const theWordToSearch = "yt3950nidb"
+  const trans = await getTranslationByWord(theWordToSearch)
+  console.log({ trans })
+
+  return NextResponse.json({ finished: true })
 }
