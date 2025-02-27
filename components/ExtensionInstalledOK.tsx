@@ -13,7 +13,10 @@ const ExtensionInstalledOK = () => {
   useEffect(() => {
     if (user)
       window.postMessage(
-        { type: "LINGOLIN_USER_ID", data: "Hello from Next.js!" },
+        {
+          type: "LINGOLIN_USER_ID",
+          data: { id: user.id, email: user.email?.address },
+        },
         "*"
       )
     else {
@@ -27,7 +30,12 @@ const ExtensionInstalledOK = () => {
     <div>
       <Title>ExtensionInstalledOK</Title>
       {user ? (
-        <Button onClick={sendMessage}>Send Message</Button>
+        <div>
+          <Button onClick={sendMessage}>Send Message</Button>
+          <div>
+            <pre className="text-xs">{JSON.stringify(user, null, 2)}</pre>
+          </div>
+        </div>
       ) : (
         <LoginButton />
       )}
