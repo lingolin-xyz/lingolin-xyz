@@ -3,7 +3,7 @@ import { SecretVaultWrapper } from "secretvaults"
 import { orgConfig } from "./orgConfig"
 import schema from "./schema.json" assert { type: "json" }
 
-async function main() {
+export const createSchema = async () => {
   try {
     const org = new SecretVaultWrapper(
       orgConfig.nodes,
@@ -19,5 +19,3 @@ async function main() {
     process.exit(1)
   }
 }
-
-main()

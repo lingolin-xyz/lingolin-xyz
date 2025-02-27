@@ -8,15 +8,29 @@ const nillion = new SecretVaultWrapper(
   process.env.SECRET_VAULT_SCHEMA_ID!
 )
 
-export async function writeToNodes(key: string, translation: string) {
-  await nillion.init()
-  const result = await nillion.writeToNodes([
-    {
-      key,
-      translation: { "%allot": translation },
-    },
-  ])
-  return result
+export async function writeToNodes(
+  key: string,
+  translation: {
+    word: string
+    translation: string
+  }
+) {
+  try {
+    await nillion.init()
+    const result = await nillion.writeToNodes([
+      {
+        key,
+        translation: translation.translation,
+        word: { "%share": translation.word },
+        _id: crypto.randomUUID(),
+      },
+    ])
+    console.log("✅ Successfully wrote to nodes:", result)
+    return result
+  } catch (error) {
+    console.error("❌ Failed to use SecretVaultWrapper:", JSON.stringify(error))
+    process.exit(1)
+  }
 }
 
 export async function readFromNodes() {
