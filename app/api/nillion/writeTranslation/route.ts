@@ -1,16 +1,25 @@
+import { writeToNodes } from "@/lib/nillion/utils"
+
 export async function POST(req: Request) {
-  const body = await req.json()
-  const { text, userId } = body
+  //   const body = await req.json()
+  //   const { text, userId } = body
 
-  if (!text || !userId) {
-    return new Response(
-      JSON.stringify({
-        error: "Missing required parameters: text and userId",
-      })
-    )
-  }
+  //   if (!text || !userId) {
+  //     return new Response(
+  //       JSON.stringify({
+  //         error: "Missing required parameters: text and userId",
+  //       })
+  //     )
+  //   }
 
-  console.log(" 🥚 TRANSLATE API STARTED!", text, userId)
+  const randonWord = Math.random().toString(36).substring(2, 15)
+
+  await writeToNodes(randonWord, {
+    word: randonWord,
+    translation: "peperrrrrr",
+  })
+
+  console.log(" 💚  SAVEDDDDDDDD!", randonWord)
 
   return new Response(JSON.stringify({ finished: true }), {
     status: 200,
