@@ -3,8 +3,11 @@
 import LoginButton from "@/components/LoginButton"
 import { usePrivy } from "@privy-io/react-auth"
 import LoggedInHome from "@/components/LoggedInHome"
+import ExtensionInstalledOK from "@/components/ExtensionInstalledOK"
 import NoExtensionFound from "@/components/NoExtensionFound"
+import LandingWhileLoading from "@/components/LandingWhileLoading"
 import { useEffect, useState } from "react"
+import { AnimatePresence, motion } from "framer-motion"
 
 export default function Home() {
   const { user } = usePrivy()
@@ -23,12 +26,27 @@ export default function Home() {
       setIsLoading(false)
     }, 200)
   }, [])
+
+  return (
+    <div>
+      <AnimatePresence>
+        {isLoading && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            // transition={{ duration: 0.5 }}
+          >
+            <LandingWhileLoading />
+          </motion.div>
+        )}
+      </AnimatePresence>
+      {hasTheExtension && <ExtensionInstalledOK />}
+      {!hasTheExtension && <div>ALGO AQUI</div>}
+    </div>
+  )
   if (isLoading) {
-    return (
-      <div className="py-6 max-w-7xl mx-auto w-full">
-        <p>Loading...</p>
-      </div>
-    )
+    return <LandingWhileLoading />
   }
 
   if (!hasTheExtension) {

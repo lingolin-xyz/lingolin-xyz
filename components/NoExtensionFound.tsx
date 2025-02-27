@@ -5,3 +5,5 @@ const NoExtensionFound = () => {
     </div>
   )
 }
+
+export default NoExtensionFound
