@@ -48,21 +48,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <PrivyProviders>
-      <html lang="en" suppressHydrationWarning>
-        <body
-          className={`${grandstander.className} ${grandstander.variable} antialiased selection:bg-emerald-300 selection:text-black`}
-        >
-          <div className="max-w-7xl mx-auto">
-            <NoiseLayer />
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${grandstander.className} ${grandstander.variable} antialiased selection:bg-emerald-300 selection:text-black`}
+      >
+        <div className="max-w-7xl mx-auto">
+          <NoiseLayer />
+          <PrivyProviders>
             <div className="p-4 max-w-7xl mx-auto">
               <Header />
               {children}
             </div>
-          </div>
-          <Toaster />
-        </body>
-      </html>
-    </PrivyProviders>
+          </PrivyProviders>
+        </div>
+        <Toaster />
+      </body>
+    </html>
   );
 }
