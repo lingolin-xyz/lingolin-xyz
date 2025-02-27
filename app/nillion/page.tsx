@@ -35,7 +35,7 @@ const NillionPage = () => {
   const callToReadTranslations = async () => {
     const res = await axios.post("/api/nillion/readTranslations")
     const { translations } = res.data
-    console.log(translations)
+    console.table(translations)
     toast({
       title: "Translations read",
       description: "Translations read successfully",
@@ -49,7 +49,8 @@ const NillionPage = () => {
 
   const callToSearchByWord = async () => {
     const res = await axios.post("/api/nillion/searchByWord")
-    console.log({ res })
+    console.log("searching by word:")
+    console.log(res.data.trans)
   }
 
   return (

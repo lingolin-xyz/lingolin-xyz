@@ -58,7 +58,12 @@ export const flushData = async () => {
 
 export async function getTranslationByWord(word: string) {
   try {
-    await nillion.init()
+    const collection = new SecretVaultWrapper(
+      orgConfig.nodes,
+      orgConfig.orgCredentials,
+      process.env.SECRET_VAULT_SCHEMA_ID!
+    )
+    await collection.init()
 
     // Create a query to find translations by word
     const query = {
