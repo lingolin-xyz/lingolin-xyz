@@ -4,6 +4,7 @@ import { Grandstander } from "next/font/google";
 import { Toaster } from "@/components/ui/toaster";
 import NoiseLayer from "@/components/NoiseLayer";
 import Header from "@/components/Header";
+import PrivyProviders from "@/components/auth/PrivyProviders";
 
 const grandstander = Grandstander({
   subsets: ["latin"],
@@ -47,19 +48,21 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body
-        className={`${grandstander.className} ${grandstander.variable} antialiased selection:bg-emerald-300 selection:text-black`}
-      >
-        <div className="max-w-7xl mx-auto">
-          <NoiseLayer />
-          <div className="p-4 max-w-7xl mx-auto">
-            <Header />
-            {children}
+    <PrivyProviders>
+      <html lang="en" suppressHydrationWarning>
+        <body
+          className={`${grandstander.className} ${grandstander.variable} antialiased selection:bg-emerald-300 selection:text-black`}
+        >
+          <div className="max-w-7xl mx-auto">
+            <NoiseLayer />
+            <div className="p-4 max-w-7xl mx-auto">
+              <Header />
+              {children}
+            </div>
           </div>
-        </div>
-        <Toaster />
-      </body>
-    </html>
+          <Toaster />
+        </body>
+      </html>
+    </PrivyProviders>
   );
 }
