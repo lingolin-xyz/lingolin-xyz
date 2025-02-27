@@ -38,7 +38,7 @@ async function main() {
       dataRead.slice(0, web3ExperienceSurveyData.length)
     )
   } catch (error) {
-    console.error("❌ Failed to use SecretVaultWrapper:", error.message)
+    console.error("❌ Failed to use SecretVaultWrapper:", JSON.stringify(error))
     process.exit(1)
   }
 }
