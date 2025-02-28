@@ -1,7 +1,7 @@
 // @ts-expect-error - secretvaults is not typed
 import { SecretVaultWrapper } from "secretvaults"
 import { orgConfig } from "./orgConfig"
-import schema from "./schema.json" assert { type: "json" }
+import schema from "./credits-schema.json" assert { type: "json" }
 
 export const createSchema = async () => {
   try {

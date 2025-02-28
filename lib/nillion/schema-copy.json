@@ -10,7 +10,7 @@
         "format": "uuid",
         "coerce": true
       },
-      "word": {
+      "years_in_web3": {
         "type": "object",
         "properties": {
           "%share": {
