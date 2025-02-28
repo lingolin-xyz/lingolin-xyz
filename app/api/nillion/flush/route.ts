@@ -1,4 +1,4 @@
-import { flushData } from "@/lib/nillion/utils"
+import { flushCreditsData, flushTranslationsData } from "@/lib/nillion/utils"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
