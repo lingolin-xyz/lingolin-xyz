@@ -6,6 +6,7 @@ import NoiseLayer from "@/components/NoiseLayer"
 import Header from "@/components/Header"
 import PrivyProviders from "@/components/auth/PrivyProviders"
 import Footer from "@/components/Footer"
+
 const grandstander = Grandstander({
   subsets: ["latin"],
   variable: "--font-grandstander",
