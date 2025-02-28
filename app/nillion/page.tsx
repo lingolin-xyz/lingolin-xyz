@@ -1,12 +1,13 @@
 "use client"
 
 import HugeTitle from "@/components/HugeTitle"
+import Title from "@/components/Title"
 import { Button } from "@/components/ui/button"
 import { useToast } from "@/hooks/use-toast"
 import axios from "axios"
 
 // import { createSchema } from "@/lib/nillion/createSchema"
-// import { readFromNodes, writeToNodes } from "@/lib/nillion/utils"
+// import { readFromNodes, writeTranslation } from "@/lib/nillion/utils"
 
 const NillionPage = () => {
   const { toast } = useToast()
@@ -14,7 +15,7 @@ const NillionPage = () => {
 
   //   await createSchema()
 
-  //   await writeToNodes("hello", { word: "yo", translation: "pepe" })
+  //   await writeTranslation("hello", { word: "yo", translation: "pepe" })
   //   const translations = await readFromNodes()
   //   console.log({ translations })
 
@@ -53,10 +54,31 @@ const NillionPage = () => {
     console.log(res.data.translations)
   }
 
+  const callToWriteCredits = async () => {
+    const res = await axios.post("/api/nillion/writeCredits")
+    console.log({ res })
+  }
+
+  const callToReadCredits = async () => {
+    const res = await axios.post("/api/nillion/readCredits")
+    console.log({ res })
+  }
+
+  const callToSearchByUserId = async () => {
+    const res = await axios.post("/api/nillion/searchByUserId")
+    console.log({ res })
+  }
+
+  const callToFlushCreditsData = async () => {
+    const res = await axios.post("/api/nillion/flushCreditsData")
+    console.log({ res })
+  }
+
   return (
     <div className="bg-orange-200 p-12 rounded-3xl mt-12 flex flex-col gap-3 items-center justify-center">
       <HugeTitle>Nillion playground</HugeTitle>
       <div className="flex flex-col gap-3 w-60 mx-auto">
+        <Title>Translations</Title>
         <Button onClick={callToCreateSchema} size="lg">
           Create schema
         </Button>
@@ -70,6 +92,24 @@ const NillionPage = () => {
           search by word
         </Button>
         <Button onClick={callToFlushData} size="lg">
+          Flush data
+        </Button>
+      </div>
+      <div className="flex flex-col gap-3 w-60 mx-auto">
+        <Title>Credits</Title>
+        <Button onClick={callToCreateSchema} size="lg">
+          Create schema
+        </Button>
+        <Button onClick={callToWriteCredits} size="lg">
+          Write credits
+        </Button>
+        <Button onClick={callToReadCredits} size="lg">
+          Read credits
+        </Button>
+        <Button onClick={callToSearchByUserId} size="lg">
+          search by
+        </Button>
+        <Button onClick={callToFlushCreditsData} size="lg">
           Flush data
         </Button>
       </div>

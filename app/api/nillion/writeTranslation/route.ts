@@ -1,4 +1,4 @@
-import { writeToNodes } from "@/lib/nillion/utils"
+import { writeTranslation } from "@/lib/nillion/utils"
 
 export async function POST(req: Request) {
   //   const body = await req.json()
@@ -14,7 +14,7 @@ export async function POST(req: Request) {
 
   const randonWord = Math.random().toString(36).substring(2, 15)
 
-  await writeToNodes(randonWord, {
+  await writeTranslation(randonWord, {
     word: "manolo",
     translation: "maola",
   })
