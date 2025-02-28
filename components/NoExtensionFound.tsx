@@ -24,7 +24,7 @@ const NoExtensionFound = () => {
           transition={{ delay: 0.5, duration: 0.3 }}
           src="/images/no-extension.png"
           alt="No extension found"
-          className="h-96 hidden md:block"
+          className="h-96 hidden md:block border-r-4 border-black"
         />
 
         <div className="px-4 space-y-4 py-6 md:py-4">
