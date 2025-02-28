@@ -1,14 +1,12 @@
 "use client"
 
 import { useEffect } from "react"
-import Title from "./Title"
-import { Button } from "./ui/button"
-
 import { usePrivy } from "@privy-io/react-auth"
-import LoginButton from "./LoginButton"
+
+import LoginScreen from "./LoginScreen"
 
 const ExtensionInstalledOK = () => {
-  const { user, logout } = usePrivy()
+  const { user } = usePrivy()
 
   useEffect(() => {
     if (user)
@@ -26,7 +24,6 @@ const ExtensionInstalledOK = () => {
 
   return (
     <div className="py-4">
-      <Title>User has extension!!</Title>
       {user ? (
         <div>
           <div className="flex flex-col gap-2">
@@ -36,7 +33,7 @@ const ExtensionInstalledOK = () => {
           </div>
         </div>
       ) : (
-        <LoginButton />
+        <LoginScreen />
       )}
     </div>
   )

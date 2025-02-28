@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { PrivyProvider } from "@privy-io/react-auth";
-import { PRIVY_APP_ID } from "@/lib/constants";
+import { PrivyProvider } from "@privy-io/react-auth"
+import { PRIVY_APP_ID } from "@/lib/constants"
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
     <PrivyProvider
@@ -11,7 +11,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
         appearance: {
           theme: "light",
           accentColor: "#676FFF",
-          logo: "https://javitoshi.com/images/lingolin.pgn",
+          logo: "https://javitoshi.com/images/lingolin.png",
         },
         // Create embedded wallets for users who don't have a wallet
         embeddedWallets: {
@@ -21,5 +21,5 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     >
       {children}
     </PrivyProvider>
-  );
+  )
 }

@@ -6,6 +6,7 @@ import NoiseLayer from "@/components/NoiseLayer"
 import Header from "@/components/Header"
 import PrivyProviders from "@/components/auth/PrivyProviders"
 import Footer from "@/components/Footer"
+import VisitTracker from "@/components/VisitTracker"
 
 const grandstander = Grandstander({
   subsets: ["latin"],
@@ -55,6 +56,7 @@ export default function RootLayout({
       >
         <div className="max-w-7xl mx-auto">
           <NoiseLayer />
+          <VisitTracker />
           <PrivyProviders>
             <div className="p-4 max-w-7xl mx-auto min-h-[100dvh] flex flex-col">
               <Header />
