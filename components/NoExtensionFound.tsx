@@ -5,8 +5,11 @@ import BigTitle from "./BigTitle"
 import BlurryEntrance from "./BlurryEntrance"
 import Link from "next/link"
 import Title from "./Title"
+import { useToast } from "@/hooks/use-toast"
 
 const NoExtensionFound = () => {
+  const { toast } = useToast()
+
   return (
     <div className="py-6 max-w-7xl mx-auto w-full h-full px-2 text-center justify-center items-center flex flex-col gap-4">
       <BigTitle>
@@ -37,13 +40,21 @@ const NoExtensionFound = () => {
             <div className="text-xl text-balance pt-6">
               You can download it from the Chrome Web Store.
             </div>
-            <div className="w-full my-2 flex justify-center">
-              <Link href="https://chromewebstore.google.com/detail/lingolin-extension/">
+            <div className="w-full my-2 pt-6 flex justify-center">
+              <div
+                className="cursor-pointer active:opacity-60"
+                onClick={() => {
+                  toast({
+                    title: "Coming soon",
+                    description: "We are working on it",
+                  })
+                }}
+              >
                 <img
                   src="/images/chrome-web-store.png"
                   className="h-12 px-2 border border-black/30 rounded-lg"
                 />
-              </Link>
+              </div>
             </div>
           </BlurryEntrance>
         </div>
