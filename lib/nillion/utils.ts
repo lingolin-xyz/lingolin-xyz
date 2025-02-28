@@ -48,25 +48,56 @@ export async function writeCredits({
   credits: number
 }) {
   try {
-    await nillionCredits.init()
+    const collection = new SecretVaultWrapper(
+      orgConfig.nodes,
+      orgConfig.orgCredentials,
+      process.env.CREDITS_SECRET_VAULT_SCHEMA_ID!
+    )
+    await collection.init()
 
-    console.log(" ABOUT TO SAVE:", {
-      key,
-      userid,
-      credits,
-    })
-
-    const result = await nillionCredits.writeToNodes([
+    const web3ExperienceSurveyData = [
       {
-        key,
-        userid: userid,
-        credits: { "%allot": credits },
-        // credits: credits,
-        _id: crypto.randomUUID(),
+        credits: { "%allot": 8 }, // years_in_web3 will be encrypted to a %share
+        responses: [
+          { rating: 5, question_number: 1 },
+          { rating: 3, question_number: 2 },
+        ], // responses will be stored in plaintext
       },
-    ])
-    console.log("✅ Successfully wrote to nodes for credits")
-    return result
+    ]
+    const dataWritten = await collection.writeToNodes(web3ExperienceSurveyData)
+    console.log("dataWritten", dataWritten)
+
+    const newIds = [
+      ...new Set(dataWritten.map((item: any) => item.data.created).flat()),
+    ]
+    console.log("created ids:", newIds)
+
+    const dataRead = await collection.readFromNodes({})
+    console.log("📚 total records:", dataRead.length)
+    console.log(
+      "📚 Read new records:",
+      dataRead.slice(0, web3ExperienceSurveyData.length)
+    )
+
+    return newIds
+
+    // console.log(" ABOUT TO SAVE:", {
+    //   key,
+    //   userid,
+    //   credits,
+    // })
+
+    // const result = await nillionCredits.writeToNodes([
+    //   {
+    //     key,
+    //     userid: userid,
+    //     credits: { "%share": credits },
+    //     // credits: credits,
+    //     _id: crypto.randomUUID(),
+    //   },
+    // ])
+    // console.log("✅ Successfully wrote to nodes for credits")
+    // return result
   } catch (error) {
     console.error(
       "❌ Failed to use SecretVaultWrapper writeCredits:",
@@ -105,16 +136,27 @@ export async function readFromNodes(
 }
 
 export async function readCredits(userIdFilter?: string | null) {
-  await nillionCredits.init()
-  const filter = userIdFilter ? { userid: userIdFilter } : ({} as any)
-
-  console.log(
-    " 💜 [readCredits] the filter i have is..." + JSON.stringify(filter)
+  const collection = new SecretVaultWrapper(
+    orgConfig.nodes,
+    orgConfig.orgCredentials,
+    process.env.CREDITS_SECRET_VAULT_SCHEMA_ID!
   )
+  await collection.init()
 
-  const data = await nillionCredits.readFromNodes({})
+  const dataRead = await collection.readFromNodes({})
+  console.log("📚 READ OK!!!!!!! total records:", dataRead.length)
+  console.log("📚 READ OK!!!!!!! dataRead:", dataRead)
 
-  console.log(" 💜  the data i have is...", data)
+  //   await nillionCredits.init()
+  //   const filter = userIdFilter ? { userid: userIdFilter } : ({} as any)
+
+  //   console.log(
+  //     " 💜 [readCredits] the filter i have is..." + JSON.stringify(filter)
+  //   )
+
+  //   const data = await nillionCredits.readFromNodes({})
+
+  //   console.log(" 💜  the data i have is...", data)
 
   return []
   //   const credits = data.map((record: any) => ({
