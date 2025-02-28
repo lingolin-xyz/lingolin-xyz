@@ -24,6 +24,6 @@
         "required": ["%share"]
       }
     },
-    "required": ["_id", "word", "credits"]
+    "required": ["_id", "userid", "credits"]
   }
 }

@@ -31,7 +31,7 @@ export async function writeTranslation(
         _id: crypto.randomUUID(),
       },
     ])
-    console.log("✅ Successfully wrote to nodes:", result)
+    console.log("✅ Successfully wrote to nodes for translations")
     return result
   } catch (error) {
     console.error("❌ Failed to use SecretVaultWrapper:", JSON.stringify(error))
@@ -57,7 +57,7 @@ export async function writeCredits(
         _id: crypto.randomUUID(),
       },
     ])
-    console.log("✅ Successfully wrote to nodes for credits:", result)
+    console.log("✅ Successfully wrote to nodes for credits")
     return result
   } catch (error) {
     console.error(
@@ -102,7 +102,7 @@ export async function readCredits(userIdFilter?: string | null) {
 
   console.log(" 💜  the filter i have is..." + JSON.stringify(filter))
 
-  const data = await nillionTranslations.readFromNodes(filter)
+  const data = await nillionCredits.readFromNodes(filter)
 
   console.log(" 💜  the data i have is...", data)
 

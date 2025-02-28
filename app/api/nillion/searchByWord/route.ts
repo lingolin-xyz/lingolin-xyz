@@ -6,8 +6,8 @@ export async function POST(req: Request) {
 
   // const trans = await readFromNodes()
 
-  const theWordToSearch = "fv4atnehj05"
-  const translations = await readFromNodes("manolo")
+  const userId = "fv4atnehj05"
+  const translations = await readFromNodes(userId)
 
   console.log("VAMOS VAMOS QUE TENGO...", translations)
 
