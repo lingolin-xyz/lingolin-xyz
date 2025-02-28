@@ -1,12 +1,12 @@
-import { NextResponse } from "next/server";
-import { postWebVisitToDiscord } from "@/lib/discord";
-import { cleanURLDomain } from "@/lib/urls";
+import { NextResponse } from "next/server"
+import { postWebVisitToDiscord } from "@/lib/discord"
+import { cleanURLDomain } from "@/lib/urls"
 
 export async function POST(req: Request) {
   if (process.env.NODE_ENV !== "production") {
     return NextResponse.json({
       finished: true,
-    });
+    })
   }
 
   const {
@@ -17,7 +17,7 @@ export async function POST(req: Request) {
     utm_campaign,
     utm_ref,
     isMobile,
-  } = await req.json();
+  } = await req.json()
 
   const messageToPost = `
     ${isMobile ? " 📱 " : " 🖥️ "} visita: \`${pathname}\` desde ${
@@ -36,17 +36,17 @@ export async function POST(req: Request) {
     utm_ref &&
     utm_ref !== "null" &&
     !utm_ref.includes("http://localhost:3000/") &&
-    !utm_ref.includes("http://smoluniverse.com/") &&
+    !utm_ref.includes("http://lingolin.xyz/") &&
     !utm_ref.includes("checkout.stripe.com")
       ? `ref: \`${cleanURLDomain(utm_ref)}\``
       : ""
-  }`;
+  }`
 
-  postWebVisitToDiscord(messageToPost);
+  postWebVisitToDiscord(messageToPost)
 
-  await new Promise((resolve) => setTimeout(resolve, 400));
+  await new Promise((resolve) => setTimeout(resolve, 400))
 
   return NextResponse.json({
     finished: true,
-  });
+  })
 }
