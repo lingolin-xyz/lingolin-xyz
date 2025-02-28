@@ -10,9 +10,6 @@
         "format": "uuid",
         "coerce": true
       },
-      "userid": {
-        "type": "string"
-      },
       "fromLanguage": {
         "type": "string"
       },
@@ -26,13 +23,6 @@
         "type": "string"
       }
     },
-    "required": [
-      "_id",
-      "userid",
-      "fromLanguage",
-      "toLanguage",
-      "message",
-      "translation"
-    ]
+    "required": ["_id", "fromLanguage", "toLanguage", "message", "translation"]
   }
 }

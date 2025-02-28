@@ -4,6 +4,7 @@ import { NextResponse } from "next/server"
 export async function POST(req: Request) {
   console.log(" 🥚 Read translations API    !!")
 
-  await flushData()
+  await flushCreditsData()
+  await flushTranslationsData()
   return NextResponse.json({ finished: true })
 }

@@ -2,12 +2,6 @@
 import { SecretVaultWrapper } from "secretvaults"
 import { orgConfig } from "./orgConfig"
 
-const nillionTranslations = new SecretVaultWrapper(
-  orgConfig.nodes,
-  orgConfig.orgCredentials,
-  process.env.TRANSLATIONS_SECRET_VAULT_SCHEMA_ID!
-)
-
 export async function writeCredits({
   userid,
   credits,
@@ -25,79 +19,23 @@ export async function writeCredits({
 
     const web3ExperienceSurveyData = [
       {
-        credits: { "%allot": credits }, // years_in_web3 will be encrypted to a %share
+        credits: { "%allot": credits }, // credits will be encrypted to a %share
         userid,
       },
     ]
-    const dataWritten = await collection.writeToNodes(web3ExperienceSurveyData)
-    console.log("dataWritten", dataWritten)
-
-    const newIds = [
-      ...new Set(dataWritten.map((item: any) => item.data.created).flat()),
-    ]
-    console.log("created ids:", newIds)
+    await collection.writeToNodes(web3ExperienceSurveyData)
 
     const dataRead = await collection.readFromNodes({})
     console.log("📚 total records:", dataRead.length)
-    console.log(
-      "📚 Read new records:",
-      dataRead.slice(0, web3ExperienceSurveyData.length)
-    )
 
-    return newIds
-
-    // console.log(" ABOUT TO SAVE:", {
-    //   key,
-    //   userid,
-    //   credits,
-    // })
-
-    // const result = await nillionCredits.writeToNodes([
-    //   {
-    //     key,
-    //     userid: userid,
-    //     credits: { "%share": credits },
-    //     // credits: credits,
-    //     _id: crypto.randomUUID(),
-    //   },
-    // ])
-    // console.log("✅ Successfully wrote to nodes for credits")
-    // return result
+    return dataRead
   } catch (error) {
     console.error(
       "❌ Failed to use SecretVaultWrapper writeCredits:",
       JSON.stringify(error)
     )
-    process.exit(1)
+    return false
   }
-}
-
-export async function readFromNodes(
-  wordFilter?: string | null,
-  translationFilter?: string | null
-) {
-  await nillionTranslations.init()
-  const filter = wordFilter ? { word: wordFilter } : ({} as any)
-  if (translationFilter) {
-    filter.translation = translationFilter
-  }
-
-  console.log(" 💜  the filter i have is..." + JSON.stringify(filter))
-
-  const data = await nillionTranslations.readFromNodes(filter)
-
-  console.log(" 💜  the data i have is...", data)
-
-  const translations = data.map((record: any) => ({
-    id: record._id,
-    key: record.key,
-    translation: record.translation,
-    word: record.word,
-  }))
-
-  console.log(" 💜  the translations i have are...", translations)
-
-  return translations
 }
 
 export async function readCredits(userIdFilter?: string | null) {
@@ -110,17 +48,14 @@ export async function readCredits(userIdFilter?: string | null) {
   const filter = userIdFilter ? { userid: userIdFilter } : ({} as any)
 
   const dataRead = await collection.readFromNodes(filter)
-  console.log("📚 READ OK!!!!!!! total records:", dataRead.length)
-  console.log("📚 READ OK!!!!!!! dataRead:", dataRead)
-
   return dataRead
 }
 
-export const flushData = async () => {
+export const flushTranslationsData = async () => {
   const collection = new SecretVaultWrapper(
     orgConfig.nodes,
     orgConfig.orgCredentials,
-    process.env.SECRET_VAULT_SCHEMA_ID!
+    process.env.TRANSLATIONS_SECRET_VAULT_SCHEMA_ID!
   )
   await collection.init()
 
@@ -139,70 +74,6 @@ export const flushCreditsData = async () => {
   const flushedData = await collection.flushData()
   console.log(flushedData)
 }
-
-// export async function getTranslationByWord(word: string) {
-//   try {
-//     const collection = new SecretVaultWrapper(
-//       orgConfig.nodes,
-//       orgConfig.orgCredentials,
-//       process.env.SECRET_VAULT_SCHEMA_ID!
-//     )
-//     await collection.init()
-
-//     // Create a query to find translations by word
-//     const query = {
-//       id: "findTranslationByWord",
-//       variables: {
-//         word: word,
-//       },
-//     }
-
-//     // Execute the query against each node
-//     const results = await Promise.all(
-//       orgConfig.nodes.map(async (node) => {
-//         try {
-//           const response = await fetch(`${node.url}/queries/execute`, {
-//             method: "POST",
-//             headers: {
-//               Authorization: `Bearer ${process.env.NILLION_BEARER_TOKEN}`,
-//               "Content-Type": "application/json",
-//             },
-//             body: JSON.stringify(query),
-//           })
-
-//           if (!response.ok) {
-//             throw new Error(`HTTP error! status: ${response.status}`)
-//           }
-
-//           const result = await response.json()
-//           return result.data || []
-//         } catch (error) {
-//           console.error(`Error querying node ${node.url}:`, error)
-//           return []
-//         }
-//       })
-//     )
-
-//     // Combine and deduplicate results from all nodes
-//     const allTranslations = results.flat()
-
-//     // Remove duplicates based on id
-//     const uniqueTranslations = Array.from(
-//       new Map(allTranslations.map((item) => [item._id, item])).values()
-//     )
-
-//     return uniqueTranslations.map((record: any) => ({
-//       id: record._id,
-//       key: record.key,
-//       translation: record.translation,
-//       word: record.word,
-//     }))
-//   } catch (error) {
-//     console.error("❌ Failed to query translations:", error)
-//     return []
-//   }
-// }
-
 export const getTranslationByMessageAndLanguage = async ({
   message,
   language,
@@ -261,23 +132,24 @@ export async function writeTranslation({
     const collection = new SecretVaultWrapper(
       orgConfig.nodes,
       orgConfig.orgCredentials,
-      process.env.CREDITS_SECRET_VAULT_SCHEMA_ID!
+      process.env.TRANSLATIONS_SECRET_VAULT_SCHEMA_ID!
     )
     await collection.init()
 
     const web3ExperienceSurveyData = [
       {
-        credits: { "%allot": credits }, // years_in_web3 will be encrypted to a %share
-        userid,
+        fromLanguage,
+        toLanguage,
+        message,
+        translation,
       },
     ]
     const dataWritten = await collection.writeToNodes(web3ExperienceSurveyData)
     console.log("dataWritten", dataWritten)
 
-    const newIds = [
-      ...new Set(dataWritten.map((item: any) => item.data.created).flat()),
-    ]
-    console.log("created ids:", newIds)
+    // const newIds = [
+    //   ...new Set(dataWritten.map((item: any) => item.data.created).flat()),
+    // ]
 
     const dataRead = await collection.readFromNodes({})
     console.log("📚 total records:", dataRead.length)
@@ -286,30 +158,12 @@ export async function writeTranslation({
       dataRead.slice(0, web3ExperienceSurveyData.length)
     )
 
-    return newIds
-
-    // console.log(" ABOUT TO SAVE:", {
-    //   key,
-    //   userid,
-    //   credits,
-    // })
-
-    // const result = await nillionCredits.writeToNodes([
-    //   {
-    //     key,
-    //     userid: userid,
-    //     credits: { "%share": credits },
-    //     // credits: credits,
-    //     _id: crypto.randomUUID(),
-    //   },
-    // ])
-    // console.log("✅ Successfully wrote to nodes for credits")
-    // return result
+    return dataRead
   } catch (error) {
     console.error(
-      "❌ Failed to use SecretVaultWrapper writeCredits:",
-      JSON.stringify(error)
+      "❌ Failed to use SecretVaultWrapper writeTranslation:",
+      error
     )
-    process.exit(1)
+    return false
   }
 }
