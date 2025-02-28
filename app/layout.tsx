@@ -1,24 +1,24 @@
-import "./globals.css";
+import "./globals.css"
 
-import { Grandstander } from "next/font/google";
-import { Toaster } from "@/components/ui/toaster";
-import NoiseLayer from "@/components/NoiseLayer";
-import Header from "@/components/Header";
-import PrivyProviders from "@/components/auth/PrivyProviders";
-
+import { Grandstander } from "next/font/google"
+import { Toaster } from "@/components/ui/toaster"
+import NoiseLayer from "@/components/NoiseLayer"
+import Header from "@/components/Header"
+import PrivyProviders from "@/components/auth/PrivyProviders"
+import Footer from "@/components/Footer"
 const grandstander = Grandstander({
   subsets: ["latin"],
   variable: "--font-grandstander",
-});
+})
 
 export const generateMetadata = async () => {
-  const ogImage = `https://lingolin.xyz/thumbnail.png`;
+  const ogImage = `https://lingolin.xyz/thumbnail.png`
 
-  const images = [ogImage];
+  const images = [ogImage]
 
-  const appName = "lingolin";
-  const theTitle = `Lingolin`;
-  const theDescription = "world word web";
+  const appName = "lingolin"
+  const theTitle = `Lingolin`
+  const theDescription = "world word web"
 
   return {
     title: theTitle,
@@ -39,13 +39,13 @@ export const generateMetadata = async () => {
       locale: "en_US",
       type: "website",
     },
-  };
-};
+  }
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -55,14 +55,15 @@ export default function RootLayout({
         <div className="max-w-7xl mx-auto">
           <NoiseLayer />
           <PrivyProviders>
-            <div className="p-4 max-w-7xl mx-auto">
+            <div className="p-4 max-w-7xl mx-auto min-h-[100dvh] flex flex-col">
               <Header />
-              {children}
+              <div className="flex-1">{children}</div>
+              <Footer />
             </div>
           </PrivyProviders>
         </div>
         <Toaster />
       </body>
     </html>
-  );
+  )
 }
