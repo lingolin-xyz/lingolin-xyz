@@ -38,22 +38,30 @@ export async function writeTranslation(
     process.exit(1)
   }
 }
-export async function writeCredits(
-  key: string,
-  credits: {
-    userid: string
-    credits: {
-      "%share": string
-    }
-  }
-) {
+export async function writeCredits({
+  key,
+  userid,
+  credits,
+}: {
+  key: string
+  userid: string
+  credits: number
+}) {
   try {
     await nillionCredits.init()
+
+    console.log(" ABOUT TO SAVE:", {
+      key,
+      userid,
+      credits,
+    })
+
     const result = await nillionCredits.writeToNodes([
       {
         key,
-        userid: credits.userid,
-        credits: credits.credits,
+        userid: userid,
+        credits: { "%allot": credits },
+        // credits: credits,
         _id: crypto.randomUUID(),
       },
     ])
@@ -100,22 +108,25 @@ export async function readCredits(userIdFilter?: string | null) {
   await nillionCredits.init()
   const filter = userIdFilter ? { userid: userIdFilter } : ({} as any)
 
-  console.log(" 💜  the filter i have is..." + JSON.stringify(filter))
+  console.log(
+    " 💜 [readCredits] the filter i have is..." + JSON.stringify(filter)
+  )
 
-  const data = await nillionCredits.readFromNodes(filter)
+  const data = await nillionCredits.readFromNodes({})
 
   console.log(" 💜  the data i have is...", data)
 
-  const credits = data.map((record: any) => ({
-    id: record._id,
-    key: record.key,
-    userid: record.userid,
-    credits: record.credits,
-  }))
+  return []
+  //   const credits = data.map((record: any) => ({
+  //     id: record._id,
+  //     key: record.key,
+  //     userid: record.userid,
+  //     credits: record.credits,
+  //   }))
 
-  console.log(" 💜  the credits i have are...", credits)
+  //   console.log(" 💜  the credits i have are...", credits)
 
-  return credits
+  //   return credits
 }
 
 export const flushData = async () => {

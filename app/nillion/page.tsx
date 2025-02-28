@@ -70,7 +70,7 @@ const NillionPage = () => {
   }
 
   const callToFlushCreditsData = async () => {
-    const res = await axios.post("/api/nillion/flushCreditsData")
+    const res = await axios.post("/api/nillion/flushCreditsCollection")
     console.log({ res })
   }
 

@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Lingolin Translations",
+  "title": "Lingolin Credits",
   "type": "array",
   "items": {
     "type": "object",
@@ -18,7 +18,7 @@
         "type": "object",
         "properties": {
           "%share": {
-            "type": "string"
+            "type": "integer"
           }
         },
         "required": ["%share"]

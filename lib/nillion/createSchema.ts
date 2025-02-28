@@ -12,7 +12,7 @@ export const createSchema = async () => {
     await org.init()
 
     // create a new collectionschema
-    const newSchema = await org.createSchema(schema, "Lingolin Translations")
+    const newSchema = await org.createSchema(schema, "Lingolin Credits")
     console.log("📚 New Schema:", newSchema)
   } catch (error) {
     console.error("❌ Failed to use SecretVaultWrapper:", JSON.stringify(error))
