@@ -11,7 +11,7 @@ const NoExtensionFound = () => {
   const { toast } = useToast()
 
   return (
-    <div className="py-6 max-w-7xl mx-auto w-full h-full px-2 text-center justify-center items-center flex flex-col gap-4">
+    <div className="py-6 pb-20 max-w-7xl mx-auto w-full h-full px-2 text-center justify-center items-center flex flex-col gap-4">
       <BigTitle>
         <BlurryEntrance delay={0.3}>
           <div className="py-12">Welcome to Lingolin</div>

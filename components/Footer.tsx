@@ -2,7 +2,7 @@ import Link from "next/link"
 
 const Footer = () => {
   return (
-    <div className="border-t pt-4 px-4 space-y-2 text-xs">
+    <div className="border-t pt-4 space-y-2 text-xs">
       <div>
         Lingolin as a project idea for the{" "}
         <Link
