@@ -17,7 +17,7 @@ const Footer = () => {
         Built by{" "}
         <Link
           className="text-indigo-500 font-semibold hover:text-indigo-400 active:opacity-60 transition-all duration-100"
-          href="https://github.com/javiezpeleta"
+          href="https://x.com/javitoshi"
           target="_blank"
         >
           javi
@@ -26,7 +26,7 @@ const Footer = () => {
         <Link
           target="_blank"
           className="text-indigo-500 font-semibold hover:text-indigo-400 active:opacity-60 transition-all duration-100"
-          href="https://github.com/0xhirugohan"
+          href="https://x.com/0xhirugohan"
         >
           hirugohan
         </Link>{" "}
