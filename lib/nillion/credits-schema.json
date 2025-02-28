@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Web3 Experience Survey",
+  "title": "Lingolin Credits",
   "type": "array",
   "items": {
     "type": "object",
@@ -10,6 +10,9 @@
         "format": "uuid",
         "coerce": true
       },
+      "userid": {
+        "type": "string"
+      },
       "credits": {
         "type": "object",
         "properties": {
@@ -18,27 +21,8 @@
           }
         },
         "required": ["%share"]
-      },
-      "responses": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "rating": {
-              "type": "integer",
-              "minimum": 1,
-              "maximum": 5
-            },
-            "question_number": {
-              "type": "integer",
-              "minimum": 1
-            }
-          },
-          "required": ["rating", "question_number"]
-        },
-        "minItems": 1
       }
     },
-    "required": ["_id", "credits", "responses"]
+    "required": ["_id", "userid", "credits"]
   }
 }

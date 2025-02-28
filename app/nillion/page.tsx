@@ -65,7 +65,7 @@ const NillionPage = () => {
   }
 
   const callToSearchByUserId = async () => {
-    const res = await axios.post("/api/nillion/searchByUserId")
+    const res = await axios.post("/api/nillion/searchCreditsByUserId")
     console.log({ res })
   }
 

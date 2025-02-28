@@ -57,11 +57,8 @@ export async function writeCredits({
 
     const web3ExperienceSurveyData = [
       {
-        credits: { "%allot": 8 }, // years_in_web3 will be encrypted to a %share
-        responses: [
-          { rating: 5, question_number: 1 },
-          { rating: 3, question_number: 2 },
-        ], // responses will be stored in plaintext
+        credits: { "%allot": 12 }, // years_in_web3 will be encrypted to a %share
+        userid: "manolo",
       },
     ]
     const dataWritten = await collection.writeToNodes(web3ExperienceSurveyData)
@@ -142,8 +139,9 @@ export async function readCredits(userIdFilter?: string | null) {
     process.env.CREDITS_SECRET_VAULT_SCHEMA_ID!
   )
   await collection.init()
+  const filter = userIdFilter ? { userid: userIdFilter } : ({} as any)
 
-  const dataRead = await collection.readFromNodes({})
+  const dataRead = await collection.readFromNodes(filter)
   console.log("📚 READ OK!!!!!!! total records:", dataRead.length)
   console.log("📚 READ OK!!!!!!! dataRead:", dataRead)
 
