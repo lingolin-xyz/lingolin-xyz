@@ -4,6 +4,7 @@ import LoginButton from "@/components/LoginButton"
 import { usePrivy } from "@privy-io/react-auth"
 import LoggedInHome from "@/components/LoggedInHome"
 import ExtensionInstalledOK from "@/components/ExtensionInstalledOK"
+import NeedToInstallExtension from "@/components/NeedToInstallExtension"
 import NoExtensionFound from "@/components/NoExtensionFound"
 import LandingWhileLoading from "@/components/LandingWhileLoading"
 import { useEffect, useState } from "react"
@@ -42,7 +43,7 @@ export default function Home() {
         )}
       </AnimatePresence>
       {hasTheExtension && <ExtensionInstalledOK />}
-      {!hasTheExtension && <div>ALGO AQUI</div>}
+      {!hasTheExtension && <NoExtensionFound />}
     </div>
   )
   if (isLoading) {
