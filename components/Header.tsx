@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-
+import UserHeaderCorner from "./UserHeaderCorner"
 const Header = () => {
   return (
     <div className="border-b pb-4  flex items-center justify-between">
@@ -17,7 +17,9 @@ const Header = () => {
           </div>
         </Button>
       </Link>
-      <div className="flex items-center gap-2">.</div>
+      <div className="flex items-center gap-2">
+        <UserHeaderCorner />
+      </div>
     </div>
   )
 }

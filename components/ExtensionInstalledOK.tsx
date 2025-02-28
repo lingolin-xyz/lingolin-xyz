@@ -8,7 +8,7 @@ import { usePrivy } from "@privy-io/react-auth"
 import LoginButton from "./LoginButton"
 
 const ExtensionInstalledOK = () => {
-  const { user } = usePrivy()
+  const { user, logout } = usePrivy()
 
   useEffect(() => {
     if (user)
@@ -24,16 +24,15 @@ const ExtensionInstalledOK = () => {
     }
   }, [user])
 
-  const sendMessage = () => {}
-
   return (
-    <div>
-      <Title>ExtensionInstalledOK</Title>
+    <div className="py-4">
+      <Title>User has extension!!</Title>
       {user ? (
         <div>
-          <Button onClick={sendMessage}>Send Message</Button>
-          <div>
-            <pre className="text-xs">{JSON.stringify(user, null, 2)}</pre>
+          <div className="flex flex-col gap-2">
+            <div>
+              <pre className="text-xs">{JSON.stringify(user, null, 2)}</pre>
+            </div>
           </div>
         </div>
       ) : (
