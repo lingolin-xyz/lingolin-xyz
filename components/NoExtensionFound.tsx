@@ -24,20 +24,20 @@ const NoExtensionFound = () => {
           transition={{ delay: 0.5, duration: 0.3 }}
           src="/images/no-extension.png"
           alt="No extension found"
-          className="h-96"
+          className="h-96 hidden md:block"
         />
 
-        <div className="px-4 space-y-4">
+        <div className="px-4 space-y-4 py-6 md:py-4">
           <BlurryEntrance delay={0.7}>
             <Title>
               <div className="text-balance px-4">No extension found :(</div>
             </Title>
           </BlurryEntrance>
           <BlurryEntrance delay={0.9}>
-            <div className="text-xl text-balance">
+            <div className="text-lg md:text-xl text-balance">
               Please install the Lingolin extension to use the app.
             </div>
-            <div className="text-xl text-balance pt-6">
+            <div className="text-lg md:text-xl text-balance pt-6">
               You can download it from the Chrome Web Store.
             </div>
             <div className="w-full my-2 pt-6 flex justify-center">
