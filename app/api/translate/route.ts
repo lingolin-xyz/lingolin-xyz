@@ -1,3 +1,4 @@
+import { getTranslationByMessageAndLanguage } from "@/lib/nillion/utils"
 import { waitUntil } from "@vercel/functions"
 
 export async function POST(req: Request) {
@@ -15,34 +16,38 @@ export async function POST(req: Request) {
   console.log(" 🥚 TRANSLATE API STARTED!", text, userId)
 
   try {
-    const savedTranslation = await getTranslationByMessageAndLanguage({
-      message,
-      language,
-    })
-
-    if (savedTranslation) {
-      return new Response(
-        JSON.stringify({
-          translatedMessage: savedTranslation.translated_message,
-        }),
-        {
-          status: 200,
-          headers: {
-            "Access-Control-Allow-Origin": "*",
-            "Access-Control-Allow-Methods": "POST, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type",
-          },
-        }
-      )
-    }
-
-    const translatedMessage = await translateMessage({ message, language })
-
-    waitUntil(
-      saveTranslatedMessageToDB({ message, language, translatedMessage })
-    )
-
-    return new Response(JSON.stringify({ translatedMessage }), {
+    // const savedTranslation = await getTranslationByMessageAndLanguage({
+    //   message: text,
+    //   language: "English",
+    // })
+    // if (savedTranslation) {
+    //   return new Response(
+    //     JSON.stringify({
+    //       translatedMessage: savedTranslation.translated_message,
+    //     }),
+    //     {
+    //       status: 200,
+    //       headers: {
+    //         "Access-Control-Allow-Origin": "*",
+    //         "Access-Control-Allow-Methods": "POST, OPTIONS",
+    //         "Access-Control-Allow-Headers": "Content-Type",
+    //       },
+    //     }
+    //   )
+    // }
+    // const translatedMessage = await translateMessage({ message, language })
+    // waitUntil(
+    //   saveTranslatedMessageToDB({ message, language, translatedMessage })
+    // )
+    // return new Response(JSON.stringify({ translatedMessage }), {
+    //   status: 200,
+    //   headers: {
+    //     "Access-Control-Allow-Origin": "*",
+    //     "Access-Control-Allow-Methods": "POST, OPTIONS",
+    //     "Access-Control-Allow-Headers": "Content-Type",
+    //   },
+    // })
+    return new Response(JSON.stringify({ translatedMessage: "Hello" }), {
       status: 200,
       headers: {
         "Access-Control-Allow-Origin": "*",
