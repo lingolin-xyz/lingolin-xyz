@@ -11,16 +11,13 @@ import axios from "axios"
 
 const NillionPage = () => {
   const { toast } = useToast()
-  //   await new Promise((resolve) => setTimeout(resolve, 3000))
 
-  //   await createSchema()
-
-  //   await writeTranslation("hello", { word: "yo", translation: "pepe" })
-  //   const translations = await readFromNodes()
-  //   console.log({ translations })
-
-  const callToCreateSchema = async () => {
-    const res = await axios.post("/api/nillion/createSchema")
+  const callToCreateCreditsSchema = async () => {
+    const res = await axios.post("/api/nillion/createCreditsSchema")
+    console.log({ res })
+  }
+  const callToCreateTranslationsSchema = async () => {
+    const res = await axios.post("/api/nillion/createTranslationsSchema")
     console.log({ res })
   }
 
@@ -79,7 +76,7 @@ const NillionPage = () => {
       <HugeTitle>Nillion playground</HugeTitle>
       <div className="flex flex-col gap-3 w-60 mx-auto">
         <Title>Translations</Title>
-        <Button onClick={callToCreateSchema} size="lg">
+        <Button onClick={callToCreateTranslationsSchema} size="lg">
           Create schema
         </Button>
         <Button onClick={callToWriteTranslation} size="lg">
@@ -97,7 +94,7 @@ const NillionPage = () => {
       </div>
       <div className="flex flex-col gap-3 w-60 mx-auto">
         <Title>Credits</Title>
-        <Button onClick={callToCreateSchema} size="lg">
+        <Button onClick={callToCreateCreditsSchema} size="lg">
           Create schema
         </Button>
         <Button onClick={callToWriteCredits} size="lg">

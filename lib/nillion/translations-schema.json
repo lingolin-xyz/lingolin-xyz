@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Lingolin Translations",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "_id": {
+        "type": "string",
+        "format": "uuid",
+        "coerce": true
+      },
+      "userid": {
+        "type": "string"
+      },
+      "fromLanguage": {
+        "type": "string"
+      },
+      "toLanguage": {
+        "type": "string"
+      },
+      "message": {
+        "type": "string"
+      },
+      "translation": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "_id",
+      "userid",
+      "fromLanguage",
+      "toLanguage",
+      "message",
+      "translation"
+    ]
+  }
+}
