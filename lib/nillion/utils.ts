@@ -48,7 +48,7 @@ export async function readCredits(userIdFilter?: string | null) {
   const filter = userIdFilter ? { userid: userIdFilter } : ({} as any)
 
   const dataRead = await collection.readFromNodes(filter)
-  return dataRead
+  return dataRead && dataRead.length > 0 ? dataRead[0] : null
 }
 
 export const flushTranslationsData = async () => {
