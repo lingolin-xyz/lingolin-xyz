@@ -28,7 +28,7 @@ const NoExtensionFound = () => {
             className="h-96 hidden md:block border-r-4 border-black"
           />
 
-          <div className="px-4 space-y-4 py-6 md:py-4">
+          <div className="px-8 space-y-4 py-6 md:py-4">
             <BlurryEntrance delay={0.7}>
               <Title>
                 <div className="text-balance px-4">No extension found :(</div>

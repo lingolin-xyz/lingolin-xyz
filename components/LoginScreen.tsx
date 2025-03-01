@@ -13,24 +13,24 @@ const LoginScreen = () => {
 
   return (
     <div className="py-10 max-w-7xl mx-auto w-full h-full px-2 text-center justify-center items-center flex flex-col gap-4">
-      <BigTitle>
+      {/* <BigTitle>
         <BlurryEntrance delay={0.3}>
           <div className="py-12">Welcome to Lingolin</div>
         </BlurryEntrance>
-      </BigTitle>
+      </BigTitle> */}
       <BlurryEntrance delay={0.5}>
         <div className="flex justify-center max-w-2xl items-center border-4 border-black rounded-3xl overflow-hidden">
           <div className="px-4 space-y-4 py-6 md:py-4">
             <BlurryEntrance delay={0.7}>
-              <BigTitle>
+              <div className="text-lg md:text-4xl font-bold">
                 <div className="text-balance px-4">
-                  You can&apos;t spell &quot;lingloin&quot; without
+                  You can&apos;t spell &quot;lingolin&quot; without
                   &quot;login&quot;
                 </div>
-              </BigTitle>
+              </div>
             </BlurryEntrance>
             <BlurryEntrance delay={0.9}>
-              <div className="text-lg md:text-xl text-balance pb-12">
+              <div className="text-lg md:text-xl text-balance pb-8 pt-4">
                 Please start your session to use the extension!
               </div>
               <LoginButton />
