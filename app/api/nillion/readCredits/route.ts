@@ -7,5 +7,5 @@ export async function POST(req: Request) {
   const credits = await readCredits()
   console.log({ credits })
 
-  return NextResponse.json({ credits })
+  return NextResponse.json({ finished: true })
 }

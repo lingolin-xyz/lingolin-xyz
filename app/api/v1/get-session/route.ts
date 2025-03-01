@@ -1,11 +1,19 @@
 import { PRIVY_APP_ID } from "@/lib/constants"
-import { postToDiscord } from "@/lib/discord"
+import { postErrorToDiscord, postToDiscord } from "@/lib/discord"
 import { readCredits, writeCredits } from "@/lib/nillion/utils"
+import { logEvent } from "@/lib/postgres"
 import { PrivyClient } from "@privy-io/server-auth"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
   const { userId } = await req.json()
+
+  if (!userId) {
+    await postErrorToDiscord("------ no userId wtf!")
+    console.log("------ no userId wtf!")
+
+    return NextResponse.json({ error: "userId is required" }, { status: 400 })
+  }
 
   // Crear una instancia del cliente Privy
   const privyClient = new PrivyClient(
@@ -24,11 +32,13 @@ export async function POST(req: Request) {
       userid: userId,
       credits: 10,
     })
+
     await logEvent({
-      event: "user_created",
+      event_type: "user_created",
       userId,
       extra: email,
     })
+
     await postToDiscord("🐣 adding 10 initial credits for " + email)
     return NextResponse.json({
       credits: 10,
