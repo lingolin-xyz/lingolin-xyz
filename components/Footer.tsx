@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <div className="border-t pt-4 space-y-2 text-xs">
       <div>
-        Lingolin as a project for the{" "}
+        Lingolin is a project for the{" "}
         <Link
           className="text-indigo-500 font-semibold hover:text-indigo-400 active:opacity-60 transition-all duration-100"
           href="https://hackathon.monad.xyz/"
