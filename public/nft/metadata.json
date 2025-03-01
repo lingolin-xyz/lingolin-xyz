@@ -1,0 +1,19 @@
+{
+  "name": "Lingolin Credits (NFT Title here)",
+  "description": "Now we're talking!",
+  "image": "https://lingolin.xyz/images/creditNFT.png",
+  "external_url": "https://lingolin.xyz",
+  "attributes": [
+    { "trait_type": "Lets", "value": "Fucking Go" },
+    { "trait_type": "Added Credits", "value": "50" }
+  ],
+  "properties": {
+    "files": [
+      {
+        "uri": "https://lingolin.xyz/images/50credits.png",
+        "type": "image/png"
+      }
+    ],
+    "category": "image"
+  }
+}
