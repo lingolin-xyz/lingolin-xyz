@@ -1,4 +1,4 @@
-import type { NextConfig } from "next";
+import type { NextConfig } from "next"
 
 const nextConfig: NextConfig = {
   async headers() {
@@ -85,12 +85,15 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-    ];
+    ]
   },
   images: {
     domains: ["nyam-nyam-archive.s3.us-east-1.amazonaws.com"],
   },
   crossOrigin: "anonymous",
-};
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+}
 
-export default nextConfig;
+export default nextConfig
