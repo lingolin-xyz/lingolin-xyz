@@ -4,43 +4,52 @@ import { PRIVY_APP_ID } from "./constants"
 import { readCredits } from "./nillion/utils"
 import { logEvent } from "./postgres"
 import { postToDiscord } from "./discord"
+import { unstable_cache } from "next/cache"
 
 export const getUserAndCredits = async (userId: string) => {
-  // Crear una instancia del cliente Privy
-  const privyClient = new PrivyClient(
-    PRIVY_APP_ID,
-    process.env.PRIVY_APP_SECRET || ""
-  )
+  return unstable_cache(
+    async () => {
+      const privyClient = new PrivyClient(
+        PRIVY_APP_ID,
+        process.env.PRIVY_APP_SECRET || ""
+      )
 
-  const user = await privyClient.getUserById(userId)
+      const user = await privyClient.getUserById(userId)
 
-  const email = user.email?.address
+      const email = user.email?.address
 
-  const creditsForUser = await readCredits(userId)
-  if (!creditsForUser) {
-    // we add the initial credits for the first time and post that on discord to celebrate LFG!!
-    await writeCredits({
-      userid: userId,
-      credits: 10,
-    })
+      const creditsForUser = await readCredits(userId)
+      if (!creditsForUser) {
+        // we add the initial credits for the first time and post that on discord to celebrate LFG!!
+        await writeCredits({
+          userid: userId,
+          credits: 10,
+        })
 
-    await logEvent({
-      event_type: "user_created",
-      userId,
-      extra: email,
-    })
+        await logEvent({
+          event_type: "user_created",
+          userId,
+          extra: email,
+        })
 
-    await postToDiscord("🐣 adding 10 initial credits for " + email)
-    return {
-      credits: 10,
-      tier: 1,
+        await postToDiscord("🐣 adding 10 initial credits for " + email)
+        return {
+          credits: 10,
+          tier: 1,
+        }
+      }
+
+      const credits = parseInt(creditsForUser.credits)
+
+      return {
+        credits,
+        tier: 1,
+      }
+    },
+    [`user-credits-${userId}`],
+    {
+      revalidate: 60 * 60 * 24 * 7, // Revalidar el caché cada 7 días
+      tags: [`user-credits-${userId}`], // Tag para invalidar manualmente si es necesario
     }
-  }
-
-  const credits = parseInt(creditsForUser.credits)
-
-  return {
-    credits,
-    tier: 1,
-  }
+  )()
 }
