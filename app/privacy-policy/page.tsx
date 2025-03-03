@@ -1,3 +1,4 @@
+import BlurryEntrance from "@/components/BlurryEntrance"
 import { MarkdownRendererPlain } from "@/components/MarkdownRendererPlain"
 
 const markdownContent = `
@@ -117,9 +118,11 @@ resolved in the courts of [Your Jurisdiction].`
 
 const PrivacyPolicy = () => {
   return (
-    <div className="py-6 max-w-4xl font-sans mx-auto w-full bg-yellow-50/60 rounded-xl p-6 my-6 md:px-14 md:py-8">
-      <MarkdownRendererPlain>{markdownContent}</MarkdownRendererPlain>
-    </div>
+    <BlurryEntrance>
+      <div className="py-6 max-w-4xl font-sans mx-auto w-full bg-yellow-50/60 rounded-xl p-6 my-6 md:px-14 md:py-8">
+        <MarkdownRendererPlain>{markdownContent}</MarkdownRendererPlain>
+      </div>
+    </BlurryEntrance>
   )
 }
 
