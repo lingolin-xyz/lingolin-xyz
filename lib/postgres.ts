@@ -17,7 +17,7 @@ CREATE TABLE lingolin_events (
 */
 
 import { Pool, PoolClient, types } from "pg"
-import { postErrorToDiscord } from "./discord"
+import { postErrorToDiscord, postToDiscord } from "./discord"
 
 // Parse numeric types as floats
 types.setTypeParser(1700, function (val: any) {
@@ -107,4 +107,5 @@ export const logEvent = async ({
     extra4 || null,
   ]
   await executeQuery(query, params)
+  await postToDiscord("🥚🥚🥚🥚🥚🥚 EVENT LOGGED: " + event_type)
 }

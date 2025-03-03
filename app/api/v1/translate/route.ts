@@ -3,6 +3,7 @@ import {
   getTranslationByMessageAndLanguage,
   writeTranslation,
 } from "@/lib/nillion/utils"
+import { logEvent } from "@/lib/postgres"
 import { getSentenceLanguage, translateMessage } from "@/lib/prompts"
 import { cleanString } from "@/lib/strings"
 import { waitUntil } from "@vercel/functions"
@@ -64,6 +65,13 @@ export async function POST(req: Request) {
       waitUntil(postToDiscord("Translation found in DB!"))
       console.log(" 🍎  Translation found in DB!", savedTranslation)
 
+      waitUntil(
+        afterTasksHit({
+          userId,
+          savedTranslation,
+        })
+      )
+
       return new Response(
         JSON.stringify({
           translatedMessage: savedTranslation.translation,
@@ -84,9 +92,9 @@ export async function POST(req: Request) {
       message: cleanText,
       language: actualTargetLanguage,
     })
-    // ! TODO: add log event to supabase too... maybe discord too, etc...
     waitUntil(
-      writeTranslation({
+      afterTasksMissed({
+        userId,
         fromLanguage: sentenceLanguage,
         toLanguage: actualTargetLanguage,
         message: cleanText,
@@ -121,4 +129,49 @@ export async function POST(req: Request) {
       }
     )
   }
+}
+
+const afterTasksMissed = async ({
+  userId,
+  fromLanguage,
+  toLanguage,
+  message,
+  translation,
+}: {
+  userId: string
+  fromLanguage: string
+  toLanguage: string
+  message: string
+  translation: string
+}) => {
+  writeTranslation({
+    fromLanguage,
+    toLanguage,
+    message,
+    translation,
+  })
+  logEvent({
+    event_type: "translation_missed",
+    userId,
+    extra: fromLanguage,
+    extra2: toLanguage,
+    extra3: message,
+    extra4: translation,
+  })
+}
+const afterTasksHit = async ({
+  userId,
+  savedTranslation,
+}: {
+  userId: string
+  savedTranslation: any
+}) => {
+  logEvent({
+    event_type: "translation_hit",
+    userId,
+    extra: savedTranslation.fromLanguage,
+    extra2: savedTranslation.toLanguage,
+    extra3: savedTranslation.message,
+    extra4: savedTranslation.translation,
+  })
 }
