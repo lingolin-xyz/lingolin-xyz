@@ -62,7 +62,7 @@ export async function POST(req: Request) {
     })
 
     if (savedTranslation) {
-      waitUntil(postToDiscord("Translation found in DB!"))
+      postToDiscord("Translation found in DB!")
       console.log(" 🍎  Translation found in DB!", savedTranslation)
 
       waitUntil(
@@ -144,13 +144,13 @@ const afterTasksMissed = async ({
   message: string
   translation: string
 }) => {
-  writeTranslation({
+  await writeTranslation({
     fromLanguage,
     toLanguage,
     message,
     translation,
   })
-  logEvent({
+  await logEvent({
     event_type: "translation_missed",
     userId,
     extra: fromLanguage,
@@ -166,7 +166,7 @@ const afterTasksHit = async ({
   userId: string
   savedTranslation: any
 }) => {
-  logEvent({
+  await logEvent({
     event_type: "translation_hit",
     userId,
     extra: savedTranslation.fromLanguage,
