@@ -22,7 +22,7 @@ const nextConfig: NextConfig = {
       },
       {
         // matching all API routes
-        source: "/api/translate",
+        source: "/api/v1/translate",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
           { key: "Access-Control-Allow-Origin", value: "*" }, // replace this your actual origin
