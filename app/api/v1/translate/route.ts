@@ -42,7 +42,7 @@ export async function POST(req: Request) {
     let actualTargetLanguage = "English"
     if (
       sentenceLanguage.trim().toLowerCase() ===
-      targetLanguage.trim().toLowerCase()
+      nativeLanguage.trim().toLowerCase()
     ) {
       actualTargetLanguage = targetLanguage
     } else {
@@ -58,12 +58,13 @@ export async function POST(req: Request) {
     })
 
     if (savedTranslation) {
-      await postToDiscord("Translation found in DB!")
+      waitUntil(postToDiscord("Translation found in DB!"))
       console.log(" 🍎  Translation found in DB!", savedTranslation)
 
       return new Response(
         JSON.stringify({
           translatedMessage: savedTranslation.translation,
+          targetLanguage: actualTargetLanguage,
         }),
         {
           status: 200,
@@ -80,7 +81,7 @@ export async function POST(req: Request) {
       message: cleanText,
       language: actualTargetLanguage,
     })
-    // ! TODO: add log event to supabase too...
+    // ! TODO: add log event to supabase too... maybe discord too, etc...
     waitUntil(
       writeTranslation({
         fromLanguage: sentenceLanguage,
@@ -89,14 +90,20 @@ export async function POST(req: Request) {
         translation: translatedMessage,
       })
     )
-    return new Response(JSON.stringify({ translatedMessage }), {
-      status: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-        "Access-Control-Allow-Headers": "Content-Type",
-      },
-    })
+    return new Response(
+      JSON.stringify({
+        translatedMessage,
+        targetLanguage: actualTargetLanguage,
+      }),
+      {
+        status: 200,
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+      }
+    )
   } catch (error) {
     console.error("Translation API Error:", error)
     return new Response(

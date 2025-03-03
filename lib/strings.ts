@@ -1,5 +1,5 @@
 export const cleanString = (str: string) => {
-  let cleanAux = str.toLowerCase().trim()
+  let cleanAux = str.trim()
   // if string ends with a dot but the previous character is not a space and not a dot, remove the dot
   if (
     cleanAux.endsWith(".") &&
