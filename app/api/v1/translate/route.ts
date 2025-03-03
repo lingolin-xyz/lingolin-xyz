@@ -15,7 +15,10 @@ export async function POST(req: Request) {
 
   if (!text || !userId || !nativeLanguage || !targetLanguage) {
     console.log(" 🍎  ERROR: Missing required parameters")
-    await postErrorToDiscord("Missing required parameters on /api/v1/translate")
+    await postErrorToDiscord(
+      "Missing required parameters on /api/v1/translate: " +
+        JSON.stringify({ text, userId, nativeLanguage, targetLanguage })
+    )
 
     return new Response(
       JSON.stringify({
