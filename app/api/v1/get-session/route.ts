@@ -14,8 +14,17 @@ export async function POST(req: Request) {
 
   const { credits, tier } = await getUserAndCredits(userId)
 
-  return NextResponse.json({
-    credits,
-    tier,
-  })
+  return NextResponse.json(
+    {
+      credits,
+      tier,
+    },
+    {
+      headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+        "Access-Control-Allow-Headers": "Content-Type, Authorization",
+      },
+    }
+  )
 }
