@@ -1,0 +1,16 @@
+{
+  "name": "Lingolin Used Credits",
+  "description": "Thank u for using lingolin. You can burn this NFT to get some USDC or USDT back.",
+  "image": "https://lingolin.xyz/images/50creditsUsed.png",
+  "external_url": "https://lingolin.xyz",
+  "attributes": [{ "trait_type": "Lets", "value": "Fucking Go" }],
+  "properties": {
+    "files": [
+      {
+        "uri": "https://lingolin.xyz/images/50creditsUsed.png",
+        "type": "image/png"
+      }
+    ],
+    "category": "image"
+  }
+}
