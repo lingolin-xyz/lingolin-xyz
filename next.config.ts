@@ -8,10 +8,13 @@ const nextConfig: NextConfig = {
         source: "/api/audio-in",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Origin", value: "*" }, // replace this your actual origin
+          {
+            key: "Access-Control-Allow-Origin",
+            value: process.env.NEXT_PUBLIC_APP_URL || "*",
+          },
           {
             key: "Access-Control-Allow-Methods",
-            value: "POST",
+            value: "OPTIONS, POST, GET, PUT, DELETE",
           },
           {
             key: "Access-Control-Allow-Headers",
@@ -25,10 +28,13 @@ const nextConfig: NextConfig = {
         source: "/api/v1/translate",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Origin", value: "*" }, // replace this your actual origin
+          {
+            key: "Access-Control-Allow-Origin",
+            value: process.env.NEXT_PUBLIC_APP_URL || "*",
+          },
           {
             key: "Access-Control-Allow-Methods",
-            value: "POST",
+            value: "OPTIONS, POST, GET, PUT, DELETE",
           },
           {
             key: "Access-Control-Allow-Headers",
@@ -41,10 +47,13 @@ const nextConfig: NextConfig = {
         source: "/api/text-to-speech",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Origin", value: "*" }, // replace this your actual origin
+          {
+            key: "Access-Control-Allow-Origin",
+            value: process.env.NEXT_PUBLIC_APP_URL || "*",
+          },
           {
             key: "Access-Control-Allow-Methods",
-            value: "POST",
+            value: "OPTIONS, POST, GET, PUT, DELETE",
           },
           {
             key: "Access-Control-Allow-Headers",
@@ -57,10 +66,13 @@ const nextConfig: NextConfig = {
         source: "/api/new-voice-note",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Origin", value: "*" }, // replace this your actual origin
+          {
+            key: "Access-Control-Allow-Origin",
+            value: process.env.NEXT_PUBLIC_APP_URL || "*",
+          },
           {
             key: "Access-Control-Allow-Methods",
-            value: "POST",
+            value: "OPTIONS, POST, GET, PUT, DELETE",
           },
           {
             key: "Access-Control-Allow-Headers",
@@ -73,10 +85,13 @@ const nextConfig: NextConfig = {
         source: "/api/get-bio",
         headers: [
           { key: "Access-Control-Allow-Credentials", value: "true" },
-          { key: "Access-Control-Allow-Origin", value: "*" }, // replace this your actual origin
+          {
+            key: "Access-Control-Allow-Origin",
+            value: process.env.NEXT_PUBLIC_APP_URL || "*",
+          },
           {
             key: "Access-Control-Allow-Methods",
-            value: "POST",
+            value: "OPTIONS, POST, GET, PUT, DELETE",
           },
           {
             key: "Access-Control-Allow-Headers",
