@@ -3,8 +3,9 @@
 import { useState, useRef, useEffect } from "react"
 import { Slider } from "@/components/ui/slider"
 import { Button } from "@/components/ui/button"
-import { Play, Pause, SkipBack, SkipForward, Volume2 } from "lucide-react"
+import { Play, Pause, Volume2 } from "lucide-react"
 import NumberFlow from "@number-flow/react"
+import BlurryEntranceFaster from "./BlurryEntranceFaster"
 
 const AudioPlayer = ({ src }: { src: string }) => {
   const [isPlaying, setIsPlaying] = useState(false)
@@ -85,15 +86,27 @@ const AudioPlayer = ({ src }: { src: string }) => {
           <div className="flex items-center justify-center gap-4">
             <Button size="icon" onClick={togglePlay} className="rounded-full">
               {isPlaying ? (
-                <Pause className="h-8 w-8 text-orange-200" />
+                <Pause className="h-8 w-8 text-orange-200 animate-pulse" />
               ) : (
-                <Play className="h-8 w-8 text-green-200" />
+                <BlurryEntranceFaster>
+                  <Play className="h-8 w-8 text-green-200" />
+                </BlurryEntranceFaster>
               )}
             </Button>
           </div>
 
           <div className="flex items-center gap-2">
-            <Volume2 className="h-6 w-6 text-indigo-600" />
+            <Volume2
+              className={`h-6 transition-all duration-1000 w-6 ${
+                isPlaying ? "text-emerald-600" : "text-indigo-400"
+              }`}
+              onClick={() => {
+                setVolume(volume === 0 ? 1 : 0)
+                if (audioRef.current) {
+                  audioRef.current.volume = volume === 0 ? 1 : 0
+                }
+              }}
+            />
             <Slider
               value={[volume]}
               max={1}
