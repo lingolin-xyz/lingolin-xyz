@@ -76,10 +76,12 @@ export const flushCreditsData = async () => {
 }
 export const getTranslationByMessageAndLanguage = async ({
   message,
-  language,
+  fromLanguage,
+  toLanguage,
 }: {
   message: string
-  language: string
+  fromLanguage: string
+  toLanguage: string
 }): Promise<any | null> => {
   const collection = new SecretVaultWrapper(
     orgConfig.nodes,
@@ -87,7 +89,7 @@ export const getTranslationByMessageAndLanguage = async ({
     process.env.TRANSLATIONS_SECRET_VAULT_SCHEMA_ID!
   )
   await collection.init()
-  const filter = { message, language }
+  const filter = { message, fromLanguage, toLanguage }
 
   const dataRead = await collection.readFromNodes(filter)
 
@@ -144,19 +146,20 @@ export async function writeTranslation({
         translation,
       },
     ]
-    const dataWritten = await collection.writeToNodes(web3ExperienceSurveyData)
-    console.log("dataWritten", dataWritten)
+    await collection.writeToNodes(web3ExperienceSurveyData)
+    // const dataWritten = await collection.writeToNodes(web3ExperienceSurveyData)
+    // console.log("dataWritten", dataWritten)
 
     // const newIds = [
     //   ...new Set(dataWritten.map((item: any) => item.data.created).flat()),
     // ]
 
     const dataRead = await collection.readFromNodes({})
-    console.log("📚 total records:", dataRead.length)
-    console.log(
-      "📚 Read new records:",
-      dataRead.slice(0, web3ExperienceSurveyData.length)
-    )
+    console.log("📚 total translations:", dataRead.length)
+    // console.log(
+    //   "📚 Read new records:",
+    //   dataRead.slice(0, web3ExperienceSurveyData.length)
+    // )
 
     return dataRead
   } catch (error) {
