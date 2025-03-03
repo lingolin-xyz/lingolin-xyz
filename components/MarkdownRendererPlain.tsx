@@ -1,5 +1,5 @@
-import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import Markdown from "react-markdown"
+import remarkGfm from "remark-gfm"
 import {
   ARenderer,
   h1Renderer,
@@ -8,45 +8,49 @@ import {
   liRenderer,
   pRenderer,
   ulRenderer,
-} from "./renderers";
+  emRenderer,
+  emRendererForHaikuTweets,
+} from "./renderers-plane"
 
-export const MarkdownRenderer = ({
+export const MarkdownRendererPlain = ({
   children,
-  isWebsite = false,
 }: {
-  children: React.ReactNode;
-  isWebsite?: boolean;
+  children: React.ReactNode
 }) => {
   return (
     <Markdown
       components={{
         ul: ulRenderer,
         li: liRenderer,
-        // h1: isWebsite ? h1RendererWebsite : h1Renderer,
         h1: h1Renderer,
         h2: h2Renderer,
         h3: h3Renderer,
         p: pRenderer,
         a: ARenderer,
+        em: children
+          ? typeof children === "string"
+            ? children.includes("haiku")
+              ? emRendererForHaikuTweets
+              : emRenderer
+            : emRenderer
+          : emRenderer,
       }}
       remarkPlugins={[remarkGfm]}
     >
       {processContent(children as string)}
     </Markdown>
-  );
-};
+  )
+}
 
 const processContent = (text: string) => {
-  if (!text) return "";
-  if (!text.replace) return "";
   const textWithoutBRs = text.replace(
     /<br\/>/g,
     `
 
 `
-  );
+  )
   return textWithoutBRs.replace(
     /lens\/(\w+)/g,
     "[https://hey.xyz/u/$1](https://hey.xyz/u/$1)"
-  );
-};
+  )
+}

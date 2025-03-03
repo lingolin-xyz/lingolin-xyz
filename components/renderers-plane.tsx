@@ -1,18 +1,18 @@
 "use client"
 
 import classNames from "classnames"
-import BlurryEntranceFaster from "./BlurryEntranceFaster"
 import { cleanURL, getFaviconUrl, WebsiteMetaTags } from "@/lib/urls"
 import { useEffect, useRef, useState } from "react"
 import axios from "axios"
 import { motion, AnimatePresence } from "framer-motion"
+import BlurryEntrance from "./BlurryEntrance"
 
 export const linkRenderer = (props: any) => (
   <a
     {...props}
     className={classNames(
-      "text-blue-600",
-      "hover:text-blue-800",
+      "text-blue-400",
+      "hover:text-blue-300",
       "transition-colors"
     )}
     target="_blank"
@@ -24,7 +24,7 @@ export const h1Renderer = (props: any) => (
   <div
     {...props}
     className={classNames(
-      "mb-4 text-xl font-medium tracking-tight text-zinc-800 dark:text-zinc-200 sm:text-3xl"
+      "mb-4 text-base tracking-tight font-bold text-zinc-800 sm:text-4xl"
     )}
   />
 )
@@ -32,7 +32,7 @@ export const h1RendererDark = (props: any) => (
   <div
     {...props}
     className={classNames(
-      "mb-4 mt-4 text-xl font-medium tracking-tight text-zinc-200 sm:text-3xl"
+      "mb-4 mt-4 text-base tracking-tight text-zinc-800 sm:text-3xl"
     )}
   />
 )
@@ -40,7 +40,7 @@ export const h1RendererMessage = (props: any) => (
   <div
     {...props}
     className={classNames(
-      "mb-4 mt-4 text-lg font-medium tracking-tight text-zinc-800 dark:text-zinc-200 sm:text-xl"
+      "mb-4 mt-4 text-base tracking-tight text-zinc-800 sm:text-base"
     )}
   />
 )
@@ -54,7 +54,7 @@ export const h2Renderer = (props: any) => (
     {...props}
     className={classNames(
       "font-light",
-      "mb-4 text-base uppercase tracking-wider text-zinc-600 dark:text-zinc-300 sm:text-xl"
+      "my-6 text-base font-semibold text-zinc-600 sm:text-2xl"
     )}
   />
 )
@@ -63,7 +63,7 @@ export const h2RendererDark = (props: any) => (
     {...props}
     className={classNames(
       "font-light",
-      "mb-4 pt-6 text-base uppercase tracking-wider text-zinc-300 sm:text-xl"
+      "mb-4 pt-6 text-base uppercase tracking-wider text-zinc-700 sm:text-base"
     )}
   />
 )
@@ -73,7 +73,7 @@ export const h2RendererMessage = (props: any) => (
     {...props}
     className={classNames(
       "font-light",
-      "mb-4 pt-6 text-base uppercase tracking-wider text-zinc-600 dark:text-zinc-300"
+      "mb-4 pt-6 text-base uppercase tracking-wider text-zinc-700"
     )}
   />
 )
@@ -83,7 +83,7 @@ export const h3Renderer = (props: any) => (
     className={classNames(
       "",
       "",
-      "py-2 text-lg md:text-xl font-semibold tracking-tight text-zinc-800 dark:text-zinc-200"
+      "py-2 text-base md:text-base font-semibold tracking-tight text-zinc-800"
     )}
   />
 )
@@ -108,7 +108,7 @@ export const codeRenderMessage = (props: any) => (
 //         className="group hover:bg-indigo-300 bg-indigo-900/50 transition-all -translate-y-1"
 //       >
 //         <div className="text-xs flex items-center gap-2 text-emerald-500 group-hover:text-emerald-700">
-//           <div className="font-medium tracking-tight">copy</div>
+//           <div className=" tracking-tight">copy</div>
 //           <div className="">
 //             <LuCopy />
 //           </div>
@@ -130,7 +130,7 @@ export const h3RendererMessage = (props: any) => (
     className={classNames(
       "",
       "",
-      "font-semibold mt-2 py-2 pt-4 text-lg sm:text-xl tracking-tight text-zinc-600"
+      "font-semibold mt-2 py-2 pt-4 text-base sm:text-base tracking-tight text-zinc-700"
     )}
   />
 )
@@ -139,7 +139,7 @@ export const h4Renderer = (props: any) => (
   <div
     {...props}
     className={classNames(
-      "mb-4 text-lg font-medium tracking-tight text-zinc-800 dark:text-zinc-200 sm:text-xl"
+      "mb-4 text-base tracking-tight text-zinc-800 sm:text-base"
     )}
   />
 )
@@ -159,9 +159,7 @@ export const hrRenderer = (props: any) => (
 export const pRenderer = (props: any) => (
   <div
     {...props}
-    className={classNames(
-      "text-base font-medium lg:text-lg my-2 text-zinc-800"
-    )}
+    className={classNames("text-base lg:text-base my-2 text-zinc-800")}
   />
 )
 export const pRendererMessage = (props: any) => (
@@ -184,18 +182,18 @@ export const ARenderer = (props: any) => {
   const [metaTags, setMetaTags] = useState<WebsiteMetaTags | null>(null)
   const [isHovered, setIsHovered] = useState(false)
 
-  useEffect(() => {
-    if (loadedRef.current) return
-    loadedRef.current = true
-    const fetch = async () => {
-      const url = props.children.replaceAll("lens.dev/", "hey.xyz/")
+  // useEffect(() => {
+  //   if (loadedRef.current) return
+  //   loadedRef.current = true
+  //   const fetch = async () => {
+  //     const url = props.children.replaceAll("lens.dev/", "hey.xyz/")
 
-      const res = await axios.post("/api/fetch-meta-tags", { url })
-      const metaTags = res.data.metaTags
-      setMetaTags(metaTags)
-    }
-    fetch()
-  }, [props.children])
+  //     const res = await axios.post("/api/fetch-meta-tags", { url })
+  //     const metaTags = res.data.metaTags
+  //     setMetaTags(metaTags)
+  //   }
+  //   fetch()
+  // }, [props.children])
 
   if (!props.children.replaceAll)
     return (
@@ -208,8 +206,8 @@ export const ARenderer = (props: any) => {
     <a
       {...props}
       className={classNames(
-        "text-blue-600",
-        "hover:text-blue-800",
+        "text-blue-400",
+        "hover:text-blue-200",
         "transition-colors inline-flex items-center gap-1 hover:bg-indigo-100 px-0.5 rounded-md relative"
       )}
       href={theURL}
@@ -227,7 +225,7 @@ export const ARenderer = (props: any) => {
             animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: 10, scale: 0.95, filter: "blur(4px)" }}
             // transition={{ duration: 0.2, ease: "easeOut" }}
-            className="absolute z-10 -top-[128px] md:-top-[214px] cursor-pointer bg-white/60 border border-zinc-300/20 shadow-sm shadow-black/30 backdrop-blur-sm text-black p-2 px-4 rounded-md flex-col items-center justify-center"
+            className="absolute z-10 -top-[128px] md:-top-[214px] cursor-pointer bg-white/60 border border-zinc-300/20 shadow-sm shadow-black/30 backdrop-blur-sm text-white p-2 px-4 rounded-md flex-col items-center justify-center"
           >
             <div className="w-full flex items-center">
               <div className="relative">
@@ -245,7 +243,7 @@ export const ARenderer = (props: any) => {
                 </div>
               </div>
             </div>
-            <div className="truncate font-medium tracking-tight text-ellipsis w-52 md:w-72 text-sm pt-1">
+            <div className="truncate  tracking-tight text-ellipsis w-52 md:w-72 text-sm pt-1">
               {metaTags.title}
             </div>
           </motion.div>
@@ -259,7 +257,7 @@ export const ulRenderer = (props: any) => (
   <ul
     {...props}
     className={classNames(
-      "text-lg list-disc pl-1.5 sm:pl-4 marker:text-indigo-600 dark:marker:text-indigo-400",
+      "text-base list-disc pl-1.5 sm:pl-4 marker:text-indigo-400",
       "mb-2 p-0"
     )}
   />
@@ -269,7 +267,7 @@ export const olRendererMessage = (props: any) => (
   <ol
     {...props}
     className={classNames(
-      "text-base list-decimal pl-1.5 sm:pl-4 marker:text-indigo-600 m-2 p-0"
+      "text-base list-decimal pl-1.5 sm:pl-4 marker:text-indigo-400 m-2 p-0"
     )}
   />
 )
@@ -278,25 +276,28 @@ export const olRenderer = (props: any) => (
   <ol
     {...props}
     className={classNames(
-      "text-base list-decimal pl-1.5 sm:pl-4 marker:text-indigo-600 m-2 p-0"
+      "text-base list-decimal pl-1.5 sm:pl-4 marker:text-indigo-400 m-2 p-0"
     )}
   />
 )
 
 export const preRenderer = (props: any) => (
-  <pre {...props} className={classNames("text-xs", "bg-black/80")} />
+  <pre {...props} className={classNames("text-xs", "bg-white/80")} />
 )
 
 export const emRenderer = (props: any) => (
-  <BlurryEntranceFaster>
-    <div className="px-2 lg:px-4">
+  <span {...props} className={classNames("italic font-semibold")} />
+)
+
+export const emRendererForHaikuTweets = (props: any) => (
+  <BlurryEntrance>
+    <div className="">
       <div
         {...props}
         className={classNames(
-          "",
-          "mt-12 mb-8 p-2 bg-indigo-50 dark:bg-indigo-950  font-medium rounded-md shadow-md lg:px-8 lg:py-4 shadow-indigo-200"
+          "pl-6 border-l border-zinc-300/20 italic text-indigo-600 font-grandstander font-light text-base"
         )}
       />
     </div>
-  </BlurryEntranceFaster>
+  </BlurryEntrance>
 )
