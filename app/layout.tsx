@@ -19,8 +19,8 @@ export const generateMetadata = async () => {
 
   const images = [ogImage]
 
-  const appName = "lingolin"
-  const theTitle = `Lingolin`
+  const appName = "Lingolin Browser Extension"
+  const theTitle = "Lingolin - Instant Translations in a Browser Extension"
   const theDescription =
     "A Chrome Extension for language learning and instant translations."
 
