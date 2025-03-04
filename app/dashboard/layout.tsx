@@ -3,6 +3,7 @@ import { PrivyClient } from "@privy-io/server-auth"
 import { ADMIN_EMAILS, PRIVY_APP_ID } from "@/lib/constants"
 import { postToDiscord } from "@/lib/discord"
 import DashboardHeaderBar from "@/components/DashboardHeaderBar"
+import { getEmailAddressFromPrivyUserObject } from "@/lib/privy-utils"
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const cookieStore = await cookies()
@@ -30,7 +31,12 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
     return <div>No email found</div>
   }
 
-  if (!ADMIN_EMAILS.includes(user.email.address)) {
+  const email = getEmailAddressFromPrivyUserObject(user)
+  if (!email) {
+    return <div>No email found (v2)</div>
+  }
+
+  if (!ADMIN_EMAILS.includes(email)) {
     return <div>You are not authorized to access this page</div>
   }
 

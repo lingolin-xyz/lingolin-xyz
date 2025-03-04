@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast"
 import axios from "axios"
 import Title from "./Title"
 import TranslationInRecentList from "./TranslationInRecentList"
+import { getEmailAddressFromPrivyUserObject } from "@/lib/privy-utils"
 
 const ExtensionInstalledOK = () => {
   const { user } = usePrivy()
@@ -21,7 +22,10 @@ const ExtensionInstalledOK = () => {
       window.postMessage(
         {
           type: "LINGOLIN_USER_ID",
-          data: { id: user.id, email: user.email?.address },
+          data: {
+            id: user.id,
+            email: getEmailAddressFromPrivyUserObject(user),
+          },
         },
         "*"
       )

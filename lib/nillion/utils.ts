@@ -48,7 +48,23 @@ export async function readCredits(userIdFilter?: string | null) {
   const filter = userIdFilter ? { userid: userIdFilter } : ({} as any)
 
   const dataRead = await collection.readFromNodes(filter)
-  return dataRead && dataRead.length > 0 ? dataRead[0] : null
+
+  if (userIdFilter) {
+    if (dataRead && dataRead.length > 0) {
+      const formatted = dataRead.map((item: any) => ({
+        userid: item.userid,
+        credits: parseInt(item.credits),
+      }))
+      return formatted
+    } else {
+      return null
+    }
+  } else {
+    return dataRead.map((item: any) => ({
+      userid: item.userid,
+      credits: parseInt(item.credits),
+    }))
+  }
 }
 
 export const flushTranslationsData = async () => {
