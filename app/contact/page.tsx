@@ -7,7 +7,7 @@ const Contact = () => {
         <h1 className="text-3xl font-bold mb-8">Contact Us</h1>
 
         <p className="mb-6">
-          Have questions about Lingolin? We're here to help. Choose your
+          Have questions about Lingolin? We&apos;re here to help. Choose your
           preferred way to reach us:
         </p>
 
