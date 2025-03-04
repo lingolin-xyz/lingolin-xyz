@@ -35,23 +35,34 @@ const Footer = () => {
             in Feb/Mar 2025
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <div>
-            <Link
-              className="text-indigo-500 font-semibold hover:text-indigo-400 active:opacity-60 transition-all duration-100"
-              href="/privacy-policy"
-            >
-              Privacy Policy
-            </Link>
-          </div>
-          <div>·</div>
-          <div>
-            <Link
-              className="text-indigo-500 font-semibold hover:text-indigo-400 active:opacity-60 transition-all duration-100"
-              href="/terms-and-conditions"
-            >
-              Terms and Conditions
-            </Link>
+        <div>
+          <div className="flex items-center gap-2">
+            <div>
+              <Link
+                className="text-indigo-500 font-semibold hover:text-indigo-400 active:opacity-60 transition-all duration-100"
+                href="/contact"
+              >
+                Contact Us
+              </Link>
+            </div>
+            <div>·</div>
+            <div>
+              <Link
+                className="text-indigo-500 font-semibold hover:text-indigo-400 active:opacity-60 transition-all duration-100"
+                href="/privacy-policy"
+              >
+                Privacy Policy
+              </Link>
+            </div>
+            <div>·</div>
+            <div>
+              <Link
+                className="text-indigo-500 font-semibold hover:text-indigo-400 active:opacity-60 transition-all duration-100"
+                href="/terms-and-conditions"
+              >
+                Terms and Conditions
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -29,7 +29,7 @@ const Contact = () => {
               For general inquiries:{" "}
               <span
                 onClick={() => copyToClipboard("hellolingolin@gmail.com")}
-                className="text-blue-600 hover:text-blue-800"
+                className="text-blue-600 hover:text-blue-800 cursor-pointer"
               >
                 hellolingolin@gmail.com
               </span>
