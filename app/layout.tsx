@@ -21,7 +21,8 @@ export const generateMetadata = async () => {
 
   const appName = "lingolin"
   const theTitle = `Lingolin`
-  const theDescription = "world word web"
+  const theDescription =
+    "A Chrome Extension for language learning and instant translations."
 
   return {
     title: theTitle,
