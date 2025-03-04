@@ -44,6 +44,16 @@ const ExtensionInstalledOK = () => {
     if (user) if (user.id) fetchPastTranslations(user.id)
   }, [user])
 
+  const callDeleteTranslation = async (translation: any) => {
+    setPastTranslations(pastTranslations.filter((t) => t.id !== translation.id))
+
+    // const res = await axios.post("/api/v1/delete-translation", {
+    //   translation,
+    // })
+    // console.log("DELETE TRANSLATION")
+    // console.table(res.data)
+  }
+
   return (
     <div className="py-4">
       {user ? (
@@ -67,6 +77,7 @@ const ExtensionInstalledOK = () => {
                 {pastTranslations.map(
                   (
                     translation: {
+                      id: string
                       event_type: string
                       extra: string
                       extra2: string
@@ -76,8 +87,9 @@ const ExtensionInstalledOK = () => {
                     index
                   ) => (
                     <TranslationInRecentList
-                      key={index}
+                      key={translation.id}
                       translation={translation}
+                      onDelete={callDeleteTranslation}
                     />
                   )
                 )}

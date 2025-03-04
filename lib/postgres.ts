@@ -111,7 +111,7 @@ export const logEvent = async ({
 }
 
 export const getRecentTranslationsByUserId = async (userId: string) => {
-  const query = `SELECT event_type, extra, extra2, extra3, extra4, created_at
+  const query = `SELECT id, event_type, extra, extra2, extra3, extra4, created_at
     FROM lingolin_events 
     WHERE user_id = $1 
     AND (event_type = 'translation_missed' OR event_type = 'translation_hit') 
