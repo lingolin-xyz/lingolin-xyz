@@ -22,8 +22,12 @@ const VideoDemoLyrics = () => {
                   <div>(Estoy trabajando en una extensión de Chrome)</div>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <div>To use it, you select the text and press the "T"</div>
-                  <div>(Para usarla, selecciona el texto y pulsa "T")</div>
+                  <div>
+                    To use it, you select the text and press the &quot;T&quot;
+                  </div>
+                  <div>
+                    (Para usarla, selecciona el texto y pulsa &quot;T&quot;)
+                  </div>
                 </div>
                 <div className="flex flex-col gap-2">
                   <div>It&apos;s so easy and fast, just wait and see</div>
