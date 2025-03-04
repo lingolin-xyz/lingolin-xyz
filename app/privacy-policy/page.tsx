@@ -1,3 +1,4 @@
+import AudioPlayer from "@/components/AudioPlayer"
 import BlurryEntrance from "@/components/BlurryEntrance"
 import { MarkdownRendererPlain } from "@/components/MarkdownRendererPlain"
 
@@ -115,8 +116,18 @@ practices as described above.
 const PrivacyPolicy = () => {
   return (
     <BlurryEntrance>
-      <div className="py-6 max-w-4xl font-sans mx-auto w-full bg-yellow-50/60 rounded-xl p-6 my-6 md:px-14 md:py-8">
-        <MarkdownRendererPlain>{markdownContent}</MarkdownRendererPlain>
+      <div className="flex flex-col items-center justify-center w-full mx-auto max-w-xl">
+        <div className="bg-zinc-100 p-4 rounded-xl mt-12">
+          <div>Listen to the Terms of Use here!</div>
+          <div className="w-full flex justify-center items-center">
+            <AudioPlayer src="https://www.lingolin.xyz/audios/lingolin-privacy.mp3" />
+          </div>
+        </div>
+      </div>
+      <div>
+        <div className="py-6 max-w-4xl font-sans mx-auto w-full bg-yellow-50/60 rounded-xl p-6 my-6 md:px-14 md:py-8">
+          <MarkdownRendererPlain>{markdownContent}</MarkdownRendererPlain>
+        </div>
       </div>
     </BlurryEntrance>
   )
