@@ -5,10 +5,12 @@ import { PrivyClient } from "@privy-io/server-auth"
 
 import Link from "next/link"
 import { PRIVY_APP_ID } from "@/lib/constants"
+import { postToDiscord } from "@/lib/discord"
 
 const DashboardPage = async () => {
   const cookieStore = await cookies()
 
+  await postToDiscord("Hello from the dashboard!")
   // Get a specific cookie by name
   const myCookie = cookieStore.get("privy-id-token")
 
