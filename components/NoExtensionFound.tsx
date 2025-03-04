@@ -68,12 +68,14 @@ const NoExtensionFound = () => {
           A Chrome Extension for the Monad Hackathon
         </div>
         <BlurryEntrance delay={0.5}>
-          <div className="w-full flex justify-center items-center border-4 border-black max-w-2xl rounded-xl overflow-hidden">
-            <video
-              src="/videos/lingolin-demo-1.mp4"
-              controls
-              className="scale-[101%]"
-            />
+          <div className="flex justify-center items-center">
+            <div className="w-full flex justify-center items-center border-4 border-black max-w-2xl rounded-xl overflow-hidden">
+              <video
+                src="/videos/lingolin-demo-1.mp4"
+                controls
+                className="scale-[101%]"
+              />
+            </div>
           </div>
         </BlurryEntrance>
         <BigTitle>
