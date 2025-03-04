@@ -126,4 +126,7 @@ export const deleteTranslationFromLogsById = async (translationId: string) => {
   const query = `DELETE FROM lingolin_events WHERE id = $1`
   const params = [translationId]
   await executeQuery(query, params)
+  await postToDiscord(
+    "🔴🔴🔴🔴 DELETED TRANSLATION FROM LOGS: " + translationId
+  )
 }
