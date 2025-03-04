@@ -2,7 +2,7 @@ import { cookies } from "next/headers"
 import { PrivyClient } from "@privy-io/server-auth"
 import { ADMIN_EMAILS, PRIVY_APP_ID } from "@/lib/constants"
 import { postToDiscord } from "@/lib/discord"
-import Title from "@/components/Title"
+import DashboardHeaderBar from "@/components/DashboardHeaderBar"
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const cookieStore = await cookies()
@@ -34,7 +34,12 @@ const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
     return <div>You are not authorized to access this page</div>
   }
 
-  return <div>{children}</div>
+  return (
+    <div>
+      <DashboardHeaderBar />
+      {children}
+    </div>
+  )
 }
 
 export default DashboardLayout
