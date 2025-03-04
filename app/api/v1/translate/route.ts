@@ -65,14 +65,16 @@ export async function POST(req: Request) {
       postToDiscord("Translation found in DB!")
       console.log(" 🍎  Translation found in DB!", savedTranslation)
 
-      await logEvent({
-        event_type: "translation_hit",
-        userId,
-        extra: savedTranslation.fromLanguage,
-        extra2: savedTranslation.toLanguage,
-        extra3: savedTranslation.message,
-        extra4: savedTranslation.translation,
-      })
+      waitUntil(
+        logEvent({
+          event_type: "translation_hit",
+          userId,
+          extra: savedTranslation.fromLanguage,
+          extra2: savedTranslation.toLanguage,
+          extra3: savedTranslation.message,
+          extra4: savedTranslation.translation,
+        })
+      )
 
       return new Response(
         JSON.stringify({
@@ -93,14 +95,6 @@ export async function POST(req: Request) {
     const translatedMessage = await translateMessage({
       message: cleanText,
       language: actualTargetLanguage,
-    })
-    await logEvent({
-      event_type: "translation_missed",
-      userId,
-      extra: sentenceLanguage,
-      extra2: actualTargetLanguage,
-      extra3: cleanText,
-      extra4: translatedMessage,
     })
 
     waitUntil(
@@ -155,6 +149,14 @@ const afterTasksMissed = async ({
   message: string
   translation: string
 }) => {
+  await logEvent({
+    event_type: "translation_missed",
+    userId,
+    extra: fromLanguage,
+    extra2: toLanguage,
+    extra3: message,
+    extra4: translation,
+  })
   await writeTranslation({
     fromLanguage,
     toLanguage,
