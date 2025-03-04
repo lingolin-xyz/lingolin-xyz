@@ -78,9 +78,9 @@ const TranslationInRecentList = ({
                 })
               }
             }}
-            className="relative text-base md:text-lg font-semibold opacity-70 tracking-tighter pt-4 bg-transparent hover:bg-yellow-100 rounded-xl px-2 cursor-pointer hover:opacity-90 active:opacity-40 group transition-all duration-300"
+            className="relative text-base md:text-lg font-semibold opacity-70 tracking-tighter pt-4 bg-transparent hover:bg-yellow-100 rounded-xl px-2 cursor-pointer hover:opacity-90 active:opacity-30 active:scale-[100%] active:translate-y-0.5 active:duration-100 group transition-all duration-300"
           >
-            <div className="absolute text-indigo-600 top-0 left-0 font-normal text-sm rotate-0 group-hover:-rotate-6 transition-all duration-100 group-hover:scale-125">
+            <div className="absolute text-indigo-600 top-0 left-0 font-normal text-sm rotate-0 group-hover:-rotate-6 transition-all duration-100 group-hover:scale-125 group-active:scale-75">
               from {translation.extra}
             </div>
             {translation.extra3}
@@ -95,9 +95,9 @@ const TranslationInRecentList = ({
                 })
               }
             }}
-            className="relative text-xl md:text-2xl font-bold tracking-tight pt-5 bg-transparent group hover:bg-emerald-200 rounded-xl px-2 cursor-pointer hover:opacity-90 active:opacity-40 transition-all duration-300"
+            className="relative text-xl md:text-2xl font-bold tracking-tight pt-5 bg-transparent group hover:bg-emerald-200 rounded-xl px-2 cursor-pointer hover:opacity-90 active:opacity-30 active:scale-[100%] active:translate-y-0.5 active:duration-100 group transition-all duration-300"
           >
-            <div className="absolute top-0 left-0 font-normal text-sm rotate-0 group-hover:-rotate-6 transition-all duration-100 group-hover:scale-125">
+            <div className="absolute top-0 left-0 font-normal text-sm rotate-0 group-hover:-rotate-6 transition-all duration-100 group-hover:scale-125 group-active:scale-75">
               to {translation.extra2}
             </div>
 

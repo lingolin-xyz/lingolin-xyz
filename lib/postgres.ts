@@ -121,3 +121,9 @@ export const getRecentTranslationsByUserId = async (userId: string) => {
   const res = await executeQuery(query, params)
   return res.rows
 }
+
+export const deleteTranslationFromLogsById = async (translationId: string) => {
+  const query = `DELETE FROM lingolin_events WHERE id = $1`
+  const params = [translationId]
+  await executeQuery(query, params)
+}

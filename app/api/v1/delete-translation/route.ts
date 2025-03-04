@@ -1,3 +1,4 @@
+import { deleteTranslationFromLogsById } from "@/lib/postgres"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
@@ -6,6 +7,8 @@ export async function POST(req: Request) {
 
   try {
     console.log("🍎  🍎  🍎  🍎  🍎  🍎  🍎 something something", translationId)
+
+    await deleteTranslationFromLogsById(translationId)
     return new NextResponse(JSON.stringify({ success: true }))
   } catch (error) {
     console.error("Translation API Error:", error)

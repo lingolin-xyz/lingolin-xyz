@@ -47,11 +47,11 @@ const ExtensionInstalledOK = () => {
   const callDeleteTranslation = async (translation: any) => {
     setPastTranslations(pastTranslations.filter((t) => t.id !== translation.id))
 
-    // const res = await axios.post("/api/v1/delete-translation", {
-    //   translation,
-    // })
-    // console.log("DELETE TRANSLATION")
-    // console.table(res.data)
+    const res = await axios.post("/api/v1/delete-translation", {
+      translationId: translation.id,
+    })
+    console.log("DELETE TRANSLATION")
+    console.table(res.data)
   }
 
   return (
