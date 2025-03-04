@@ -49,18 +49,18 @@ const Footer = () => {
             <div>
               <Link
                 className="text-indigo-500 font-semibold hover:text-indigo-400 active:opacity-60 transition-all duration-100"
-                href="/privacy-policy"
+                href="/terms-and-conditions"
               >
-                Privacy Policy
+                Terms and Conditions
               </Link>
             </div>
             <div>·</div>
             <div>
               <Link
                 className="text-indigo-500 font-semibold hover:text-indigo-400 active:opacity-60 transition-all duration-100"
-                href="/terms-and-conditions"
+                href="/privacy-policy"
               >
-                Terms and Conditions
+                Privacy Policy
               </Link>
             </div>
           </div>
