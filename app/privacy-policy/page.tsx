@@ -4,7 +4,7 @@ import { MarkdownRendererPlain } from "@/components/MarkdownRendererPlain"
 const markdownContent = `
 # Privacy Policy for Lingolin Chrome Extension
 
-Last updated: [Current Date]
+Last updated: March 3rd, 2025
 
 ## 1. Introduction
 
@@ -88,8 +88,7 @@ collect information from children under 13.
 
 ## 10. Changes to This Policy
 
-We may update this Privacy Policy periodically. We will notify users of any
-material changes through the extension or website.
+We may update this Privacy Policy from time to time. When we make changes, we will inform you through our website or the extension. By continuing to use our extension after these changes, you agree to be bound by the updated policy.
 
 ## 11. Data Retention
 
@@ -103,18 +102,14 @@ We retain your data for as long as:
 
 For privacy-related questions or concerns, contact us at:
 
-- Email: [Your Contact Email]
+- Email: hello@lingolin.xyz
 - Website: https://www.lingolin.xyz
 
 ## 13. Consent
 
 By using the Extension, you consent to this Privacy Policy and our data
 practices as described above.
-
-## 14. Jurisdiction
-
-This policy is governed by [Your Jurisdiction] law. Any disputes will be
-resolved in the courts of [Your Jurisdiction].`
+`
 
 const PrivacyPolicy = () => {
   return (
