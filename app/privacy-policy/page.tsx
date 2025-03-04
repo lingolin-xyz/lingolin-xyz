@@ -118,7 +118,7 @@ const PrivacyPolicy = () => {
     <BlurryEntrance>
       <div className="flex flex-col items-center justify-center w-full mx-auto max-w-xl">
         <div className="bg-zinc-100 p-4 rounded-xl mt-12">
-          <div>Listen to the Terms of Use here!</div>
+          <div>Listen to the Privacy Policy as a rap:</div>
           <div className="w-full flex justify-center items-center">
             <AudioPlayer src="https://www.lingolin.xyz/audios/lingolin-privacy.mp3" />
           </div>
