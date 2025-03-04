@@ -1,5 +1,6 @@
 "use client"
 
+import Title from "@/components/Title"
 import { Textarea } from "@/components/ui/textarea"
 import { useState } from "react"
 
@@ -18,12 +19,14 @@ const Notepad = () => {
   }
 
   return (
-    <div className="flex flex-col gap-4 py-12 max-w-2xl mx-auto">
+    <div className="flex flex-col gap-4 py-12 max-w-2xl mx-auto items-center justify-center">
+      <Title>Notepad / Playground</Title>
       <Textarea
-        placeholder="Write your note here..."
+        placeholder="Write your note here, select, and translate to any language!"
         value={text}
+        rows={8}
         onChange={handleChange}
-        className="resize-none !text-2xl"
+        className="resize-none !text-3xl !p-5 !font-semibold"
       />
     </div>
   )
