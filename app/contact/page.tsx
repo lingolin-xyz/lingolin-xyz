@@ -1,6 +1,17 @@
+"use client"
+
 import BlurryEntrance from "@/components/BlurryEntrance"
+import { useToast } from "@/hooks/use-toast"
 
 const Contact = () => {
+  const { toast } = useToast()
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+    toast({
+      title: "Copied to clipboard",
+    })
+  }
+
   return (
     <BlurryEntrance>
       <div className="py-6 max-w-4xl font-granstander mx-auto w-full bg-yellow-50/60 rounded-xl p-6 my-6 md:px-14 md:py-8">
@@ -16,12 +27,12 @@ const Contact = () => {
             <h2 className="text-xl font-semibold mb-2">Email</h2>
             <p>
               For general inquiries:{" "}
-              <a
-                href="mailto:hellolingolin@gmail.com"
+              <span
+                onClick={() => copyToClipboard("hellolingolin@gmail.com")}
                 className="text-blue-600 hover:text-blue-800"
               >
                 hellolingolin@gmail.com
-              </a>
+              </span>
             </p>
           </div>
 
