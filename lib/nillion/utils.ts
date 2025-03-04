@@ -1,6 +1,7 @@
 // @ts-expect-error - secretvaults is not typed
 import { SecretVaultWrapper } from "secretvaults"
 import { orgConfig } from "./orgConfig"
+import { postToDiscord } from "../discord"
 
 export async function writeCredits({
   userid,
@@ -54,6 +55,7 @@ export async function readCredits(userIdFilter?: string | null) {
       const formatted = dataRead.map((item: any) => ({
         userid: item.userid,
         credits: parseInt(item.credits),
+        _id: item._id,
       }))
       return formatted
     } else {
@@ -63,7 +65,38 @@ export async function readCredits(userIdFilter?: string | null) {
     return dataRead.map((item: any) => ({
       userid: item.userid,
       credits: parseInt(item.credits),
+      _id: item._id,
     }))
+  }
+}
+
+export const updateCreditsValueById = async (
+  recordId: string,
+  credits: number
+) => {
+  const collection = new SecretVaultWrapper(
+    orgConfig.nodes,
+    orgConfig.orgCredentials,
+    process.env.CREDITS_SECRET_VAULT_SCHEMA_ID!
+  )
+  await collection.init()
+
+  const readDataFiltered = await collection.readFromNodes({ _id: recordId })
+
+  if (readDataFiltered) {
+    const recordUpdate = readDataFiltered[0]
+    const clearRecord = {
+      userid: recordUpdate.userid,
+      credits: recordUpdate.credits,
+    }
+
+    clearRecord.credits = credits
+
+    await collection.updateDataToNodes(clearRecord, {
+      _id: recordId,
+    })
+
+    await postToDiscord(`New credits for User...: ${clearRecord.credits}`)
   }
 }
 

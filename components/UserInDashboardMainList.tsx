@@ -8,11 +8,21 @@ import { useState } from "react"
 const UserInDashboardMainList = ({ user }: { user: any }) => {
   const [credits, setCredits] = useState(user.credits)
 
-  const handleMinus = () => {
-    setCredits(credits - 1)
+  const handleMinus = async () => {
+    const newCreditsValue = credits - 1
+    console.log("gonna substract for ", user)
+
+    const res = await fetch("/api/dashboard/users/update-credits", {
+      method: "POST",
+      body: JSON.stringify({ recordId: user._id, credits: newCreditsValue }),
+    })
+
+    // if (res.ok) {
+    // setCredits(newCreditsValue)
+    // await updateUserCredits(user.id, newCreditsValue)
   }
 
-  const handlePlus = () => {
+  const handlePlus = async () => {
     setCredits(credits + 1)
   }
 
