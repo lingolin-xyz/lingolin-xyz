@@ -102,7 +102,7 @@ We retain your data for as long as:
 
 For privacy-related questions or concerns, contact us at:
 
-- Email: hello@lingolin.xyz
+- Email: hellolingolin@gmail.com
 - Website: https://www.lingolin.xyz
 
 ## 13. Consent
