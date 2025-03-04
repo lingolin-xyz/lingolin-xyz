@@ -30,7 +30,7 @@ export const getUserAndCredits = async (userId: string) => {
         await logEvent({
           event_type: "user_created",
           userId,
-          extra: email,
+          extra: email || "",
         })
 
         await postToDiscord("🐣 adding 10 initial credits for " + email)

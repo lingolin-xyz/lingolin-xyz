@@ -1,7 +1,7 @@
 import Title from "@/components/Title"
-import { PRIVY_APP_ID } from "@/lib/constants"
 import { readCredits } from "@/lib/nillion/utils"
 import { getEmailAddressFromUserId } from "@/lib/privy-utils"
+import UserInDashboardMainList from "@/components/UserInDashboardMainList"
 
 const UsersPage = async () => {
   const users = await readCredits()
@@ -13,10 +13,12 @@ const UsersPage = async () => {
   }
   return (
     <div>
-      <div>
+      <div className="flex flex-col gap-3 max-w-2xl mx-auto px-4 py-12">
         <Title>Users</Title>
-        <div>
-          <pre>{JSON.stringify(usersWithEmails, null, 2)}</pre>
+        <div className="flex flex-col gap-3">
+          {usersWithEmails.map((user) => (
+            <UserInDashboardMainList key={user.userid} user={user} />
+          ))}
         </div>
       </div>
     </div>

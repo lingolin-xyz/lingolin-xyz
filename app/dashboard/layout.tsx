@@ -7,8 +7,6 @@ import { getEmailAddressFromPrivyUserObject } from "@/lib/privy-utils"
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const cookieStore = await cookies()
-
-  await postToDiscord("Hello from the dashboard!")
   // Get a specific cookie by name
   const myCookie = cookieStore.get("privy-id-token")
 
