@@ -8,6 +8,10 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Plus, Minus } from "lucide-react"
 import { useToast } from "@/hooks/use-toast"
+import NumberFlow from "@number-flow/react"
+import SmolTitle from "../SmolTitle"
+import Title from "../Title"
+import axios from "axios"
 
 const UserNFTsClientExplorer = () => {
   const { address, isConnected } = useAccount()
@@ -33,7 +37,12 @@ const UserNFTsClientExplorer = () => {
   }
   const { toast } = useToast()
 
-  const handleMint = () => {
+  const handleMint = async () => {
+    const res = await axios.post("/api/server-mint", {
+      address,
+      amount: mintAmount,
+    })
+
     toast({
       title: "Minting...",
       description: "Minting NFTs...",
@@ -57,7 +66,7 @@ const UserNFTsClientExplorer = () => {
 
       <div className="mt-6 space-y-4">
         <h3 className="text-lg font-medium">Mint New NFTs</h3>
-        <div className="flex items-center space-x-2">
+        <div className="flex items-center space-x-2 justify-center select-none">
           <Button
             variant="outline"
             size="icon"
@@ -67,18 +76,11 @@ const UserNFTsClientExplorer = () => {
             <Minus className="h-4 w-4" />
           </Button>
 
-          <Input
-            type="number"
-            value={mintAmount}
-            onChange={(e) => {
-              const value = parseInt(e.target.value)
-              if (!isNaN(value) && value >= 1) {
-                setMintAmount(value)
-              }
-            }}
-            className="w-20 text-center"
-            min={1}
-          />
+          <Title>
+            <div className="min-w-16 text-center">
+              <NumberFlow value={mintAmount} />
+            </div>
+          </Title>
 
           <Button variant="outline" size="icon" onClick={handleIncrement}>
             <Plus className="h-4 w-4" />
