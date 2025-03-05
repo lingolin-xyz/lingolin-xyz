@@ -4,6 +4,7 @@ import { PrivyClient } from "@privy-io/server-auth"
 import { cookies } from "next/headers"
 import PrivyLogoutButtonWrapper from "@/components/auth/PrivyLogoutButtonWrapper"
 import { redirect } from "next/navigation"
+import UserWalletClientExplorer from "@/components/wallet/UserWalletClientExplorer"
 
 const ProfilePage = async () => {
   const cookieStore = await cookies()
@@ -30,6 +31,7 @@ const ProfilePage = async () => {
     <div>
       <Title>ProfilePage</Title>
       <PrivyLogoutButtonWrapper />
+      <UserWalletClientExplorer />
       <div>
         <pre className="text-xs">{JSON.stringify(user, null, 2)}</pre>
       </div>

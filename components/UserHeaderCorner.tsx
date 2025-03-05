@@ -33,7 +33,7 @@ const UserHeaderCorner = () => {
       )}
       <Link
         href="/profile"
-        className="group p-2 group"
+        className="group px-2"
         onMouseLeave={() => {
           setIsHovered(false)
           setIsBye(!isBye)

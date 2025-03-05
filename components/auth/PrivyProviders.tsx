@@ -19,7 +19,7 @@ export const config = createConfig({
 
 const privyConfig = {
   appearance: {
-    theme: "dark",
+    theme: "light",
     accentColor: "#676FFF",
     logo: "https://javitoshi.com/images/lingolin.png",
   },
