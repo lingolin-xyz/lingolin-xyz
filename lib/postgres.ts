@@ -10,6 +10,7 @@ CREATE TABLE lingolin_events (
   extra2 text,
   extra3 text,
   extra4 text,
+  extra5 text,
   created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
