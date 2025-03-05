@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast"
 import axios from "axios"
 import Title from "./Title"
 import TranslationInRecentList from "./TranslationInRecentList"
-import { getEmailAddressFromPrivyUserObject } from "@/lib/privy-utils"
+import { getEmailAddressFromPrivyUserObject } from "@/lib/privy-utils-client"
 
 const ExtensionInstalledOK = () => {
   const { user } = usePrivy()

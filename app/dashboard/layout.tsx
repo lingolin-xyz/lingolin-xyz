@@ -3,7 +3,7 @@ import { PrivyClient } from "@privy-io/server-auth"
 import { ADMIN_EMAILS, PRIVY_APP_ID } from "@/lib/constants"
 import { postToDiscord } from "@/lib/discord"
 import DashboardHeaderBar from "@/components/DashboardHeaderBar"
-import { getEmailAddressFromPrivyUserObject } from "@/lib/privy-utils"
+import { getEmailAddressFromPrivyUserObject } from "@/lib/privy-utils-client"
 
 const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
   const cookieStore = await cookies()

@@ -5,8 +5,6 @@ import UserInDashboardMainList from "@/components/UserInDashboardMainList"
 
 const UsersPage = async () => {
   const users = await readCredits()
-  console.log("users")
-  console.log(users)
 
   const usersWithEmails = []
 
