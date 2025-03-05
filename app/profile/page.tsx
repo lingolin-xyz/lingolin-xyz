@@ -29,8 +29,10 @@ const ProfilePage = async () => {
 
   return (
     <div>
-      <Title>ProfilePage</Title>
-      <PrivyLogoutButtonWrapper />
+      <div className="flex justify-between items-center py-6">
+        <Title>ProfilePage</Title>
+        <PrivyLogoutButtonWrapper />
+      </div>
       <UserWalletClientExplorer />
       <div>
         <pre className="text-xs">{JSON.stringify(user, null, 2)}</pre>
