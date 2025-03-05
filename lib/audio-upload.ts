@@ -1,5 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai"
 import { getRandomGeminiAPIKey } from "./llm"
+import { cleanString } from "./strings"
 
 export const processAudioFile = async (audioBuffer: Buffer) => {
   const randomApiKey = getRandomGeminiAPIKey()
@@ -25,7 +26,7 @@ export const processAudioFile = async (audioBuffer: Buffer) => {
               },
             },
             {
-              text: "Please transcribe the audio in clear Spanish.",
+              text: "Please transcribe the audio in clear text. Ignore noises and other sounds. Just focus on the words and sentences. If you can't hear anything, just Reply with an empty string.",
             },
           ],
         },
@@ -39,7 +40,7 @@ export const processAudioFile = async (audioBuffer: Buffer) => {
 
     // console.log("Response from Gemini:");
     // console.log(text);
-    return text
+    return cleanString(text)
   } catch (error) {
     console.error("Error processing audio file:", error)
   }

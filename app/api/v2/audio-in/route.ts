@@ -31,7 +31,7 @@ export async function POST(req: Request) {
       `Upload and transcription took: ${Date.now() - uploadStartTime}ms`
     )
 
-    if (!transcription) {
+    if (!transcription || transcription.trim().length === 0) {
       await postErrorToDiscord("No transcription found from audio url!!")
       return NextResponse.json({
         finished: false,

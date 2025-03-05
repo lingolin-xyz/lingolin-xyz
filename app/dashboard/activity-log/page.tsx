@@ -60,6 +60,7 @@ const ActivityLogPage = async () => {
 export default ActivityLogPage
 
 const getIconForActivityLogType = (type: string) => {
-  if (type.startsWith("translation")) return <BsTranslate />
+  if (type.startsWith("translation") || type.startsWith("save_voice_note"))
+    return <BsTranslate />
   return <HiQuestionMarkCircle />
 }

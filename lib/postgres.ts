@@ -119,7 +119,7 @@ export const getRecentTranslationsByUserId = async (userId: string) => {
   const query = `SELECT id, event_type, extra, extra2, extra3, extra4, created_at
     FROM lingolin_events 
     WHERE user_id = $1 
-    AND (event_type = 'translation_missed' OR event_type = 'translation_hit') 
+    AND (event_type = 'translation_missed' OR event_type = 'translation_hit' or event_type = 'save_voice_note') 
     ORDER BY created_at DESC 
     LIMIT 50`
   const params = [userId]
