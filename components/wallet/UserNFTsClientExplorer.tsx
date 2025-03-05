@@ -15,8 +15,10 @@ import axios from "axios"
 import Image from "next/image"
 import BlurryEntrance from "../BlurryEntrance"
 import NFTInProfilePage from "./NFTInProfilePage"
+import { usePrivy } from "@privy-io/react-auth"
 
 const UserNFTsClientExplorer = () => {
+  const { user } = usePrivy()
   const { address, isConnected } = useAccount()
   const [nftCount, setNftCount] = useState<number | null>(null)
   const [mintAmount, setMintAmount] = useState(1)
@@ -63,15 +65,29 @@ const UserNFTsClientExplorer = () => {
   const { toast } = useToast()
 
   const handleMint = async () => {
-    const res = await axios.post("/api/server-mint", {
-      address,
-      amount: mintAmount,
-    })
-
+    if (!user) return false
     toast({
       title: "Minting...",
       description: "Minting NFTs...",
     })
+
+    const res = await axios.post("/api/server-mint", {
+      address,
+      amount: mintAmount,
+      userId: user.id,
+    })
+
+    if (res.status === 200) {
+      toast({
+        title: "Minting successful",
+        description: "NFTs minted successfully",
+      })
+    } else {
+      toast({
+        title: "Minting failed",
+        description: "NFTs minting failed",
+      })
+    }
   }
 
   useEffect(() => {

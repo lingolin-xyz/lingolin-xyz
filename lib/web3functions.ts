@@ -4,6 +4,7 @@ import {
   NFT_CREDITS_CONTRACT_ABI,
 } from "./constants"
 import { postToDiscord } from "./discord"
+import { getUserAndCredits } from "./cachedLayer"
 
 export const mintNftCreditsBatch = async ({
   amount,
