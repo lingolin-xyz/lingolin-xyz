@@ -2,14 +2,18 @@
 
 import { usePrivy } from "@privy-io/react-auth"
 import { Button } from "./ui/button"
-import { AiOutlinePoweroff } from "react-icons/ai"
 import Link from "next/link"
 import { IoDocumentTextOutline } from "react-icons/io5"
 import { usePathname } from "next/navigation"
+import { useState } from "react"
+import { motion } from "framer-motion"
 
 const UserHeaderCorner = () => {
   const { user, logout } = usePrivy()
   const pathname = usePathname()
+
+  const [isBye, setIsBye] = useState(false)
+  const [isHovered, setIsHovered] = useState(false)
 
   if (!user) return null
 
@@ -27,14 +31,52 @@ const UserHeaderCorner = () => {
           </Button>
         </Link>
       )}
-      <Link href="/profile" className="group p-2 group">
-        <div className="rounded-full border-black/50 border-2 w-10 h-10 overflow-hidden group-hover:scale-[120%] transition-all duration-500 group-active:scale-[95%] group-active:rotate-[720deg] group-active:duration-300">
+      <Link
+        href="/profile"
+        className="group p-2 group"
+        onMouseLeave={() => {
+          setIsHovered(false)
+          setIsBye(!isBye)
+        }}
+        onMouseEnter={() => setIsHovered(true)}
+      >
+        <div className="rounded-full border-zinc-700 group-active:opacity-60 hover:border-emerald-600 border-2 w-10 h-10 overflow-hidden group-hover:scale-[130%] transition-all duration-500 group-active:scale-[95%] group-active:rotate-[720deg] group-active:duration-300 relative">
           <img
             draggable={false}
             alt="pfp"
             src="/images/pfp.png"
-            className="scale-125 translate-y-1 group-hover:translate-y-0 group-hover:scale-105 transition-all duration-500"
+            className="scale-[180%] translate-y-2.5 group-hover:translate-y-0 group-hover:scale-100 transition-all duration-500"
           />
+          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+            <motion.div
+              animate={{ opacity: isBye ? 1 : 0 }}
+              transition={{
+                duration: 0.1,
+              }}
+            >
+              <img
+                draggable={false}
+                alt="pfp"
+                src="/images/pfpbye.png"
+                className="scale-[180%] translate-y-2.5 group-hover:translate-y-0 group-hover:scale-100 transition-all duration-500"
+              />
+            </motion.div>
+          </div>
+          <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center">
+            <motion.div
+              animate={{ opacity: isHovered ? 1 : 0 }}
+              transition={{
+                duration: 0.1,
+              }}
+            >
+              <img
+                draggable={false}
+                alt="pfp"
+                src="/images/pfphover.png"
+                className="scale-[180%] translate-y-2.5 group-hover:translate-y-0 group-hover:scale-100 transition-all duration-500"
+              />
+            </motion.div>
+          </div>
         </div>
       </Link>
       {/* <Button variant="outline" onClick={logout} className="group">
