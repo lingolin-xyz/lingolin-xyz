@@ -90,12 +90,12 @@ const UserWalletClientExplorer: React.FC<UserWalletClientExplorerProps> = ({
     )
 
   return (
-    <div className="border-2 border-purple-400 p-2 pb-0 px-3 mt-4 max-w-md rounded-xl overflow-hidden relative">
+    <div className="border-2 border-monad p-2 pb-0 px-3 mt-4 max-w-md rounded-xl overflow-hidden relative">
       <div className="absolute inset-0 -z-10">
         <div
-          className="w-full h-full opacity-70"
+          className="w-full h-full opacity-30"
           style={{
-            backgroundImage: `url(/images/gradient1.png)`,
+            backgroundImage: `url(/images/gradient3.png)`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             backgroundRepeat: "no-repeat",

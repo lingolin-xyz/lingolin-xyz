@@ -10,6 +10,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        monad: "#7a66e8",
         accent: "#47ec93",
         claude: "#d97757",
         background: "var(--background)",
