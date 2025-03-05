@@ -2,6 +2,9 @@
 import { SecretVaultWrapper } from "secretvaults"
 import { orgConfig } from "./orgConfig"
 import { postToDiscord } from "../discord"
+import { revalidatePath } from "next/cache"
+import { getUserAndCredits } from "../cachedLayer"
+import { waitUntil } from "@vercel/functions"
 
 export async function writeCredits({
   userid,
@@ -96,7 +99,10 @@ export const updateCreditsValueById = async (
       _id: recordId,
     })
 
-    await postToDiscord(`New credits for User...: ${clearRecord.credits}`)
+    // here i want to revalidate the unstable_cache for that user
+    revalidatePath(`user-credits-${clearRecord.userid}`)
+    waitUntil(getUserAndCredits(clearRecord.userid))
+    waitUntil(postToDiscord(`New credits for User...: ${clearRecord.credits}`))
   }
 }
 

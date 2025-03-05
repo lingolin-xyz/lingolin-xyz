@@ -37,6 +37,7 @@ export const getUserAndCredits = async (userId: string) => {
         return {
           credits: 10,
           tier: 1,
+          // email,
         }
       }
 
@@ -45,6 +46,7 @@ export const getUserAndCredits = async (userId: string) => {
       return {
         credits,
         tier: 1,
+        // email,
       }
     },
     [`user-credits-${userId}`],

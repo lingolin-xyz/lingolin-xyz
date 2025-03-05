@@ -10,20 +10,20 @@ const UserInDashboardMainList = ({ user }: { user: any }) => {
 
   const handleMinus = async () => {
     const newCreditsValue = credits - 1
-    console.log("gonna substract for ", user)
+    setCredits(newCreditsValue)
 
-    const res = await fetch("/api/dashboard/users/update-credits", {
+    await fetch("/api/dashboard/users/update-credits", {
       method: "POST",
       body: JSON.stringify({ recordId: user._id, credits: newCreditsValue }),
     })
-
-    // if (res.ok) {
-    // setCredits(newCreditsValue)
-    // await updateUserCredits(user.id, newCreditsValue)
   }
 
   const handlePlus = async () => {
     setCredits(credits + 1)
+    await fetch("/api/dashboard/users/update-credits", {
+      method: "POST",
+      body: JSON.stringify({ recordId: user._id, credits: credits + 1 }),
+    })
   }
 
   return (
