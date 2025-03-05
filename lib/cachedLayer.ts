@@ -20,6 +20,9 @@ export const getUserAndCredits = async (userId: string) => {
       const email = getEmailAddressFromPrivyUserObject(user)
 
       const creditsForUser = await readCredits(userId)
+
+      // console.log("Debug of readCredits..", creditsForUser)
+
       if (!creditsForUser) {
         // we add the initial credits for the first time and post that on discord to celebrate LFG!!
         await writeCredits({
@@ -46,11 +49,11 @@ export const getUserAndCredits = async (userId: string) => {
       return {
         credits,
         tier: 1,
-        // email,
       }
     },
     [`user-credits-${userId}`],
     {
+      // revalidate: 2, // * (for quick testing)
       revalidate: 60 * 60 * 24 * 7, // Revalidar el caché cada 7 días
       tags: [`user-credits-${userId}`], // Tag para invalidar manualmente si es necesario
     }

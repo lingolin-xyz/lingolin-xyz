@@ -28,7 +28,10 @@ const UserInDashboardMainList = ({ user }: { user: any }) => {
 
   return (
     <div className="flex items-center justify-between bg-zinc-100 p-3 px-6 rounded-lg">
-      <div>{user.email}</div>
+      <div>
+        <div>{user.email}</div>
+        <div className="text-sm text-zinc-500">{user.userid}</div>
+      </div>
       <div className="flex items-center gap-0">
         <Button variant="outline" size="icon" onClick={handleMinus}>
           <Minus size={12} />

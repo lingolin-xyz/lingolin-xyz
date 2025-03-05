@@ -15,6 +15,10 @@ export async function POST(req: Request) {
 
     const { credits, tier } = await getUserAndCredits(userId)
 
+    console.log("------ userId: " + userId)
+    console.log("------ credits: " + credits)
+    console.log("------ tier: " + tier)
+
     return NextResponse.json(
       {
         credits,
