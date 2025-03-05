@@ -34,9 +34,9 @@ const ProfilePage = async () => {
         <PrivyLogoutButtonWrapper />
       </div>
       <UserWalletClientExplorer />
-      <div>
+      {/* <div>
         <pre className="text-xs">{JSON.stringify(user, null, 2)}</pre>
-      </div>
+      </div> */}
     </div>
   )
 }

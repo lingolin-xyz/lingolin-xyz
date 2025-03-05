@@ -2,14 +2,18 @@
 
 import { useLinkAccount, usePrivy, useSignMessage } from "@privy-io/react-auth"
 import { useUser } from "@privy-io/react-auth"
-import React from "react"
-import { useAccount } from "wagmi"
+import React, { useEffect, useState } from "react"
+import { useAccount, useBalance } from "wagmi"
 import { Button } from "../ui/button"
 
 import monad from "@/public/monad.svg"
 import { formatAddress } from "@/lib/strings"
 import BlurryEntrance from "../BlurryEntrance"
 import { ImSpinner8 } from "react-icons/im"
+import Title from "../Title"
+import SmolTitle from "../SmolTitle"
+import NumberFlow from "@number-flow/react"
+import BigTitle from "../BigTitle"
 
 interface UserWalletClientExplorerProps {
   userId?: string
@@ -21,6 +25,36 @@ const UserWalletClientExplorer: React.FC<UserWalletClientExplorerProps> = ({
   const { linkWallet } = usePrivy()
   const { address, isConnected } = useAccount()
   const { user } = useUser()
+  const { data: balanceData } = useBalance({
+    address: address,
+  })
+  const [exactFormattedBalance, setExactFormattedBalance] = useState<number>(0)
+
+  const [privyLinkedWallet, setPrivyLinkedWallet] = useState<string | null>(
+    null
+  )
+
+  useEffect(() => {
+    if (balanceData) {
+      setExactFormattedBalance(Number(Number(balanceData.formatted).toFixed(4)))
+    }
+  }, [balanceData])
+
+  useEffect(() => {
+    if (!user) return
+    if (user.linkedAccounts) {
+      //   let walletLinkedPrimary = false
+      user.linkedAccounts.forEach((account: any) => {
+        console.log("DEBUGGING THIS ACCOUNT YO!", account)
+        if (account.chainType === "ethereum") {
+          setPrivyLinkedWallet(account.address)
+        }
+        // if (account.type === "wallet") {
+        //   walletLinkedPrimary = true
+        // }
+      })
+    }
+  }, [user])
 
   const { ready } = usePrivy()
   //   const { linkWallet } = useLinkAccount({
@@ -48,10 +82,15 @@ const UserWalletClientExplorer: React.FC<UserWalletClientExplorerProps> = ({
       </div>
     )
 
-  if (!isConnected) return <div>Not connected</div>
+  if (!isConnected)
+    return (
+      <div className="p-24">
+        <Button onClick={linkWallet}>Link your wallet</Button>
+      </div>
+    )
 
   return (
-    <div className="border-2 border-purple-300 p-4 mt-4 max-w-md rounded-xl overflow-hidden relative">
+    <div className="border-2 border-purple-400 p-2 pb-0 px-3 mt-4 max-w-md rounded-xl overflow-hidden relative">
       <div className="absolute inset-0 -z-10">
         <div
           className="w-full h-full opacity-70"
@@ -63,25 +102,35 @@ const UserWalletClientExplorer: React.FC<UserWalletClientExplorerProps> = ({
           }}
         />
       </div>
-      {address ? (
-        <div className="hello">
-          <img
-            src={monad.src}
-            alt="monad"
-            className="w-60 h-16 rounded-xl hello"
-          />
-          <h3 className="text-lg font-medium mb-2">
+      {privyLinkedWallet && address ? (
+        <div className="">
+          <img src={monad.src} alt="monad" className="w-64 h-20 rounded-xl" />
+          {/* <h3 className="text-lg font-medium mb-2">
             Wallet Explorer {formatAddress(address)}
-          </h3>
-          <p className="text-sm text-gray-500">
+          </h3> */}
+          {/* <p className="text-sm text-gray-500">
             User ID: {user?.id || "Not available"}
-          </p>
-          <p className="text-sm text-gray-500">
-            Wallet Address: {address || "Not available"}
-          </p>
+          </p> */}
+          <div className="text-2xl font-medium">{formatAddress(address)}</div>
+          <div className="translate-y-4">
+            <SmolTitle>Balance:</SmolTitle>
+          </div>
+          <BigTitle>
+            <div className="tracking-tight text-black">
+              <NumberFlow value={exactFormattedBalance} suffix="$MON" />
+            </div>
+          </BigTitle>
         </div>
       ) : (
-        <Button onClick={linkWallet}>Link your wallet</Button>
+        <>
+          {address ? (
+            <div>
+              <Button onClick={linkWallet}>Sign Message</Button>
+            </div>
+          ) : (
+            <Button onClick={linkWallet}>Link your wallet</Button>
+          )}
+        </>
       )}
     </div>
   )

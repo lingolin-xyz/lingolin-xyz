@@ -21,3 +21,13 @@ body {
     0 -0.5px 0 #000000cc, 0.5px 0.5px #000000cc, -0.5px -0.5px 0 #000000cc,
     0.5px -0.5px 0 #000000cc, -0.5px 0.5px 0 #000000cc;
 }
+.text-shadow-like-border-2 {
+  text-shadow: 1.3px 0 0 #000000cc, -1.3px 0 0 #000000cc, 0 1.3px 0 #000000cc,
+    0 -1.3px 0 #000000cc, 1.3px 1.3px #000000cc, -1.3px -1.3px 0 #000000cc,
+    1.3px -1.3px 0 #000000cc, -1.3px 1.3px 0 #000000cc;
+}
+.text-shadow-like-border-purple {
+  text-shadow: 0.5px 0 0 purple, -0.5px 0 0 purple, 0 0.5px 0 purple,
+    0 -0.5px 0 purple, 0.5px 0.5px purple, -0.5px -0.5px 0 purple,
+    0.5px -0.5px 0 purple, -0.5px 0.5px 0 purple;
+}
