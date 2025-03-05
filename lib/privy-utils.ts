@@ -8,6 +8,14 @@ const privyClient = new PrivyClient(
 )
 
 export const getEmailAddressFromUserId = async (userId: string) => {
-  const user = await privyClient.getUserById(userId)
-  return getEmailAddressFromPrivyUserObject(user)
+  try {
+    const user = await privyClient.getUserById(userId)
+    if (!user) {
+      return null
+    }
+    return getEmailAddressFromPrivyUserObject(user)
+  } catch (error) {
+    console.log("Error getting email address from user ID:", error)
+    return null
+  }
 }

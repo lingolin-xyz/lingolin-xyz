@@ -10,6 +10,9 @@ const UsersPage = async () => {
 
   for (const user of users) {
     const email = await getEmailAddressFromUserId(user.userid)
+    if (!email) {
+      continue
+    }
     usersWithEmails.push({ ...user, email })
   }
   return (
