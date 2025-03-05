@@ -5,7 +5,7 @@ import { readCredits } from "./nillion/utils"
 import { logEvent } from "./postgres"
 import { postToDiscord } from "./discord"
 import { unstable_cache } from "next/cache"
-import { getEmailAddressFromPrivyUserObject } from "./privy-utils"
+import { getEmailAddressFromPrivyUserObject } from "./privy-utils-client"
 
 export const getUserAndCredits = async (userId: string) => {
   return unstable_cache(

@@ -130,3 +130,9 @@ export const deleteTranslationFromLogsById = async (translationId: string) => {
     "🔴🔴🔴🔴 DELETED TRANSLATION FROM LOGS: " + translationId
   )
 }
+
+export const getRecentActivity = async () => {
+  const query = `SELECT * FROM lingolin_events ORDER BY created_at DESC LIMIT 50`
+  const res = await executeQuery(query)
+  return res.rows
+}
