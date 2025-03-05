@@ -1,6 +1,6 @@
 "use client"
 
-import { useLinkAccount, usePrivy } from "@privy-io/react-auth"
+import { useLinkAccount, usePrivy, useSignMessage } from "@privy-io/react-auth"
 import { useUser } from "@privy-io/react-auth"
 import React from "react"
 import { useAccount } from "wagmi"
@@ -13,21 +13,21 @@ interface UserWalletClientExplorerProps {
 const UserWalletClientExplorer: React.FC<UserWalletClientExplorerProps> = ({
   userId,
 }) => {
-  //   const { linkWallet } = usePrivy()
+  const { linkWallet } = usePrivy()
   const { address } = useAccount()
   const { user } = useUser()
 
-  const { linkWallet } = useLinkAccount({
-    onSuccess: ({ user, linkMethod, linkedAccount }) => {
-      console.log(user, linkMethod, linkedAccount)
-      // Any logic you'd like to execute if the user successfully links an account while this
-      // component is mounted
-    },
-    onError: (error, details) => {
-      console.log(error, details)
-      // Any logic you'd like to execute after a user exits the link flow or there is an error
-    },
-  })
+  //   const { linkWallet } = useLinkAccount({
+  //     onSuccess: ({ user, linkMethod, linkedAccount }) => {
+  //       console.log(user, linkMethod, linkedAccount)
+  //       // Any logic you'd like to execute if the user successfully links an account while this
+  //       // component is mounted
+  //     },
+  //     onError: (error, details) => {
+  //       console.log(error, details)
+  //       // Any logic you'd like to execute after a user exits the link flow or there is an error
+  //     },
+  //   })
 
   return (
     <div className="rounded-md border p-4 mt-4">
