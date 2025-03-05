@@ -34,8 +34,10 @@ const ProfilePage = async () => {
         <Title>ProfilePage</Title>
         <PrivyLogoutButtonWrapper />
       </div>
-      <UserWalletClientExplorer />
-      <UserNFTsClientExplorer />
+      <div className="flex justify-between gap-8">
+        <UserWalletClientExplorer />
+        <UserNFTsClientExplorer />
+      </div>
       {/* <div>
         <pre className="text-xs">{JSON.stringify(user, null, 2)}</pre>
       </div> */}
