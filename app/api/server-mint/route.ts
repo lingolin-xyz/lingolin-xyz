@@ -9,7 +9,13 @@ export async function POST(req: Request) {
   console.log(" 🍎  address: ", address)
   console.log(" 🍎  amount: ", amount)
 
-  await mintNftCreditsBatch({ address, amount })
+  const txHash = await mintNftCreditsBatch({ address, amount })
+
+  if (!txHash) {
+    return NextResponse.json({ error: "Error minting NFTs" }, { status: 500 })
+  }
+
+  console.log(" 🍎  txHash: ", txHash)
 
   // increase credits
 

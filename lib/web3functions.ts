@@ -42,6 +42,6 @@ export const mintNftCreditsBatch = async ({
     return tx.hash
   } catch (error) {
     console.error("Error al mintear el NFT:", error)
-    process.exit(1)
+    return null
   }
 }
