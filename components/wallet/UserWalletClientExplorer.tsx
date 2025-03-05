@@ -85,7 +85,7 @@ const UserWalletClientExplorer: React.FC<UserWalletClientExplorerProps> = ({
     )
 
   return (
-    <div className="border-2 border-monad p-2 pb-0 px-3 mt-4 max-w-md rounded-xl overflow-hidden relative">
+    <div className="border-2 border-monad min-w-80 md:min-w-[420px] p-2 pb-0 px-3 mt-4 max-w-md rounded-xl overflow-hidden relative">
       <div className="absolute inset-0 -z-10">
         <div
           className="w-full h-full opacity-30"

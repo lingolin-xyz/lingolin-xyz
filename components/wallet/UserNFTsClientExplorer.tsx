@@ -17,6 +17,7 @@ const UserNFTsClientExplorer = () => {
   const { address, isConnected } = useAccount()
   const [nftCount, setNftCount] = useState<number | null>(null)
   const [mintAmount, setMintAmount] = useState(1)
+  const [tokenIds, setTokenIds] = useState<number[]>([])
 
   const { data, isError, isLoading } = useContractRead({
     address: NFT_CREDITS_CONTRACT_ADDRESS,
@@ -24,6 +25,15 @@ const UserNFTsClientExplorer = () => {
     functionName: "balanceOf",
     args: [address],
     chainId: TESTNET_CHAIN_ID,
+  })
+
+  const { data: tokenOfOwnerByIndexData } = useContractRead({
+    address: NFT_CREDITS_CONTRACT_ADDRESS,
+    abi: NFT_CREDITS_CONTRACT_ABI,
+    functionName: "tokensOfOwner",
+    args: [address],
+    chainId: TESTNET_CHAIN_ID,
+    // enabled: !!address && nftCount !== null && nftCount > 0,
   })
 
   const handleIncrement = () => {
@@ -55,6 +65,15 @@ const UserNFTsClientExplorer = () => {
     }
   }, [data])
 
+  useEffect(() => {
+    if (tokenOfOwnerByIndexData) {
+      const ids = Array.isArray(tokenOfOwnerByIndexData)
+        ? tokenOfOwnerByIndexData.map((id) => Number(id))
+        : []
+      setTokenIds(ids)
+    }
+  }, [tokenOfOwnerByIndexData])
+
   if (isLoading) return <div>Loading NFT balance...</div>
   if (isError) return <div>Error fetching NFT balance</div>
   if (!isConnected) return <div>Connect your wallet to view NFTs</div>
@@ -63,6 +82,25 @@ const UserNFTsClientExplorer = () => {
     <div>
       <h2>Your NFT Balance</h2>
       <p>You own {nftCount ?? 0} NFTs from this collection</p>
+
+      <div>
+        {/* <pre>{JSON.stringify(tokenOfOwnerByIndexData, null, 2)}</pre> */}
+      </div>
+      {tokenIds.length > 0 && (
+        <div className="mt-4">
+          <SmolTitle>Your Token IDs</SmolTitle>
+          <div className="mt-2 flex flex-wrap gap-2">
+            {tokenIds.map((id) => (
+              <div
+                key={id}
+                className="px-3 py-1 bg-secondary rounded-md text-sm"
+              >
+                #{id}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="mt-6 space-y-4">
         <h3 className="text-lg font-medium">Mint New NFTs</h3>
