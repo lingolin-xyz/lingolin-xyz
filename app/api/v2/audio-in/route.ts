@@ -6,10 +6,13 @@ import { postErrorToDiscord, postToDiscord } from "@/lib/discord"
 import { waitUntil } from "@vercel/functions"
 import {
   getTranslationByMessageAndLanguage,
+  updateCreditsValueById,
   writeTranslation,
 } from "@/lib/nillion/utils"
 import { cleanString } from "@/lib/strings"
 import { logEvent } from "@/lib/postgres"
+import { getUserAndCredits } from "@/lib/cachedLayer"
+import { revalidateTag } from "next/cache"
 
 export async function POST(req: Request) {
   try {
@@ -19,6 +22,22 @@ export async function POST(req: Request) {
     const nativeLanguage = formData.get("nativeLanguage") as string
     const targetLanguage = formData.get("targetLanguage") as string
     const userId = formData.get("userId") as string
+
+    const userWithCredits = await getUserAndCredits(userId)
+    if (!userWithCredits) {
+      await postErrorToDiscord("User not found!!")
+      return NextResponse.json({
+        finished: false,
+        error: "User not found",
+      })
+    }
+    if (userWithCredits.credits <= 0) {
+      await postErrorToDiscord("User has no credits!! " + userId)
+      return NextResponse.json({
+        finished: false,
+        error: "User has no credits",
+      })
+    }
 
     const buffer = Buffer.from(await audioFile.arrayBuffer())
 
@@ -152,10 +171,26 @@ const callToSaveVoiceNote = async ({
       extra5: audioUrl,
     })
 
+    const userWithCreditsAgain = await getUserAndCredits(userId)
+    if (!userWithCreditsAgain) {
+      await postErrorToDiscord("User not found!!")
+      return NextResponse.json({
+        finished: false,
+        error: "User not found",
+      })
+    }
+
+    // update credits
+    await updateCreditsValueById(
+      userWithCreditsAgain._id,
+      userWithCreditsAgain.credits - 1
+    )
+
+    revalidateTag(`user-credits-${userId}`)
+
     await postToDiscord(
       " 🍎  GOTTA SAVE THE VOICE NOTE.." + audioUrl + " " + userId
     )
-    console.log(" 🍎  GOTTA SAVE THE VOICE NOTE.." + audioUrl + " " + userId)
   } catch (error) {
     await postErrorToDiscord(
       "Error saving voice note! (post-response catch!!!)"

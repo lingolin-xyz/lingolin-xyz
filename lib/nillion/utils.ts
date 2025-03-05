@@ -3,8 +3,6 @@ import { SecretVaultWrapper } from "secretvaults"
 import { orgConfig } from "./orgConfig"
 import { postToDiscord } from "../discord"
 import { revalidateTag } from "next/cache"
-import { getUserAndCredits } from "../cachedLayer"
-import { waitUntil } from "@vercel/functions"
 
 export async function writeCredits({
   userid,
@@ -90,23 +88,26 @@ export const updateCreditsValueById = async (
     const recordUpdate = readDataFiltered[0]
     const clearRecord = {
       userid: recordUpdate.userid,
-      credits: recordUpdate.credits,
+      credits: credits,
     }
 
-    clearRecord.credits = credits
+    // console.log(
+    //   " stepppo 3 📗  FROM",
+    //   recordUpdate.credits,
+    //   " to be updated to ",
+    //   clearRecord.credits
+    // )
 
     await collection.updateDataToNodes(clearRecord, {
       _id: recordId,
     })
 
-    // here i want to revalidate the unstable_cache for that user
     revalidateTag(`user-credits-${clearRecord.userid}`)
-    waitUntil(getUserAndCredits(clearRecord.userid))
-    waitUntil(
-      postToDiscord(
-        `New credits for User...: ${clearRecord.userid} ${clearRecord.credits}`
-      )
+    await postToDiscord(
+      `New credits for User...: ${clearRecord.userid} ${credits}`
     )
+  } else {
+    console.error("❌ Failed to use SecretVaultWrapper updateCreditsValueById:")
   }
 }
 
