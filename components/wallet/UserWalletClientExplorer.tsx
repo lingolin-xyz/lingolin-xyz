@@ -43,15 +43,10 @@ const UserWalletClientExplorer: React.FC<UserWalletClientExplorerProps> = ({
   useEffect(() => {
     if (!user) return
     if (user.linkedAccounts) {
-      //   let walletLinkedPrimary = false
       user.linkedAccounts.forEach((account: any) => {
-        console.log("DEBUGGING THIS ACCOUNT YO!", account)
         if (account.chainType === "ethereum") {
           setPrivyLinkedWallet(account.address)
         }
-        // if (account.type === "wallet") {
-        //   walletLinkedPrimary = true
-        // }
       })
     }
   }, [user])

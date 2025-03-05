@@ -5,6 +5,7 @@ import { cookies } from "next/headers"
 import PrivyLogoutButtonWrapper from "@/components/auth/PrivyLogoutButtonWrapper"
 import { redirect } from "next/navigation"
 import UserWalletClientExplorer from "@/components/wallet/UserWalletClientExplorer"
+import UserNFTsClientExplorer from "@/components/wallet/UserNFTsClientExplorer"
 
 const ProfilePage = async () => {
   const cookieStore = await cookies()
@@ -34,6 +35,7 @@ const ProfilePage = async () => {
         <PrivyLogoutButtonWrapper />
       </div>
       <UserWalletClientExplorer />
+      <UserNFTsClientExplorer />
       {/* <div>
         <pre className="text-xs">{JSON.stringify(user, null, 2)}</pre>
       </div> */}
