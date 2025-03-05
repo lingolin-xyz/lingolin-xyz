@@ -9,6 +9,7 @@ import {
   writeTranslation,
 } from "@/lib/nillion/utils"
 import { cleanString } from "@/lib/strings"
+import { logEvent } from "@/lib/postgres"
 
 export async function POST(req: Request) {
   try {
@@ -141,19 +142,20 @@ const callToSaveVoiceNote = async ({
       translation: translatedMessage,
     })
 
+    await logEvent({
+      event_type: "save_voice_note",
+      userId: userId,
+      extra: languageFrom,
+      extra2: languageTo,
+      extra3: transcription,
+      extra4: translatedMessage,
+      extra5: audioUrl,
+    })
+
     await postToDiscord(
       " 🍎  GOTTA SAVE THE VOICE NOTE.." + audioUrl + " " + userId
     )
     console.log(" 🍎  GOTTA SAVE THE VOICE NOTE.." + audioUrl + " " + userId)
-
-    // await saveVoiceNote({
-    //   original_message: transcription,
-    //   translated_message: translatedMessage,
-    //   user_id: userId,
-    //   audio_url: audioUrl,
-    //   language_from: languageFrom,
-    //   language_to: languageTo,
-    // })
   } catch (error) {
     await postErrorToDiscord(
       "Error saving voice note! (post-response catch!!!)"

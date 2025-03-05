@@ -83,6 +83,7 @@ process.on("SIGTERM", async () => {
     pool = null
   }
 })
+
 export const logEvent = async ({
   event_type,
   userId,
@@ -90,6 +91,7 @@ export const logEvent = async ({
   extra2,
   extra3,
   extra4,
+  extra5,
 }: {
   event_type: string
   userId: string
@@ -97,8 +99,9 @@ export const logEvent = async ({
   extra2?: string
   extra3?: string
   extra4?: string
+  extra5?: string
 }) => {
-  const query = `INSERT INTO lingolin_events (user_id, event_type, extra, extra2, extra3, extra4) VALUES ($1, $2, $3, $4, $5, $6)`
+  const query = `INSERT INTO lingolin_events (user_id, event_type, extra, extra2, extra3, extra4, extra5) VALUES ($1, $2, $3, $4, $5, $6, $7)`
   const params = [
     userId,
     event_type,
@@ -106,6 +109,7 @@ export const logEvent = async ({
     extra2 || null,
     extra3 || null,
     extra4 || null,
+    extra5 || null,
   ]
   await executeQuery(query, params)
   await postToDiscord("🥚🥚🥚🥚🥚🥚 EVENT LOGGED: " + event_type)

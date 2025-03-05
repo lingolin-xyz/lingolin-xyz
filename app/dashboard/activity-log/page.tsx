@@ -11,6 +11,7 @@ import {
 import { timeSinceShorter } from "@/lib/time"
 import { BsTranslate } from "react-icons/bs"
 import { HiQuestionMarkCircle } from "react-icons/hi2"
+import MiniAudioPlayer from "@/components/MiniAudioPlayer"
 
 const ActivityLogPage = async () => {
   const recentActivity = await getRecentActivity()
@@ -27,6 +28,7 @@ const ActivityLogPage = async () => {
               <TableHead>Extra 2</TableHead>
               <TableHead>Extra 3</TableHead>
               <TableHead>Extra 4</TableHead>
+              <TableHead>audio</TableHead>
               <TableHead className="text-right"></TableHead>
             </TableRow>
           </TableHeader>
@@ -40,6 +42,9 @@ const ActivityLogPage = async () => {
                 <TableCell>{activity.extra2 || "-"}</TableCell>
                 <TableCell>{activity.extra3 || "-"}</TableCell>
                 <TableCell>{activity.extra4 || "-"}</TableCell>
+                <TableCell>
+                  {activity.extra5 && <MiniAudioPlayer src={activity.extra5} />}
+                </TableCell>
                 <TableCell className="text-right">
                   {timeSinceShorter(new Date(activity.created_at).getTime())}
                 </TableCell>
