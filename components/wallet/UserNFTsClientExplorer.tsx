@@ -12,12 +12,18 @@ import NumberFlow from "@number-flow/react"
 import SmolTitle from "../SmolTitle"
 import Title from "../Title"
 import axios from "axios"
+import Image from "next/image"
+import BlurryEntrance from "../BlurryEntrance"
+import NFTInProfilePage from "./NFTInProfilePage"
 
 const UserNFTsClientExplorer = () => {
   const { address, isConnected } = useAccount()
   const [nftCount, setNftCount] = useState<number | null>(null)
   const [mintAmount, setMintAmount] = useState(1)
   const [tokenIds, setTokenIds] = useState<number[]>([])
+  const [tokenMetadata, setTokenMetadata] = useState<{ [key: number]: any }>({})
+  const [isLoadingMetadata, setIsLoadingMetadata] = useState(false)
+  const [currentTokenId, setCurrentTokenId] = useState<number | null>(null)
 
   const { data, isError, isLoading } = useContractRead({
     address: NFT_CREDITS_CONTRACT_ADDRESS,
@@ -34,6 +40,15 @@ const UserNFTsClientExplorer = () => {
     args: [address],
     chainId: TESTNET_CHAIN_ID,
     // enabled: !!address && nftCount !== null && nftCount > 0,
+  })
+
+  const { data: tokenURI } = useContractRead({
+    address: NFT_CREDITS_CONTRACT_ADDRESS,
+    abi: NFT_CREDITS_CONTRACT_ABI,
+    functionName: "tokenURI",
+    args: [currentTokenId],
+    chainId: TESTNET_CHAIN_ID,
+    // enabled: currentTokenId !== null,
   })
 
   const handleIncrement = () => {
@@ -73,7 +88,6 @@ const UserNFTsClientExplorer = () => {
       setTokenIds(ids)
     }
   }, [tokenOfOwnerByIndexData])
-
   if (isLoading) return <div>Loading NFT balance...</div>
   if (isError) return <div>Error fetching NFT balance</div>
   if (!isConnected) return <div>Connect your wallet to view NFTs</div>
@@ -89,14 +103,9 @@ const UserNFTsClientExplorer = () => {
       {tokenIds.length > 0 && (
         <div className="mt-4">
           <SmolTitle>Your Token IDs</SmolTitle>
-          <div className="mt-2 flex flex-wrap gap-2">
+          <div className="mt-2 flex flex-wrap gap-4">
             {tokenIds.map((id) => (
-              <div
-                key={id}
-                className="px-3 py-1 bg-secondary rounded-md text-sm"
-              >
-                #{id}
-              </div>
+              <NFTInProfilePage key={id} tokenId={id} />
             ))}
           </div>
         </div>

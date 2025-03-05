@@ -34,7 +34,7 @@ const ProfilePage = async () => {
         <Title>ProfilePage</Title>
         <PrivyLogoutButtonWrapper />
       </div>
-      <div className="flex justify-between gap-8">
+      <div className="flex justify-between items-start gap-8">
         <UserWalletClientExplorer />
         <UserNFTsClientExplorer />
       </div>
