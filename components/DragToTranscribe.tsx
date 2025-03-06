@@ -10,6 +10,9 @@ const DragToTranscribe = ({ user }: { user: User }) => {
   const [image, setImage] = useState<File | null>(null)
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
+  const [transcribedText, setTranscribedText] = useState<string | null>(
+    "```text Native language: Spanish Target language: English ```"
+  )
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -32,11 +35,6 @@ const DragToTranscribe = ({ user }: { user: User }) => {
       setImage(file)
       const imageUrl = URL.createObjectURL(file)
       setImagePreview(imageUrl)
-
-      toast({
-        title: "Image ready!",
-        description: "Now you can click on 'Translate'",
-      })
     }
   }
 
@@ -60,6 +58,7 @@ const DragToTranscribe = ({ user }: { user: User }) => {
       const data = await response.json()
       console.log("CAME BACK FROM TRANSCRIPTION!!!")
       console.log(data)
+      setTranscribedText(data.transcribedImage)
 
       toast({
         title: "Transcription complete",
@@ -86,35 +85,40 @@ const DragToTranscribe = ({ user }: { user: User }) => {
         </div>
       </div>
 
-      <div
-        onDragEnter={handleDrag}
-        onDragLeave={handleDrag}
-        onDragOver={handleDrag}
-        onDrop={handleDrop}
-        className={`min-h-[186px] border-2 border-dashed rounded-lg p-4 flex items-center justify-center ${
-          dragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
-        }`}
-      >
-        {image ? (
-          <div className="flex flex-col items-center justify-center">
-            {imagePreview && (
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="max-h-[140px] max-w-full mb-2 rotate-3 rounded"
-              />
+      {transcribedText ? (
+        <div className="text-sm text-gray-500">{transcribedText}</div>
+      ) : (
+        <div className="flex flex-col gap-2">
+          <div
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+            className={`min-h-[186px] border-2 border-dashed rounded-lg p-4 flex items-center justify-center ${
+              dragActive ? "border-blue-500 bg-blue-50" : "border-gray-300"
+            }`}
+          >
+            {image ? (
+              <div className="flex flex-col items-center justify-center">
+                {imagePreview && (
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="max-h-[140px] max-w-full mb-2 rotate-3 rounded"
+                  />
+                )}
+              </div>
+            ) : (
+              <div className="text-sm text-gray-500">
+                Drag and drop your image here
+              </div>
             )}
           </div>
-        ) : (
-          <div className="text-sm text-gray-500">
-            Drag and drop your image here
-          </div>
-        )}
-      </div>
-
-      <Button disabled={!image} onClick={submitToTranscribe}>
-        {!image ? "🔼 Drag an image file first" : "Translate it!"}
-      </Button>
+          <Button disabled={!image} onClick={submitToTranscribe}>
+            {!image ? "🔼 Drag an image file first" : "Translate it!"}
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
