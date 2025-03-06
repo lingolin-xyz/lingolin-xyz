@@ -11,7 +11,7 @@ CREATE TABLE lingolin_events (
   extra3 text,
   extra4 text,
   extra5 text,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 

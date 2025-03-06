@@ -25,7 +25,7 @@ const ActivityLogPage = async () => {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Event Type</TableHead>
+              <TableHead>Type</TableHead>
               <TableHead>Extra</TableHead>
               <TableHead>Extra 2</TableHead>
               <TableHead>Extra 3</TableHead>
