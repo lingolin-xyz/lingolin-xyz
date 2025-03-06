@@ -11,6 +11,7 @@ import {
 import { timeSinceShorter } from "@/lib/time"
 import { BsTranslate } from "react-icons/bs"
 import { HiQuestionMarkCircle } from "react-icons/hi2"
+import { SlPicture } from "react-icons/sl"
 import MiniAudioPlayer from "@/components/MiniAudioPlayer"
 import Link from "next/link"
 
@@ -83,5 +84,6 @@ export default ActivityLogPage
 const getIconForActivityLogType = (type: string) => {
   if (type.startsWith("translation") || type.startsWith("save_voice_note"))
     return <BsTranslate />
+  if (type.startsWith("transcribe-image")) return <SlPicture />
   return <HiQuestionMarkCircle />
 }

@@ -119,6 +119,8 @@ const DragToTranscribe = ({ user }: { user: User }) => {
         transcribedText={transcribedText || ""}
         setTranscribedText={setTranscribedText}
         image={imagePreview || ""}
+        setImage={setImage}
+        setImagePreview={setImagePreview}
       />
 
       {transcribedText ? (
@@ -145,6 +147,8 @@ const DragToTranscribe = ({ user }: { user: User }) => {
                 disabled={!transcribedText}
                 onClick={() => {
                   setTranscribedText(null)
+                  setImage(null)
+                  setImagePreview(null)
                 }}
               >
                 Reset
@@ -184,7 +188,7 @@ const DragToTranscribe = ({ user }: { user: User }) => {
 
           <Button disabled={!image} onClick={submitToTranscribe}>
             <BlurryEntranceFaster>
-              {!image ? "🔼 Drag an image file first" : "Translate it!"}
+              {!image ? "🔼 Drag an image file first" : "Transcribe it!"}
             </BlurryEntranceFaster>
           </Button>
         </div>

@@ -3,7 +3,6 @@ import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogContent,
-  AlertDialogDescription,
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
@@ -14,10 +13,14 @@ const TranscriptionModalDialog = ({
   transcribedText,
   setTranscribedText,
   image,
+  setImage,
+  setImagePreview,
 }: {
   transcribedText: string
   setTranscribedText: (text: string) => void
   image: string | null
+  setImage: (image: string | null) => void
+  setImagePreview: (imagePreview: string | null) => void
 }) => {
   const [open, setOpen] = useState(false)
 
@@ -32,25 +35,43 @@ const TranscriptionModalDialog = ({
     setTranscribedText("")
   }
 
+  const onClose = () => {
+    setOpen(false)
+    setTranscribedText("")
+    setImage(null)
+    setImagePreview(null)
+  }
+
   return (
-    <AlertDialog open={open} onOpenChange={setOpen}>
-      <AlertDialogContent className="bg-white border border-gray-100 shadow-md max-w-md">
+    <AlertDialog open={open} onOpenChange={onClose}>
+      <AlertDialogContent className="bg-white border border-gray-100 shadow-md max-w-5xl w-full">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-gray-800 text-xl">
-            Transcription Result
+            {/* Transcription Result */}
           </AlertDialogTitle>
-          {image && (
-            <div className="flex justify-center items-center">
-              <img src={image} alt="Transcription" className="w-1/2 h-1/2" />
+          <div className="flex flex-col md:flex-row gap-6">
+            {image && (
+              <div className="flex justify-center items-center pb-6 w-80">
+                <img
+                  src={image}
+                  alt="Transcription"
+                  className="w-full rounded-lg"
+                />
+              </div>
+            )}
+            <div className="max-h-[440px] flex-1 bg-zinc-100 rounded-xl p-5 overflow-y-auto whitespace-pre-wrap">
+              {/* <AlertDialogDescription className="text-gray-600 max-h-[60vh] overflow-y-auto whitespace-pre-wrap"> */}
+              <MarkdownRendererPlain>
+                {
+                  transcribedText
+                    .replace("```text", "")
+                    .replace("```markdown", "")
+                  //   .replace("```", "")
+                }
+              </MarkdownRendererPlain>
             </div>
-          )}
-          {/* <AlertDialogDescription className="text-gray-600 max-h-[60vh] overflow-y-auto whitespace-pre-wrap"> */}
-          <MarkdownRendererPlain>
-            {
-              transcribedText.replace("```text", "").replace("```markdown", "")
-              //   .replace("```", "")
-            }
-          </MarkdownRendererPlain>
+          </div>
+
           {/* </AlertDialogDescription> */}
         </AlertDialogHeader>
         <AlertDialogFooter>
