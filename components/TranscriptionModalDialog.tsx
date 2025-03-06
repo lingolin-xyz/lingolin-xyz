@@ -8,6 +8,8 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { MarkdownRendererPlain } from "./MarkdownRendererPlain"
+import { Button } from "./ui/button"
+import { useToast } from "@/hooks/use-toast"
 
 const TranscriptionModalDialog = ({
   transcribedText,
@@ -40,6 +42,26 @@ const TranscriptionModalDialog = ({
     setTranscribedText("")
     setImage(null)
     setImagePreview(null)
+  }
+
+  const handleTranslate = () => {
+    // Select all text in the div with id = "transcription"
+    const transcriptionDiv = document.getElementById("transcription")
+    if (transcriptionDiv) {
+      const selection = window.getSelection()
+      if (selection) {
+        selection.selectAllChildren(transcriptionDiv)
+      }
+    }
+
+    // Simulate 'T' key press
+    const keyEvent = new KeyboardEvent("keydown", {
+      key: "T",
+      code: "KeyT",
+      bubbles: true,
+    })
+    document.dispatchEvent(keyEvent)
+    setOpen(false)
   }
 
   return (
@@ -75,12 +97,19 @@ const TranscriptionModalDialog = ({
           {/* </AlertDialogDescription> */}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogAction
+          <Button
+            onClick={handleTranslate}
+            className="bg-gray-800 hover:bg-gray-700 text-white rounded-md px-4 py-2 text-sm"
+          >
+            Translate it!
+          </Button>
+          <Button
+            variant="outline"
             onClick={handleClose}
             className="bg-gray-800 hover:bg-gray-700 text-white rounded-md px-4 py-2 text-sm"
           >
             Close
-          </AlertDialogAction>
+          </Button>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

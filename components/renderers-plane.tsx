@@ -168,7 +168,7 @@ export const pRendererMessage = (props: any) => (
 // export const pRendererMessage = (props: any) => <p {...props} className={classNames("text-base mt-2 mb-4")} />
 
 export const liRenderer = (props: any) => (
-  <li {...props} className={classNames("text-base", "my-4 p-0")} />
+  <li {...props} className={classNames("text-base", "my-1 p-0")} />
 )
 export const liRendererMessage = (props: any) => (
   <li

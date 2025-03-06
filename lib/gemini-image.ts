@@ -44,7 +44,7 @@ Following this format:
 
 # Image Transcription
 
-[transcribed text with nice formatting, sections, lists, whatever you consider!!]
+[transcribed text with nice formatting, paragraphs and titles. But try not to do lists please.]
 
 \`\`\`
 
