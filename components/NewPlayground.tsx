@@ -39,7 +39,7 @@ const NewPlayground = () => {
   }
 
   return (
-    <div className="flex flex-col gap-2 p-4 bg-zinc-100 rounded-3xl">
+    <div className="flex flex-col gap-2 p-4 bg-zinc-100 rounded-xl">
       <div>
         <div className="text-2xl font-bold tracking-tight">
           🗒️ Notepad / Playground
@@ -51,9 +51,9 @@ const NewPlayground = () => {
       <Textarea
         placeholder="Write your note here, select, and translate to any language!"
         value={text}
-        rows={4}
+        // rows={4}
         onChange={handleChange}
-        className="resize-none !text-3xl !p-5 !font-semibold bg-white !rounded-xl"
+        className="resize-none !text-xl !p-2 !px-3 !font-semibold bg-white !rounded-xl h-[186px]"
       />
       <Button disabled={text.length === 0} onClick={handleTranslate}>
         {text.length === 0 ? "Write Something" : "Translate it!"}

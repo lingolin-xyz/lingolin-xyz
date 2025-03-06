@@ -109,7 +109,7 @@ const DragToTranscribe = ({ user }: { user: User }) => {
   }
 
   return (
-    <div className="flex flex-col gap-2 p-4 bg-zinc-100 rounded-3xl">
+    <div className="flex flex-col gap-2 p-4 bg-zinc-100 rounded-xl">
       <div>
         <div className="text-2xl font-bold tracking-tight">
           🏎️ Drag To Transcribe
