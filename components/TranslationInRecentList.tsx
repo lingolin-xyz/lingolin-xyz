@@ -68,7 +68,7 @@ const TranslationInRecentList = ({
           </div>
         </motion.div>
 
-        <div className="space-y-2 pr-8 md:pr-24">
+        <div className="space-y-2 pr-8 md:pr-14">
           <div
             onClick={() => {
               if (!isDragging) {
