@@ -10,6 +10,7 @@ import { useToast } from "@/hooks/use-toast"
 import axios from "axios"
 import Title from "./Title"
 import TranslationInRecentList from "./TranslationInRecentList"
+import PlaygroundAndDragImage from "./PlaygroundAndDragImage"
 import { getEmailAddressFromPrivyUserObject } from "@/lib/privy-utils-client"
 
 const ExtensionInstalledOK = () => {
@@ -59,11 +60,12 @@ const ExtensionInstalledOK = () => {
   }
 
   return (
-    <div className="py-4">
+    <div className="py-8">
       {user ? (
-        <div className="w-full">
+        <div className="w-full max-w-5xl mx-auto">
+          <PlaygroundAndDragImage />
           <div className="flex flex-col gap-6 py-12 max-w-2xl mx-auto justify-center items-center w-full">
-            <BigTitle>Welcome to Lingolin!</BigTitle>
+            {/* <BigTitle>Welcome to Lingolin!</BigTitle>
             <Button
               onClick={() => {
                 toast({
@@ -73,7 +75,7 @@ const ExtensionInstalledOK = () => {
               }}
             >
               Watch Tutorial Video
-            </Button>
+            </Button> */}
 
             <div className="w-full max-w-2xl mx-auto bg-zinc-100 rounded-2xl p-6 md:px-8">
               <Title>Recent Translations</Title>
