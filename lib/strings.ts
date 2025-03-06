@@ -22,3 +22,10 @@ export const cleanString = (str: string) => {
 export const formatAddress = (address: string) => {
   return address.slice(0, 6) + "..." + address.slice(-4)
 }
+
+export const extractJSONfromString = (input: string) => {
+  const inputCleaned = input.match(/```json\s*([\s\S]*?)\s*```/)
+  if (!inputCleaned) return false
+
+  return JSON.parse(inputCleaned[1])
+}

@@ -12,3 +12,5 @@ export const USDC_MONAD_TESTNET_CONTRACT_ADDRESS =
   "0xf817257fed379853cDe0fa4F97AB987181B1E5Ea"
 
 export const TESTNET_CHAIN_ID = 10143
+
+export const FLASH_LATEST = "gemini-2.0-flash-exp"

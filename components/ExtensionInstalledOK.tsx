@@ -63,7 +63,7 @@ const ExtensionInstalledOK = () => {
     <div className="py-8">
       {user ? (
         <div className="w-full max-w-5xl mx-auto">
-          <PlaygroundAndDragImage />
+          <PlaygroundAndDragImage user={user} />
           <div className="flex flex-col gap-6 py-12 max-w-2xl mx-auto justify-center items-center w-full">
             {/* <BigTitle>Welcome to Lingolin!</BigTitle>
             <Button
