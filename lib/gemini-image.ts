@@ -42,12 +42,9 @@ Following this format:
 
 \`\`\`markdown
 
-# Image Transcription
-
-[transcribed text with nice formatting, paragraphs and titles. But try not to do lists please.]
-
 \`\`\`
 
+Transcribe the text on the image, with a nice formatting: paragraphs and titles. But try not to do lists please.
 </Important>`
 
     const googleFlashExp = createGoogleGenerativeAI({

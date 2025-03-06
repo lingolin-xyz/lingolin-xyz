@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react"
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
@@ -9,7 +8,6 @@ import {
 } from "@/components/ui/alert-dialog"
 import { MarkdownRendererPlain } from "./MarkdownRendererPlain"
 import { Button } from "./ui/button"
-import { useToast } from "@/hooks/use-toast"
 
 const TranscriptionModalDialog = ({
   transcribedText,
@@ -21,7 +19,7 @@ const TranscriptionModalDialog = ({
   transcribedText: string
   setTranscribedText: (text: string) => void
   image: string | null
-  setImage: (image: string | null) => void
+  setImage: (image: File | null) => void
   setImagePreview: (imagePreview: string | null) => void
 }) => {
   const [open, setOpen] = useState(false)
@@ -97,19 +95,16 @@ const TranscriptionModalDialog = ({
           {/* </AlertDialogDescription> */}
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <Button
-            onClick={handleTranslate}
-            className="bg-gray-800 hover:bg-gray-700 text-white rounded-md px-4 py-2 text-sm"
-          >
-            Translate it!
-          </Button>
-          <Button
-            variant="outline"
-            onClick={handleClose}
-            className="bg-gray-800 hover:bg-gray-700 text-white rounded-md px-4 py-2 text-sm"
-          >
-            Close
-          </Button>
+          <div className="w-full max-w-md mx-auto flex justify-center gap-4">
+            <div className="flex flex-col w-full">
+              <Button variant="outline" onClick={handleClose}>
+                Close
+              </Button>
+            </div>
+            <div className="flex flex-col w-full">
+              <Button onClick={handleTranslate}>Translate it!</Button>
+            </div>
+          </div>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
