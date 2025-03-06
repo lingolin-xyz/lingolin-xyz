@@ -14,3 +14,5 @@ export const USDC_MONAD_TESTNET_CONTRACT_ADDRESS =
 export const TESTNET_CHAIN_ID = 10143
 
 export const FLASH_LATEST = "gemini-2.0-flash-exp"
+
+export const TWITTER_LINK = "https://x.com/hellolingolin"

@@ -7,6 +7,7 @@ import { IoDocumentTextOutline } from "react-icons/io5"
 import { usePathname } from "next/navigation"
 import { useState } from "react"
 import { motion } from "framer-motion"
+import { TWITTER_LINK } from "@/lib/constants"
 
 const UserHeaderCorner = () => {
   const { user, logout } = usePrivy()
@@ -18,7 +19,10 @@ const UserHeaderCorner = () => {
   if (!user) return null
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex items-center gap-6">
+      <Link href="/contact">
+        <Button variant="ghost">💬 Share Feedback</Button>
+      </Link>
       {/* {pathname !== "/notepad" && (
         <Link href="/notepad">
           <Button variant="outline" className="group">
