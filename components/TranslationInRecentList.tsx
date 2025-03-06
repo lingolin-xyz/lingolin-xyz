@@ -25,7 +25,7 @@ const TranslationInRecentList = ({
   const background = useTransform(
     x,
     [-200, 0],
-    ["rgba(239, 68, 68, 0.7)", "rgba(255, 255, 255, 0)"]
+    ["rgba(239, 68, 68, 0.7)", "rgba(255, 255, 255, 255)"]
   )
   const deleteOpacity = useTransform(x, [-200, -100, -20], [1, 0.5, 0])
   const [isDragging, setIsDragging] = useState(false)
@@ -68,7 +68,7 @@ const TranslationInRecentList = ({
           </div>
         </motion.div>
 
-        <div className="space-y-2">
+        <div className="space-y-2 pr-8 md:pr-24">
           <div
             onClick={() => {
               if (!isDragging) {
