@@ -77,30 +77,39 @@ const ExtensionInstalledOK = () => {
               Watch Tutorial Video
             </Button> */}
 
-            <div className="w-full max-w-2xl mx-auto bg-zinc-100 rounded-2xl p-6 md:px-8">
-              <Title>Recent Translations</Title>
-              <div className="flex flex-col gap-3 w-full mx-auto pt-2">
-                {pastTranslations.map(
-                  (
-                    translation: {
-                      id: string
-                      event_type: string
-                      extra: string
-                      extra2: string
-                      extra3: string
-                      extra4: string
-                    },
-                    index
-                  ) => (
-                    <TranslationInRecentList
-                      key={translation.id}
-                      translation={translation}
-                      onDelete={callDeleteTranslation}
-                    />
-                  )
-                )}
+            {pastTranslations && pastTranslations.length > 0 ? (
+              <div className="w-full max-w-2xl mx-auto bg-zinc-100 rounded-2xl p-6 md:px-8">
+                <Title>Recent Translations</Title>
+                <div className="flex flex-col gap-3 w-full mx-auto pt-2">
+                  {pastTranslations.map(
+                    (
+                      translation: {
+                        id: string
+                        event_type: string
+                        extra: string
+                        extra2: string
+                        extra3: string
+                        extra4: string
+                      },
+                      index
+                    ) => (
+                      <TranslationInRecentList
+                        key={translation.id}
+                        translation={translation}
+                        onDelete={callDeleteTranslation}
+                      />
+                    )
+                  )}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="bg-emerald-200 p-8 rounded-2xl text-2xl font-bold pb-7 flex flex-col gap-4 max-w-sm mx-auto w-full">
+                <div className="text-center text-balance">
+                  Use the extension to start translating!
+                </div>
+                <Button>Watch Mini Tutorial</Button>
+              </div>
+            )}
           </div>
         </div>
       ) : (
