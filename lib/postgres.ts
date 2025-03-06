@@ -154,3 +154,10 @@ export const getTranslatedAudioByMessageAndLanguage = async ({
   const res = await executeQuery(query, params)
   return res.rows[0]
 }
+
+export const getRecentTTsByUserId = async (userId: string) => {
+  const query = `SELECT * FROM lingolin_events WHERE event_type = 'tts_generated' AND user_id = $1 ORDER BY created_at DESC LIMIT 50`
+  const params = [userId]
+  const res = await executeQuery(query, params)
+  return res.rows
+}
