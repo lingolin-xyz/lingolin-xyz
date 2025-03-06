@@ -5,7 +5,7 @@ export const PRIVY_APP_ID = "cm7kput8203rjqfjfh7qhsnj6"
 export const ADMIN_EMAILS = ["hellolingolin@gmail.com", "han.test@fbrns.co"]
 
 export const NFT_CREDITS_CONTRACT_ADDRESS =
-  "0x063dDbf3E7370813165Ac800c21cae82904c321F"
+  "0x700DaCFcf2ee0bC661aa49c7825718D4786F7EDC"
 
 export { NFT_CREDITS_CONTRACT_ABI }
 export const USDC_MONAD_TESTNET_CONTRACT_ADDRESS =
