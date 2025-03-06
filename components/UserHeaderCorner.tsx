@@ -19,7 +19,7 @@ const UserHeaderCorner = () => {
 
   return (
     <div className="flex items-center gap-2">
-      {pathname !== "/notepad" && (
+      {/* {pathname !== "/notepad" && (
         <Link href="/notepad">
           <Button variant="outline" className="group">
             <div className="text-xs flex items-center gap-2">
@@ -30,17 +30,20 @@ const UserHeaderCorner = () => {
             </div>
           </Button>
         </Link>
-      )}
+      )} */}
       <Link
         href="/profile"
-        className="group px-2"
+        className="group px-2 bg-zinc-100 transition-all duration-500 hover:bg-emerald-700 text-black hover:text-white rounded-lg flex items-center justify-center gap-2"
         onMouseLeave={() => {
           setIsHovered(false)
           setIsBye(!isBye)
         }}
         onMouseEnter={() => setIsHovered(true)}
       >
-        <div className="rounded-full border-zinc-700 group-active:opacity-60 hover:border-emerald-600 border-2 w-10 h-10 overflow-hidden group-hover:scale-[130%] transition-all duration-500 group-active:scale-[95%] group-active:rotate-[720deg] group-active:duration-300 relative">
+        <div className="font-bold tracking-tight translate-y-[1px]">
+          My Account
+        </div>
+        <div className="rounded-full border-zinc-700 group-active:opacity-60 group-hover:border-emerald-600 border-2 w-10 h-10 overflow-hidden group-hover:scale-[130%] transition-all duration-500 group-active:scale-[95%] group-active:rotate-[720deg] group-active:duration-300 relative">
           <img
             draggable={false}
             alt="pfp"
