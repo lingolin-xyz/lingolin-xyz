@@ -6,6 +6,8 @@ import PrivyLogoutButtonWrapper from "@/components/auth/PrivyLogoutButtonWrapper
 import { redirect } from "next/navigation"
 import UserWalletClientExplorer from "@/components/wallet/UserWalletClientExplorer"
 import UserNFTsClientExplorer from "@/components/wallet/UserNFTsClientExplorer"
+import HugeTitle from "@/components/HugeTitle"
+import BigTitle from "@/components/BigTitle"
 
 const ProfilePage = async () => {
   const cookieStore = await cookies()
@@ -31,7 +33,7 @@ const ProfilePage = async () => {
   return (
     <div>
       <div className="flex justify-between items-center py-6">
-        <Title>ProfilePage</Title>
+        <BigTitle>My Account</BigTitle>
         <PrivyLogoutButtonWrapper />
       </div>
       <div className="flex justify-between items-start gap-8">
