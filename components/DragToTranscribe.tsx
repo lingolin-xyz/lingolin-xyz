@@ -14,9 +14,9 @@ const DragToTranscribe = ({ user }: { user: User }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   const [transcribedText, setTranscribedText] = useState<string | null>(
-    // null
+    null
     // "```text Native language: Spanish Target language: English ```"
-    "```text\n5. Rf1 6. Rf6 7. Rxg6\n\n5. Rf1 X\n\nSubmit\n```"
+    // "```text\n5. Rf1 6. Rf6 7. Rxg6\n\n5. Rf1 X\n\nSubmit\n```"
   )
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
@@ -154,11 +154,13 @@ const DragToTranscribe = ({ user }: { user: User }) => {
             {image ? (
               <div className="flex flex-col items-center justify-center">
                 {imagePreview && (
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="max-h-[140px] max-w-full mb-2 rotate-3 rounded"
-                  />
+                  <BlurryEntranceFaster>
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="max-h-[140px] max-w-full mb-2 rotate-3 rounded"
+                    />
+                  </BlurryEntranceFaster>
                 )}
               </div>
             ) : (
