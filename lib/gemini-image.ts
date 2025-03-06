@@ -13,7 +13,7 @@ const GEMINI_API_KEYS = [
 export const transcribeImage = async ({
   imageContent,
 }: {
-  imageContent: string
+  imageContent: File
 }) => {
   try {
     const modelToUseHere = FLASH_LATEST
@@ -43,6 +43,8 @@ export const transcribeImage = async ({
       apiKey: geminiApiKey,
     })
 
+    const base64Image = await fileToBase64(imageContent)
+
     const result = await generateText({
       model: googleFlashExp("gemini-2.0-flash-exp"),
       messages: [
@@ -52,7 +54,9 @@ export const transcribeImage = async ({
             { type: "text", text: prompt },
             {
               type: "image",
-              image: imageContent,
+
+              // as base64 please
+              image: base64Image,
             },
           ],
         },
@@ -69,4 +73,9 @@ export const transcribeImage = async ({
     console.error("Error transcribing image:", error)
     return null
   }
+}
+
+const fileToBase64 = async (file: File): Promise<string> => {
+  const buffer = await file.arrayBuffer()
+  return Buffer.from(buffer).toString("base64")
 }

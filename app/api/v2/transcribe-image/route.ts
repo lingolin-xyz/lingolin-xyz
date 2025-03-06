@@ -18,7 +18,7 @@ export async function POST(req: Request) {
     const uploadedImage = await uploadAnyImageToAWS(imageFile)
 
     const transcribedImage = await transcribeImage({
-      imageContent: uploadedImage,
+      imageContent: imageFile,
     })
 
     if (!transcribedImage) {

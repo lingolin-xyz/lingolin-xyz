@@ -11,7 +11,8 @@ const DragToTranscribe = ({ user }: { user: User }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   const [transcribedText, setTranscribedText] = useState<string | null>(
-    "```text Native language: Spanish Target language: English ```"
+    null
+    // "```text Native language: Spanish Target language: English ```"
   )
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
