@@ -95,7 +95,7 @@ export async function POST(req: Request) {
     if (savedTranslation) {
       return NextResponse.json({
         transcription,
-        translatedMessage: savedTranslation.translated_message,
+        translatedMessage: savedTranslation.translation,
       })
     }
 

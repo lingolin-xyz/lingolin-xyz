@@ -141,3 +141,16 @@ export const getRecentActivity = async () => {
   const res = await executeQuery(query)
   return res.rows
 }
+
+export const getTranslatedAudioByMessageAndLanguage = async ({
+  message,
+  language,
+}: {
+  message: string
+  language: string
+}) => {
+  const query = `SELECT * FROM lingolin_events WHERE event_type = 'tts_generated' AND extra = $1 AND extra2 = $2`
+  const params = [message, language]
+  const res = await executeQuery(query, params)
+  return res.rows[0]
+}

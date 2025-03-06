@@ -1,7 +1,8 @@
 import { getUserAndCredits } from "@/lib/cachedLayer"
-import { postErrorToDiscord } from "@/lib/discord"
+import { postErrorToDiscord, postToDiscord } from "@/lib/discord"
 import { updateCreditsValueById } from "@/lib/nillion/utils"
 import { mintNftCreditsBatch } from "@/lib/web3functions"
+import { revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
@@ -30,10 +31,12 @@ export async function POST(req: Request) {
   }
 
   // update credits
-  await updateCreditsValueById(
-    userWithCredits._id,
-    userWithCredits.credits + 50 * amount
-  )
+
+  const newCredits = userWithCredits.credits + 50 * amount
+  await updateCreditsValueById(userWithCredits._id, newCredits)
+  revalidateTag(`user-credits-${userId}`)
+
+  await postToDiscord(`💸 CREDITS UPDATED TO: ${newCredits}`)
 
   console.log(" 🍎  txHash: ", txHash)
 

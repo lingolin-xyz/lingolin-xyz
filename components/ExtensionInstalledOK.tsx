@@ -42,7 +42,7 @@ const ExtensionInstalledOK = () => {
       const res = await axios.post("/api/v1/get-recent-translations", {
         userId,
       })
-      console.log("RECENT TRANSLATIONS")
+      // console.log("RECENT TRANSLATIONS")
       console.table(res.data)
       setPastTranslations(res.data)
     }
