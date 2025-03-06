@@ -4,6 +4,9 @@ import { useState } from "react"
 import { Button } from "./ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { User } from "@privy-io/react-auth"
+import { MarkdownRendererPlain } from "./MarkdownRendererPlain"
+import BlurryEntrance from "./BlurryEntrance"
+import BlurryEntranceFaster from "./BlurryEntranceFaster"
 
 const DragToTranscribe = ({ user }: { user: User }) => {
   const [dragActive, setDragActive] = useState(false)
@@ -11,9 +14,9 @@ const DragToTranscribe = ({ user }: { user: User }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   const [transcribedText, setTranscribedText] = useState<string | null>(
-    null
+    // null
     // "```text Native language: Spanish Target language: English ```"
-    // "```text\n5. Rf1 6. Rf6 7. Rxg6\n\n5. Rf1 X\n\nSubmit\n```"
+    "```text\n5. Rf1 6. Rf6 7. Rxg6\n\n5. Rf1 X\n\nSubmit\n```"
   )
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
@@ -26,6 +29,30 @@ const DragToTranscribe = ({ user }: { user: User }) => {
   }
 
   const { toast } = useToast()
+
+  const handleTranslate = () => {
+    // Select all text in the div with id = "transcription"
+    const transcriptionDiv = document.getElementById("transcription")
+    if (transcriptionDiv) {
+      const selection = window.getSelection()
+      if (selection) {
+        selection.selectAllChildren(transcriptionDiv)
+      }
+    }
+
+    // Simulate 'T' key press
+    const keyEvent = new KeyboardEvent("keydown", {
+      key: "T",
+      code: "KeyT",
+      bubbles: true,
+    })
+    document.dispatchEvent(keyEvent)
+
+    toast({
+      title: "Translating...",
+      description: "Please wait while we translate your text...",
+    })
+  }
 
   const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault()
@@ -88,7 +115,31 @@ const DragToTranscribe = ({ user }: { user: User }) => {
       </div>
 
       {transcribedText ? (
-        <div className="text-sm text-gray-500">{transcribedText}</div>
+        <div className="flex flex-col gap-2">
+          <div className="h-[184px] overflow-y-auto">
+            <div className="bg-white p-5 rounded-lg" id="transcription">
+              <MarkdownRendererPlain>{transcribedText}</MarkdownRendererPlain>
+            </div>
+          </div>
+          <div className="flex justify-center gap-2 w-full">
+            <div className="flex flex-col w-full">
+              <Button disabled={!transcribedText} onClick={handleTranslate}>
+                Translate it!
+              </Button>
+            </div>
+            <div className="flex flex-col w-full">
+              <Button
+                variant="outline"
+                disabled={!transcribedText}
+                onClick={() => {
+                  setTranscribedText(null)
+                }}
+              >
+                Reset
+              </Button>
+            </div>
+          </div>
+        </div>
       ) : (
         <div className="flex flex-col gap-2">
           <div
@@ -116,8 +167,11 @@ const DragToTranscribe = ({ user }: { user: User }) => {
               </div>
             )}
           </div>
+
           <Button disabled={!image} onClick={submitToTranscribe}>
-            {!image ? "🔼 Drag an image file first" : "Translate it!"}
+            <BlurryEntranceFaster>
+              {!image ? "🔼 Drag an image file first" : "Translate it!"}
+            </BlurryEntranceFaster>
           </Button>
         </div>
       )}
