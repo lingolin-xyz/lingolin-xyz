@@ -52,7 +52,7 @@ export const askAnyLLM = async ({
   return text
 }
 
-const getAIModel = async (model: LLMModel) => {
+export const getAIModel = async (model: LLMModel) => {
   switch (model) {
     case "gemini-2.0-flash-exp":
       const apiKey = getRandomGeminiAPIKey()

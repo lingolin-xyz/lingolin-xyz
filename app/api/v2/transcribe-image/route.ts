@@ -1,5 +1,6 @@
 import { uploadAnyImageToAWS } from "@/lib/aws"
 import { transcribeImage } from "@/lib/gemini-image"
+import { logEvent } from "@/lib/postgres"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
@@ -17,8 +18,20 @@ export async function POST(req: Request) {
     const uploadedImage = await uploadAnyImageToAWS(imageFile)
 
     const transcribedImage = await transcribeImage({
-      uploadedUrl: uploadedImage,
+      imageContent: uploadedImage,
+    })
+
+    if (!transcribedImage) {
+      return NextResponse.json({
+        error: "No transcribed image",
+      })
+    }
+
+    await logEvent({
       userId,
+      event_type: "transcribe-image",
+      extra: transcribedImage,
+      extra2: uploadedImage,
     })
 
     return NextResponse.json({
