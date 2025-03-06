@@ -71,8 +71,8 @@ export const getUserAndCredits = async (userId: string) => {
     },
     [`user-credits-${userId}`],
     {
-      revalidate: 2, // * (for quick testing)
-      // revalidate: 60 * 60 * 24 * 7, // Revalidar el caché cada 7 días
+      // revalidate: 2, // * (for quick testing)
+      revalidate: 60 * 60 * 24 * 7, // Revalidar el caché cada 7 días
       tags: [`user-credits-${userId}`], // Tag para invalidar manualmente si es necesario
     }
   )()

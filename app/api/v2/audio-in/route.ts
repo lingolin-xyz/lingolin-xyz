@@ -58,6 +58,14 @@ export async function POST(req: Request) {
       })
     }
 
+    // update credits
+    await updateCreditsValueById(
+      userWithCredits._id,
+      userWithCredits.credits - 1
+    )
+
+    revalidateTag(`user-credits-${userId}`)
+
     console.log("transcription", transcription)
 
     const translationStartTime = Date.now()
@@ -120,6 +128,14 @@ export async function POST(req: Request) {
         languageTo: actualTargetLanguage,
       })
     )
+    // await callToSaveVoiceNote({
+    //   transcription,
+    //   translatedMessage,
+    //   userId: userId,
+    //   buffer,
+    //   languageFrom: sentenceLanguage,
+    //   languageTo: actualTargetLanguage,
+    // })
 
     console.log(`🏁Total process took: ${Date.now() - startTime}ms`)
 
@@ -171,22 +187,22 @@ const callToSaveVoiceNote = async ({
       extra5: audioUrl,
     })
 
-    const userWithCreditsAgain = await getUserAndCredits(userId)
-    if (!userWithCreditsAgain) {
-      await postErrorToDiscord("User not found!!")
-      return NextResponse.json({
-        finished: false,
-        error: "User not found",
-      })
-    }
+    // const userWithCreditsAgain = await getUserAndCredits(userId)
+    // if (!userWithCreditsAgain) {
+    //   await postErrorToDiscord("User not found!!")
+    //   return NextResponse.json({
+    //     finished: false,
+    //     error: "User not found",
+    //   })
+    // }
 
-    // update credits
-    await updateCreditsValueById(
-      userWithCreditsAgain._id,
-      userWithCreditsAgain.credits - 1
-    )
+    // // update credits
+    // await updateCreditsValueById(
+    //   userWithCreditsAgain._id,
+    //   userWithCreditsAgain.credits - 1
+    // )
 
-    revalidateTag(`user-credits-${userId}`)
+    // revalidateTag(`user-credits-${userId}`)
 
     await postToDiscord(
       " 🍎  GOTTA SAVE THE VOICE NOTE.." + audioUrl + " " + userId
