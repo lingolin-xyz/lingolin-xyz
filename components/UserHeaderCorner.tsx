@@ -33,7 +33,7 @@ const UserHeaderCorner = () => {
       )} */}
       <Link
         href="/profile"
-        className="group px-2 bg-zinc-100 transition-all duration-500 hover:bg-emerald-700 text-black hover:text-white rounded-lg flex items-center justify-center gap-2"
+        className="group px-2 bg-zinc-100 active:opacity-70 active:scale-[99%] active:translate-y-[2px] active:duration-75 transition-all duration-300 hover:bg-emerald-700 text-black hover:text-white rounded-lg flex items-center justify-center gap-2"
         onMouseLeave={() => {
           setIsHovered(false)
           setIsBye(!isBye)
