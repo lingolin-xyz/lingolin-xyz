@@ -12,6 +12,7 @@ import { timeSinceShorter } from "@/lib/time"
 import { BsTranslate } from "react-icons/bs"
 import { HiQuestionMarkCircle } from "react-icons/hi2"
 import MiniAudioPlayer from "@/components/MiniAudioPlayer"
+import Link from "next/link"
 
 const ActivityLogPage = async () => {
   const recentActivity = await getRecentActivity()
@@ -39,7 +40,27 @@ const ActivityLogPage = async () => {
                   {getIconForActivityLogType(activity.event_type)}
                 </TableCell>
                 <TableCell>{activity.extra || "-"}</TableCell>
-                <TableCell>{activity.extra2 || "-"}</TableCell>
+                <TableCell>
+                  {/* type: {activity.event_type} */}
+                  {activity.event_type === "transcribe-image" ? (
+                    <div className="min-w-44">
+                      <Link
+                        href={activity.extra2}
+                        target="_blank"
+                        className="hover:opacity-80 transition-opacity active:opacity-60"
+                        rel="noopener noreferrer"
+                      >
+                        <img
+                          src={activity.extra2}
+                          alt="image"
+                          className="h-12 rounded-md"
+                        />
+                      </Link>
+                    </div>
+                  ) : (
+                    <>{activity.extra2 || "-"}</>
+                  )}
+                </TableCell>
                 <TableCell>{activity.extra3 || "-"}</TableCell>
                 <TableCell>{activity.extra4 || "-"}</TableCell>
                 <TableCell>

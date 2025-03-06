@@ -37,7 +37,18 @@ export const transcribeImage = async ({
   
   <Important>
   Reply only with the transcibed content in Markdown and anything else, thanks.
-  </Important>`
+
+Following this format:
+
+\`\`\`markdown
+
+# Image Transcription
+
+[transcribed text with nice formatting, sections, lists, whatever you consider!!]
+
+\`\`\`
+
+</Important>`
 
     const googleFlashExp = createGoogleGenerativeAI({
       apiKey: geminiApiKey,

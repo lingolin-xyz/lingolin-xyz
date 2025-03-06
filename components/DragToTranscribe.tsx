@@ -7,6 +7,7 @@ import { User } from "@privy-io/react-auth"
 import { MarkdownRendererPlain } from "./MarkdownRendererPlain"
 import BlurryEntrance from "./BlurryEntrance"
 import BlurryEntranceFaster from "./BlurryEntranceFaster"
+import TranscriptionModalDialog from "./TranscriptionModalDialog"
 
 const DragToTranscribe = ({ user }: { user: User }) => {
   const [dragActive, setDragActive] = useState(false)
@@ -114,11 +115,22 @@ const DragToTranscribe = ({ user }: { user: User }) => {
         </div>
       </div>
 
+      <TranscriptionModalDialog
+        transcribedText={transcribedText || ""}
+        setTranscribedText={setTranscribedText}
+        image={imagePreview || ""}
+      />
+
       {transcribedText ? (
         <div className="flex flex-col gap-2">
           <div className="h-[184px] overflow-y-auto">
             <div className="bg-white p-5 rounded-lg" id="transcription">
-              <MarkdownRendererPlain>{transcribedText}</MarkdownRendererPlain>
+              <MarkdownRendererPlain>
+                {transcribedText
+                  .replace("```text", "")
+                  .replace("```markdown", "")
+                  .replace("```", "")}
+              </MarkdownRendererPlain>
             </div>
           </div>
           <div className="flex justify-center gap-2 w-full">
