@@ -5,6 +5,7 @@ import { extractJSONfromString } from "./strings"
 import path from "path"
 import fs from "fs/promises"
 import { logEvent } from "./postgres"
+import { postErrorToDiscord } from "./discord"
 
 const GEMINI_API_KEYS = [
   process.env.GOOGLE_GEMINI_API_KEY_1 || "",
@@ -111,8 +112,11 @@ export const transcribeImage = async ({
     })
 
     return responseText
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error in processImageWithGemini:", error)
-    return "Error in processImageWithGemini"
+    await postErrorToDiscord(
+      "Error in processImageWithGemini: " + error.toString().slice(0, 300)
+    )
+    throw error
   }
 }
