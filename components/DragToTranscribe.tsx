@@ -1,15 +1,14 @@
 "use client"
 
 import { useState } from "react"
-import { Textarea } from "./ui/textarea"
 import { Button } from "./ui/button"
 import { useToast } from "@/hooks/use-toast"
 import { User } from "@privy-io/react-auth"
 
 const DragToTranscribe = ({ user }: { user: User }) => {
-  const [text, setText] = useState("")
   const [dragActive, setDragActive] = useState(false)
   const [image, setImage] = useState<File | null>(null)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
@@ -21,6 +20,8 @@ const DragToTranscribe = ({ user }: { user: User }) => {
     }
   }
 
+  const { toast } = useToast()
+
   const handleDrop = async (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -29,55 +30,49 @@ const DragToTranscribe = ({ user }: { user: User }) => {
     const file = e.dataTransfer.files[0]
     if (file && file.type.startsWith("image/")) {
       setImage(file)
+      const imageUrl = URL.createObjectURL(file)
+      setImagePreview(imageUrl)
 
-      const formData = new FormData()
-      formData.append("image", file)
-      formData.append("userId", user.id)
-
-      try {
-        const response = await fetch("/api/v2/transcribe-image", {
-          method: "POST",
-          body: formData,
-        })
-        if (!response.ok) throw new Error("Upload failed")
-
-        toast({
-          title: "Upload successful",
-          description: "Image uploaded successfully",
-        })
-      } catch (error) {
-        toast({
-          title: "Upload failed",
-          description: "Failed to upload image",
-          variant: "destructive",
-        })
-      }
+      toast({
+        title: "Image ready!",
+        description: "Now you can click on 'Translate'",
+      })
     }
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const newText = e.target.value
-    setText(newText)
-    localStorage.setItem("notepad-text", newText)
-  }
-  const { toast } = useToast()
-  const handleTranslate = () => {
-    // Select all text in textarea
-    const textarea = document.querySelector("textarea")
-    textarea?.select()
+  const submitToTranscribe = async () => {
+    if (!image) return
 
-    // Simulate 'T' key press
-    const keyEvent = new KeyboardEvent("keydown", {
-      key: "T",
-      code: "KeyT",
-      bubbles: true,
-    })
-    document.dispatchEvent(keyEvent)
+    try {
+      const formData = new FormData()
+      formData.append("image", image)
+      formData.append("userId", user.id)
 
-    toast({
-      title: "Translating...",
-      description: "Please wait while we translate your text...",
-    })
+      const response = await fetch("/api/v2/transcribe-image", {
+        method: "POST",
+        body: formData,
+      })
+
+      if (!response.ok) {
+        throw new Error("Failed to transcribe image")
+      }
+
+      const data = await response.json()
+      console.log("CAME BACK FROM TRANSCRIPTION!!!")
+      console.log(data)
+
+      toast({
+        title: "Transcription complete",
+        description: "Your image has been transcribed successfully",
+      })
+    } catch (error) {
+      console.error("Error transcribing image:", error)
+      toast({
+        title: "Transcription failed",
+        description: "There was an error transcribing your image",
+        variant: "destructive",
+      })
+    }
   }
 
   return (
@@ -101,7 +96,15 @@ const DragToTranscribe = ({ user }: { user: User }) => {
         }`}
       >
         {image ? (
-          <div className="text-sm">Image ready: {image.name}</div>
+          <div className="flex flex-col items-center justify-center">
+            {imagePreview && (
+              <img
+                src={imagePreview}
+                alt="Preview"
+                className="max-h-[140px] max-w-full mb-2 rotate-3 rounded"
+              />
+            )}
+          </div>
         ) : (
           <div className="text-sm text-gray-500">
             Drag and drop your image here
@@ -109,8 +112,8 @@ const DragToTranscribe = ({ user }: { user: User }) => {
         )}
       </div>
 
-      <Button disabled={text.length === 0} onClick={handleTranslate}>
-        {text.length === 0 ? "🔼 Drag an image file first" : "Translate it!"}
+      <Button disabled={!image} onClick={submitToTranscribe}>
+        {!image ? "🔼 Drag an image file first" : "Translate it!"}
       </Button>
     </div>
   )

@@ -91,3 +91,35 @@ export const uploadMP3AudioFileToAWSS3 = async (buffer: Buffer) => {
   // await postToDiscord(`💥 💥 💥 💥 💥 💥 uploaded MP3 to S3  !!LFG!! ${url}`);
   return url
 }
+
+export const uploadAnyImageToAWS = async (imageFile: File) => {
+  console.log(" 💥 💥 💥 💥 💥 💥 uploading image to S3  !!LFG!! ")
+
+  // Always use webp for better compression
+  const newFileName =
+    "lingolin-images/webps/" +
+    Math.random().toString(36).substring(2, 15) +
+    Math.random().toString(36).substring(2, 15) +
+    ".webp"
+
+  // Convert File to Buffer
+  const arrayBuffer = await imageFile.arrayBuffer()
+  const buffer = Buffer.from(arrayBuffer)
+
+  // Compress the image using sharp and convert to webp
+  const compressedBuffer = await sharp(buffer)
+    .resize({ height: 1200, withoutEnlargement: true })
+    .toFormat("webp")
+    .webp({ quality: 80 }) // Adjust quality as needed
+    .toBuffer()
+
+  const params = {
+    Bucket: process.env.AWS_S3_BUCKET_NAME || "",
+    Key: newFileName,
+    Body: compressedBuffer,
+    ContentType: "image/webp",
+  }
+
+  await s3.send(new PutObjectCommand(params))
+  return `https://${params.Bucket}.s3.${process.env.AWS_S3_BUCKET_REGION}.amazonaws.com/${params.Key}`
+}
