@@ -44,10 +44,14 @@ export const getUserAndCredits = async (userId: string) => {
           })
 
           await postToDiscord("🐣 adding 10 initial credits for " + email)
+
+          const newCreditsForUser = await readCredits(userId)
+
+          console.log(" FIREEEEEEEEE newCreditsForUser", newCreditsForUser)
           return {
             credits: 10,
             tier: 1,
-            _id: creditsForUser._id,
+            _id: newCreditsForUser._id,
           }
         }
 

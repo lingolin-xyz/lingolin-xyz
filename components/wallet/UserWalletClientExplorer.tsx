@@ -119,8 +119,8 @@ const UserWalletClientExplorer: React.FC<UserWalletClientExplorerProps> = ({
       ) : (
         <>
           {address ? (
-            <div>
-              <Button onClick={linkWallet}>Sign Message</Button>
+            <div className="p-12">
+              <Button onClick={linkWallet}>Link your wallet</Button>
             </div>
           ) : (
             <Button onClick={linkWallet}>Link your wallet</Button>
