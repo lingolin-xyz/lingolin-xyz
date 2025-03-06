@@ -13,6 +13,7 @@ const DragToTranscribe = ({ user }: { user: User }) => {
   const [transcribedText, setTranscribedText] = useState<string | null>(
     null
     // "```text Native language: Spanish Target language: English ```"
+    // "```text\n5. Rf1 6. Rf6 7. Rxg6\n\n5. Rf1 X\n\nSubmit\n```"
   )
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
