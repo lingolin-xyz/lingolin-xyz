@@ -6,6 +6,8 @@ import { ImSpinner8 } from "react-icons/im"
 import { ethers } from "ethers"
 import { BrowserProvider, Contract } from "ethers"
 import { NFT_CREDITS_CONTRACT_ADDRESS } from "@/lib/constants"
+import { Tilt } from "../Tilt"
+import Link from "next/link"
 
 const NFTInProfilePage = ({ tokenId }: { tokenId: number }) => {
   const [isLoading, setIsLoading] = useState(true)
@@ -55,11 +57,19 @@ const NFTInProfilePage = ({ tokenId }: { tokenId: number }) => {
       ) : metadata ? (
         <div className="flex flex-col items-center">
           {metadata.image && (
-            <img
-              src={metadata.image}
-              alt={metadata.name || `NFT #${tokenId}`}
-              className="h-auto rounded-md mb-2 w-52"
-            />
+            <Link
+              href={`https://magiceden.io/item-details/monad-testnet/${NFT_CREDITS_CONTRACT_ADDRESS}/${tokenId}`}
+              target="_blank"
+              className="active:scale-90 transition-all duration-100 active:opacity-60"
+            >
+              <Tilt>
+                <img
+                  src={metadata.image}
+                  alt={metadata.name || `NFT #${tokenId}`}
+                  className="h-auto rounded-md mb-2 w-52"
+                />
+              </Tilt>
+            </Link>
           )}
           <h3 className="font-bold">{metadata.name || `NFT #${tokenId}`}</h3>
           {metadata.description && (
