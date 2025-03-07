@@ -1,10 +1,11 @@
 "use client"
 
 import { useLinkAccount, usePrivy, useSignMessage } from "@privy-io/react-auth"
-import { useUser } from "@privy-io/react-auth"
+import { useUser, useCreateWallet } from "@privy-io/react-auth"
 import React, { useEffect, useState } from "react"
 import { useAccount, useBalance } from "wagmi"
 import { Button } from "../ui/button"
+import { useToast } from "@/hooks/use-toast"
 
 import monad from "@/public/monad.svg"
 import { formatAddress } from "@/lib/strings"
@@ -14,6 +15,7 @@ import Title from "../Title"
 import SmolTitle from "../SmolTitle"
 import NumberFlow from "@number-flow/react"
 import BigTitle from "../BigTitle"
+import { FiCopy } from "react-icons/fi"
 
 interface UserWalletClientExplorerProps {
   userId?: string
@@ -23,6 +25,7 @@ const UserWalletClientExplorer: React.FC<UserWalletClientExplorerProps> = ({
   userId,
 }) => {
   const { linkWallet } = usePrivy()
+  const { createWallet } = useCreateWallet()
   const { address, isConnected } = useAccount()
   const { user } = useUser()
   const { data: balanceData } = useBalance({
@@ -33,6 +36,8 @@ const UserWalletClientExplorer: React.FC<UserWalletClientExplorerProps> = ({
   const [privyLinkedWallet, setPrivyLinkedWallet] = useState<string | null>(
     null
   )
+
+  const { toast } = useToast()
 
   useEffect(() => {
     if (balanceData) {
@@ -64,6 +69,21 @@ const UserWalletClientExplorer: React.FC<UserWalletClientExplorerProps> = ({
   //     },
   //   })
 
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text).then(() => {
+      toast({
+        title: "Success",
+        description: "Wallet address copied to clipboard!",
+      });
+    }).catch(err => {
+      toast({
+        title: "Error",
+        description: "Failed to copy wallet address.",
+        variant: "destructive",
+      });
+    });
+  };
+
   if (!ready)
     return (
       <div className="p-24">
@@ -79,8 +99,10 @@ const UserWalletClientExplorer: React.FC<UserWalletClientExplorerProps> = ({
 
   if (!isConnected)
     return (
-      <div className="p-24">
+      <div className="flex flex-col gap-y-4 p-24">
         <Button onClick={linkWallet}>Link your wallet</Button>
+        <p className="text-md text-gray-700 text-center">or</p>
+        <Button onClick={createWallet}>Create a new wallet</Button>
       </div>
     )
 
@@ -106,7 +128,15 @@ const UserWalletClientExplorer: React.FC<UserWalletClientExplorerProps> = ({
           {/* <p className="text-sm text-gray-500">
             User ID: {user?.id || "Not available"}
           </p> */}
-          <div className="text-2xl font-medium">{formatAddress(address)}</div>
+          <div className="flex text-2xl font-medium">
+            {formatAddress(address)}
+            <button 
+              onClick={() => copyToClipboard(address)} 
+              className="ml-2 text-blue-500 underline flex items-center"
+            >
+              <FiCopy className="h-5 w-5 text-black hover:text-gray-700" />
+            </button>
+          </div>
           <div className="translate-y-4">
             <SmolTitle>Balance:</SmolTitle>
           </div>

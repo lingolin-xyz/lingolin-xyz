@@ -24,6 +24,8 @@ const privyConfig = {
     logo: "https://javitoshi.com/images/lingolin.png",
   },
   walletChainType: "ethereum-only",
+  defaultChain: monadTestnet,
+  supportedChains: [monadTestnet],
   loginMethods: ["email", "google"],
   embeddedWallets: {
     createOnLogin: "off",

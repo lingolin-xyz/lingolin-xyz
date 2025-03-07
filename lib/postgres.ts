@@ -34,6 +34,7 @@ types.setTypeParser(20, function (val: any) {
 let pool: Pool | null = null
 
 const getPool = (): Pool => {
+  console.log("getPool", process.env.SUPABASE_DB_URL);
   if (!pool) {
     pool = new Pool({
       connectionString: process.env.SUPABASE_DB_URL || "",
