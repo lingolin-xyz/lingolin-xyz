@@ -15,6 +15,11 @@
         "internalType": "uint256",
         "name": "_rewardPerBurn",
         "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_mintingCost",
+        "type": "uint256"
       }
     ],
     "stateMutability": "nonpayable",
@@ -411,6 +416,32 @@
     "name": "mintNFT",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "quantity",
+        "type": "uint256"
+      }
+    ],
+    "name": "mintNFTWithToken",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "mintingCost",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {

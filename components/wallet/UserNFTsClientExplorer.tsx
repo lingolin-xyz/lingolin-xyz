@@ -16,6 +16,7 @@ import Image from "next/image"
 import BlurryEntrance from "../BlurryEntrance"
 import NFTInProfilePage from "./NFTInProfilePage"
 import { usePrivy } from "@privy-io/react-auth"
+import MintWithERC20 from "./MintWithERC20"
 
 const UserNFTsClientExplorer = () => {
   const { user } = usePrivy()
@@ -154,6 +155,7 @@ const UserNFTsClientExplorer = () => {
           MINT NOW!
         </Button>
       </div>
+      <MintWithERC20 />
     </div>
   )
 }
