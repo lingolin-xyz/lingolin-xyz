@@ -5,15 +5,13 @@ import BigTitle from "./BigTitle"
 import BlurryEntrance from "./BlurryEntrance"
 import Link from "next/link"
 import Title from "./Title"
-import { useToast } from "@/hooks/use-toast"
 import { FaXTwitter } from "react-icons/fa6"
 import { Button } from "./ui/button"
+import MiniTitle from "./MiniTitle"
 
 const NoExtensionFound = () => {
-  const { toast } = useToast()
-
   return (
-    <div className="py-10 max-w-7xl mx-auto w-full h-full px-2 text-center justify-center items-center flex flex-col gap-4">
+    <div className="pt-16 pb-8 max-w-7xl mx-auto w-full h-full px-2 text-center justify-center items-center flex flex-col gap-4">
       <BlurryEntrance delay={0.5}>
         <div className="flex justify-center max-w-2xl items-center border-4 border-black rounded-3xl overflow-hidden">
           <motion.img
@@ -38,34 +36,30 @@ const NoExtensionFound = () => {
               <div className="text-lg md:text-xl text-balance pt-6">
                 You can download it from the Chrome Web Store.
               </div>
-              <div className="w-full my-2 pt-6 flex justify-center">
-                <div
-                  className="cursor-pointer active:opacity-60"
-                  onClick={() => {
-                    toast({
-                      title: "Coming soon",
-                      description: "We are working on it",
-                    })
-                  }}
-                >
-                  <img
-                    src="/images/chrome-web-store.png"
-                    className="h-12 px-2 border border-black/30 rounded-lg"
-                  />
+              <Link href="https://chromewebstore.google.com/detail/lingolin/fdpplpaeiddhncnhhkdioplbpiiihpmf">
+                <div className="w-full my-2 pt-6 flex justify-center">
+                  <div className="cursor-pointer active:opacity-60">
+                    <img
+                      src="/images/chrome-web-store.png"
+                      className="h-12 px-2 border border-black/30 rounded-lg"
+                    />
+                  </div>
                 </div>
-              </div>
+              </Link>
             </BlurryEntrance>
           </div>
         </div>
       </BlurryEntrance>
       <div>
-        <BigTitle>
-          <BlurryEntrance delay={0.3}>
-            <div className="pt-6">Welcome to Lingolin</div>
-          </BlurryEntrance>
-        </BigTitle>
-        <div className="font-semibold text-xl opacity-70 pb-6">
-          A Chrome Extension for the Monad Hackathon
+        <div className="py-20">
+          <BigTitle>
+            <BlurryEntrance delay={0.3}>
+              <div className="pt-6">Welcome to Lingolin</div>
+            </BlurryEntrance>
+          </BigTitle>
+          <div className="font-semibold text-2xl opacity-70 pb-6">
+            A Chrome Extension for the Monad Hackathon
+          </div>
         </div>
         <BlurryEntrance delay={0.5}>
           <div className="flex justify-center items-center">
@@ -78,13 +72,25 @@ const NoExtensionFound = () => {
             </div>
           </div>
         </BlurryEntrance>
-        <BigTitle>
+        <MiniTitle>
           <BlurryEntrance delay={0.3}>
-            <div className="pt-24">Lingolin will be available soon!</div>
+            <div className="pt-24">Install the extension to get started!</div>
           </BlurryEntrance>
-        </BigTitle>
-        <div className="font-semibold text-2xl opacity-70 py-6">
-          Come back for more updates!
+        </MiniTitle>
+
+        <Link href="https://chromewebstore.google.com/detail/lingolin/fdpplpaeiddhncnhhkdioplbpiiihpmf">
+          <div className="w-full my-2 pt-6 flex justify-center">
+            <div className="cursor-pointer active:opacity-60">
+              <img
+                src="/images/chrome-web-store.png"
+                className="h-12 px-2 border border-black/30 rounded-lg"
+              />
+            </div>
+          </div>
+        </Link>
+
+        <div className="font-semibold text-2xl opacity-70 py-6 pt-40">
+          Follow us for more updates!
         </div>
 
         <div>
