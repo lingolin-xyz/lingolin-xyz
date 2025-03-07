@@ -5,6 +5,7 @@ import BigTitle from "./BigTitle"
 import BlurryEntrance from "./BlurryEntrance"
 import Link from "next/link"
 import Title from "./Title"
+import ChromeStoreImageLink from "./ChromeStoreImageLink"
 import { FaXTwitter } from "react-icons/fa6"
 import { Button } from "./ui/button"
 import MiniTitle from "./MiniTitle"
@@ -36,16 +37,7 @@ const NoExtensionFound = () => {
               <div className="text-lg md:text-xl text-balance pt-6">
                 You can download it from the Chrome Web Store.
               </div>
-              <Link href="https://chromewebstore.google.com/detail/lingolin/fdpplpaeiddhncnhhkdioplbpiiihpmf">
-                <div className="w-full my-2 pt-6 flex justify-center">
-                  <div className="cursor-pointer active:opacity-60">
-                    <img
-                      src="/images/chrome-web-store.png"
-                      className="h-12 px-2 border border-black/30 rounded-lg"
-                    />
-                  </div>
-                </div>
-              </Link>
+              <ChromeStoreImageLink />
             </BlurryEntrance>
           </div>
         </div>
@@ -78,16 +70,7 @@ const NoExtensionFound = () => {
           </BlurryEntrance>
         </MiniTitle>
 
-        <Link href="https://chromewebstore.google.com/detail/lingolin/fdpplpaeiddhncnhhkdioplbpiiihpmf">
-          <div className="w-full my-2 pt-6 flex justify-center">
-            <div className="cursor-pointer active:opacity-60">
-              <img
-                src="/images/chrome-web-store.png"
-                className="h-12 px-2 border border-black/30 rounded-lg"
-              />
-            </div>
-          </div>
-        </Link>
+        <ChromeStoreImageLink />
 
         <div className="font-semibold text-2xl opacity-70 py-6 pt-40">
           Follow us for more updates!
