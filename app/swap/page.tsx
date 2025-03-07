@@ -1,0 +1,285 @@
+"use client"
+
+import { useState } from "react"
+import {
+  useAccount,
+  useBalance,
+  useWriteContract,
+  useReadContract,
+  useSimulateContract,
+} from "wagmi"
+import { parseUnits, formatUnits, parseEther, formatEther } from "viem"
+import {
+  TESTNET_CHAIN_ID,
+  USDC_MONAD_TESTNET_CONTRACT_ADDRESS,
+} from "@/lib/constants"
+import NumberFlow from "@number-flow/react"
+import axios from "axios"
+
+const CONTRACTS = {
+  WMON: "0x760AfE86e5de5fa0Ee542fc7B7B713e1c5425701", // wmon!
+  USDC: USDC_MONAD_TESTNET_CONTRACT_ADDRESS,
+}
+
+// ABIs simplificados (deberás usar los correctos)
+const erc20Abi = [
+  {
+    inputs: [
+      { name: "spender", type: "address" },
+      { name: "amount", type: "uint256" },
+    ],
+    name: "approve",
+    outputs: [{ name: "", type: "bool" }],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ name: "account", type: "address" }],
+    name: "balanceOf",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "decimals",
+    outputs: [{ name: "", type: "uint8" }],
+    stateMutability: "view",
+    type: "function",
+  },
+]
+
+const Swap = () => {
+  const [amount, setAmount] = useState("")
+  const [isReversed, setIsReversed] = useState(false)
+  const [estimatedOutput, setEstimatedOutput] = useState("")
+  const [isLoading, setIsLoading] = useState(false)
+
+  const { address } = useAccount()
+
+  // Obtener decimales de los tokens
+  const { data: monDecimals } = useReadContract({
+    address: CONTRACTS.WMON as `0x${string}`,
+    abi: erc20Abi,
+    functionName: "decimals",
+  }) as { data: number | undefined }
+
+  const { data: usdcDecimals } = useReadContract({
+    address: CONTRACTS.USDC as `0x${string}`,
+    abi: erc20Abi,
+    functionName: "decimals",
+  }) as { data: number | undefined }
+
+  // Obtener balances
+  const { data: monBalance } = useBalance({
+    address,
+    token: CONTRACTS.WMON as `0x${string}`,
+  })
+
+  const { data: usdcBalance } = useBalance({
+    address,
+    token: CONTRACTS.USDC as `0x${string}`,
+  })
+
+  // Función para aprobar tokens
+  const { writeContractAsync: approveToken } = useWriteContract()
+
+  // Función para simular aprobación
+  const { data: simulateApprove } = useSimulateContract({
+    address: isReversed
+      ? (CONTRACTS.USDC as `0x${string}`)
+      : (CONTRACTS.WMON as `0x${string}`),
+    abi: erc20Abi,
+    functionName: "approve",
+    args: [
+      "0x_SPENDER_ADDRESS",
+      parseUnits(
+        amount || "0",
+        isReversed ? Number(usdcDecimals || 6) : Number(monDecimals || 18)
+      ),
+    ],
+  })
+
+  // Función para ejecutar el swap
+  const { writeContractAsync: executeSwap } = useWriteContract()
+
+  // Función para obtener cotización
+  const fetchQuote = async (amount: string) => {
+    setAmount(amount)
+    if (!amount || !address) return
+
+    if (Number(amount) <= 0) return
+    try {
+      setIsLoading(true)
+
+      const sellToken = isReversed
+        ? (CONTRACTS.USDC as `0x${string}`)
+        : (CONTRACTS.WMON as `0x${string}`)
+      const buyToken = isReversed
+        ? (CONTRACTS.WMON as `0x${string}`)
+        : (CONTRACTS.USDC as `0x${string}`)
+      const sellDecimals = isReversed
+        ? Number(usdcDecimals || 6)
+        : Number(monDecimals || 18)
+      const sellAmount = parseUnits(amount, sellDecimals).toString()
+
+      const params = new URLSearchParams({
+        chainId: "8453", // ID de la cadena Base
+        sellToken,
+        buyToken,
+        sellAmount,
+        taker: address,
+      })
+
+      console.log("Calling the backend with the values:")
+      console.log({ sellToken })
+      console.log({ buyToken })
+      console.log({ sellAmount })
+
+      const res = await axios.post("/api/0x/get-price", {
+        sellToken: sellToken.toString(),
+        buyToken: buyToken.toString(),
+        sellAmount: sellAmount.toString(),
+        taker: address,
+      })
+
+      const data = res.data
+      const { buyAmount } = data
+
+      if (buyAmount) {
+        const buyDecimals = isReversed
+          ? Number(monDecimals || 18)
+          : Number(usdcDecimals || 6)
+        setEstimatedOutput(formatUnits(BigInt(buyAmount), buyDecimals))
+        console.log("buyAmount", buyAmount)
+        console.log("formatted", formatUnits(BigInt(buyAmount), buyDecimals))
+      }
+    } catch (error) {
+      console.error("Error al obtener cotización:", error)
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Ejecutar swap
+  const handleSwap = async () => {
+    if (!amount || !address) return
+
+    try {
+      setIsLoading(true)
+
+      // 1. Aprobar tokens
+      const sellToken = isReversed ? CONTRACTS.USDC : CONTRACTS.WMON
+      const sellDecimals = isReversed
+        ? Number(usdcDecimals || 6)
+        : Number(monDecimals || 18)
+      const sellAmount = parseUnits(amount, sellDecimals)
+
+      // Aquí deberías implementar la lógica completa del swap usando 0x API
+      // Esto es solo un esquema básico
+
+      //   1. Aprobar tokens
+      const approveTx = await approveToken({
+        address: sellToken as `0x${string}`,
+        abi: erc20Abi,
+        functionName: "approve",
+        args: ["0x_SPENDER_ADDRESS", sellAmount],
+      })
+
+      // 2. Esperar confirmación
+      //   await new Promise((resolve) => setTimeout(resolve, 2000))
+
+      // 3. Ejecutar swap (esto es un placeholder, necesitarás implementar la lógica real)
+      // Aquí deberías usar la API de 0x para obtener la cotización y ejecutar el swap
+
+      alert("¡Swap completado con éxito!")
+    } catch (error) {
+      console.error("Error al ejecutar swap:", error)
+      alert("Error al ejecutar swap")
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // Invertir dirección del swap
+  const handleReverse = () => {
+    setIsReversed(!isReversed)
+    setAmount("")
+    setEstimatedOutput("")
+  }
+
+  return (
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+      <h1 className="text-2xl font-bold mb-6 text-center">
+        Swap {isReversed ? "USDC → MON" : "MON → USDC"}
+      </h1>
+
+      <div className="mb-4">
+        <label className="block text-sm font-medium mb-1">
+          {isReversed ? "USDC" : "MON"} a enviar
+        </label>
+        <div className="flex items-center">
+          <input
+            type="number"
+            value={amount}
+            onChange={(e) => {
+              if (e.target.value) fetchQuote(e.target.value)
+            }}
+            placeholder="0.0"
+            className="w-full p-3 border rounded-lg"
+          />
+          <span className="ml-2 font-medium">
+            {isReversed ? "USDC" : "MON"}
+          </span>
+        </div>
+        <p className="text-xs text-gray-500 mt-1">
+          Balance:{" "}
+          <NumberFlow
+            value={Number(
+              isReversed
+                ? usdcBalance?.formatted || "0"
+                : monBalance?.formatted || "0"
+            )}
+          />{" "}
+          {isReversed ? "USDC" : "MON"}
+        </p>
+      </div>
+
+      <div className="flex justify-center my-4">
+        <button
+          onClick={handleReverse}
+          className="p-2 bg-gray-100 rounded-full"
+        >
+          ↑↓
+        </button>
+      </div>
+
+      <div className="mb-6">
+        <label className="block text-sm font-medium mb-1">
+          {isReversed ? "MON" : "USDC"} a recibir (estimado)
+        </label>
+        <div className="p-3 border rounded-lg bg-gray-50">
+          <NumberFlow value={Number(estimatedOutput || "0")} />{" "}
+          {isReversed ? "MON" : "USDC"}
+        </div>
+        <p className="text-xs text-gray-500 mt-1">
+          Balance:{" "}
+          {isReversed
+            ? monBalance?.formatted || "0"
+            : usdcBalance?.formatted || "0"}{" "}
+          {isReversed ? "MON" : "USDC"}
+        </p>
+      </div>
+
+      <button
+        onClick={handleSwap}
+        disabled={!amount || isLoading}
+        className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400"
+      >
+        {isLoading ? "Procesando..." : "Swap"}
+      </button>
+    </div>
+  )
+}
+
+export default Swap
