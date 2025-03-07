@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import {
   useAccount,
   useBalance,
@@ -14,7 +14,7 @@ import {
   USDC_MONAD_TESTNET_CONTRACT_ADDRESS,
 } from "@/lib/constants"
 import NumberFlow from "@number-flow/react"
-import axios from "axios"
+import axios, { CancelTokenSource } from "axios"
 
 const CONTRACTS = {
   WMON: "0x760AfE86e5de5fa0Ee542fc7B7B713e1c5425701", // wmon!
@@ -54,6 +54,7 @@ const Swap = () => {
   const [isReversed, setIsReversed] = useState(false)
   const [estimatedOutput, setEstimatedOutput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
+  const cancelTokenRef = useRef<CancelTokenSource | null>(null)
 
   const { address } = useAccount()
 
@@ -112,6 +113,14 @@ const Swap = () => {
     try {
       setIsLoading(true)
 
+      // Cancel any previous request
+      if (cancelTokenRef.current) {
+        cancelTokenRef.current.cancel("Operation canceled due to new request")
+      }
+
+      // Create a new cancel token
+      cancelTokenRef.current = axios.CancelToken.source()
+
       const sellToken = isReversed
         ? (CONTRACTS.USDC as `0x${string}`)
         : (CONTRACTS.WMON as `0x${string}`)
@@ -136,12 +145,18 @@ const Swap = () => {
       console.log({ buyToken })
       console.log({ sellAmount })
 
-      const res = await axios.post("/api/0x/get-price", {
-        sellToken: sellToken.toString(),
-        buyToken: buyToken.toString(),
-        sellAmount: sellAmount.toString(),
-        taker: address,
-      })
+      const res = await axios.post(
+        "/api/0x/get-price",
+        {
+          sellToken: sellToken.toString(),
+          buyToken: buyToken.toString(),
+          sellAmount: sellAmount.toString(),
+          taker: address,
+        },
+        {
+          cancelToken: cancelTokenRef.current.token,
+        }
+      )
 
       const data = res.data
       const { buyAmount } = data
@@ -155,7 +170,12 @@ const Swap = () => {
         console.log("formatted", formatUnits(BigInt(buyAmount), buyDecimals))
       }
     } catch (error) {
-      console.error("Error al obtener cotización:", error)
+      // Don't show error if it was just a cancellation
+      if (axios.isCancel(error)) {
+        console.log("Request canceled:", error.message)
+      } else {
+        console.error("Error al obtener cotización:", error)
+      }
     } finally {
       setIsLoading(false)
     }
