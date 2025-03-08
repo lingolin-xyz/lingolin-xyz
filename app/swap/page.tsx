@@ -1,4 +1,5 @@
 "use client"
+import { IoSwapVertical } from "react-icons/io5"
 
 import { useState, useRef } from "react"
 import {
@@ -15,6 +16,8 @@ import {
 } from "@/lib/constants"
 import NumberFlow from "@number-flow/react"
 import axios, { CancelTokenSource } from "axios"
+import Title from "@/components/Title"
+import { motion } from "framer-motion"
 
 const CONTRACTS = {
   WMON: "0x760AfE86e5de5fa0Ee542fc7B7B713e1c5425701", // wmon!
@@ -109,6 +112,7 @@ const Swap = () => {
     console.log("amount???", amount)
     if (amount === "") {
       setAmount("0")
+      setEstimatedOutput("0")
       return
     }
     console.log("ole")
@@ -234,122 +238,146 @@ const Swap = () => {
 
   // Invertir dirección del swap
   const handleReverse = () => {
+    // Guardar los valores actuales antes de invertir
+    const currentAmount = amount
+    const currentOutput = estimatedOutput
+
     setIsReversed(!isReversed)
-    setAmount("")
-    setEstimatedOutput("")
+
+    // Intercambiar los valores
+    if (currentOutput && Number(currentOutput) > 0) {
+      setAmount(currentOutput)
+      setEstimatedOutput(currentAmount)
+    } else {
+      setAmount("")
+      setEstimatedOutput("")
+    }
   }
 
   console.log("estimatedOutput", estimatedOutput)
 
   return (
-    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6 text-center">
-        Swap {isReversed ? "USDC → MON" : "MON → USDC"}
-      </h1>
-
-      <div className="mb-4">
-        <label className="block text-sm font-medium mb-1">
-          {isReversed ? "USDC" : "MON"} a enviar
-        </label>
-        <div className="flex items-center">
-          <input
-            // increase the value if user pressed arrow down or up u know
-            onKeyDown={(e) => {
-              if (e.key === "ArrowUp") {
-                if (isNaN(Number(amount))) return
-                const newAmount = Number(amount) + 1
-                setAmount(newAmount.toString())
-                // put the cursor at the end of the input
-                setTimeout(() => {
-                  const input = e.target as HTMLInputElement
-                  input.setSelectionRange(amount.length, amount.length)
-                }, 6)
-                fetchQuote(newAmount.toString())
-              }
-            }}
-            onKeyUp={(e) => {
-              if (e.key === "ArrowDown") {
-                if (isNaN(Number(amount))) return
-                const newAmount = Number(amount) - 1
-                setAmount(newAmount.toString())
-                // put the cursor at the end of the input
-                setTimeout(() => {
-                  const input = e.target as HTMLInputElement
-                  input.setSelectionRange(amount.length, amount.length)
-                }, 6)
-                fetchQuote(newAmount.toString())
-              }
-            }}
-            type="text"
-            value={amount}
-            onChange={(e) => {
-              // Reemplazar comas por puntos y validar que sea un número válido
-              const value = e.target.value.replace(",", ".")
-              if (value === "") {
-                setAmount("0")
-                return
-              }
-              if (!isNaN(parseFloat(value)) || value === "" || value === ".") {
-                if (isNaN(Number(value))) return
-                setAmount(value)
-                if (value && value !== ".") fetchQuote(value)
-              }
-            }}
-            placeholder="0.0"
-            className="w-full p-3 border rounded-lg"
-          />
-          <span className="ml-2 font-medium">
-            {isReversed ? "USDC" : "MON"}
-          </span>
+    <div className="py-12">
+      <div className="max-w-md mx-auto p-6 bg-zinc-100 rounded-lg shadow-md">
+        <div className="flex justify-center pb-6">
+          <Title>Swap {isReversed ? "USDC → MON" : "MON → USDC"}</Title>
         </div>
-        <p className="text-xs text-gray-500 mt-1">
-          Balance:{" "}
-          <NumberFlow
-            value={Number(
-              isReversed
-                ? usdcBalance?.formatted || "0"
-                : monBalance?.formatted || "0"
-            )}
-          />{" "}
-          {isReversed ? "USDC" : "MON"}
-        </p>
-      </div>
 
-      <div className="flex justify-center my-4">
-        <button
-          onClick={handleReverse}
-          className="p-2 bg-gray-100 rounded-full"
-        >
-          ↑↓
-        </button>
-      </div>
+        <div className="px-8">
+          <div className="mb-4">
+            <label className="block text-lg opacity-70 font-medium mb-1">
+              {isReversed ? "USDC" : "MON"} to send
+            </label>
+            <div className="flex items-center">
+              <input
+                // increase the value if user pressed arrow down or up u know
+                onKeyDown={(e) => {
+                  if (e.key === "ArrowUp") {
+                    if (isNaN(Number(amount))) return
+                    const newAmount = Number(amount) + 1
+                    setAmount(newAmount.toString())
+                    // put the cursor at the end of the input
+                    setTimeout(() => {
+                      const input = e.target as HTMLInputElement
+                      input.setSelectionRange(amount.length, amount.length)
+                    }, 6)
+                    fetchQuote(newAmount.toString())
+                  }
+                }}
+                onKeyUp={(e) => {
+                  if (e.key === "ArrowDown") {
+                    if (isNaN(Number(amount))) return
+                    const newAmount = Number(amount) - 1
+                    setAmount(newAmount.toString())
+                    // put the cursor at the end of the input
+                    setTimeout(() => {
+                      const input = e.target as HTMLInputElement
+                      input.setSelectionRange(amount.length, amount.length)
+                    }, 6)
+                    fetchQuote(newAmount.toString())
+                  }
+                }}
+                type="text"
+                value={amount}
+                onChange={(e) => {
+                  // Reemplazar comas por puntos y validar que sea un número válido
+                  const value = e.target.value.replace(",", ".")
+                  if (value === "") {
+                    setAmount("0")
+                    setEstimatedOutput("0")
+                    return
+                  }
+                  if (
+                    !isNaN(parseFloat(value)) ||
+                    value === "" ||
+                    value === "."
+                  ) {
+                    if (isNaN(Number(value))) return
+                    setAmount(value)
+                    if (value && value !== ".") fetchQuote(value)
+                  }
+                }}
+                placeholder="0.0"
+                className="w-full text-xl p-3 pb-2 border rounded-lg"
+              />
+              <span className="ml-2 font-medium">
+                {isReversed ? "USDC" : "MON"}
+              </span>
+            </div>
+            <p className="text-xs text-gray-500 mt-1 text-center">
+              Balance:{" "}
+              <NumberFlow
+                value={Number(
+                  isReversed
+                    ? usdcBalance?.formatted || "0"
+                    : monBalance?.formatted || "0"
+                )}
+              />{" "}
+              {isReversed ? "USDC" : "MON"}
+            </p>
+          </div>
 
-      <div className="mb-6">
-        <label className="block text-sm font-medium mb-1">
-          {isReversed ? "MON" : "USDC"} a recibir (estimado)
-        </label>
-        <div className="rounded-lg font-semibold tracking-tighter tabular-nums text-4xl">
-          <NumberFlow
-            value={Number(Number(estimatedOutput).toFixed(6) || "0")}
-          />{" "}
-          {isReversed ? "MON" : "USDC"}
+          <div className="flex justify-center my-4">
+            <motion.button
+              onClick={handleReverse}
+              className="p-2 rounded-full bg-indigo-200 text-2xl"
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              animate={{ rotate: isReversed ? 180 : 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <IoSwapVertical />
+            </motion.button>
+          </div>
+
+          <div className="mb-6">
+            <label className="block text-sm font-medium mb-1">
+              {isReversed ? "MON" : "USDC"} to receive (estimated)
+            </label>
+            <div className="rounded-lg font-semibold tracking-tighter tabular-nums text-4xl">
+              <NumberFlow
+                value={Number(Number(estimatedOutput).toFixed(6) || "0")}
+              />{" "}
+              {isReversed ? "MON" : "USDC"}
+            </div>
+            <p className="text-xs text-gray-500 mt-1">
+              Balance:{" "}
+              {isReversed
+                ? monBalance?.formatted || "0"
+                : usdcBalance?.formatted || "0"}{" "}
+              {isReversed ? "MON" : "USDC"}
+            </p>
+          </div>
+
+          <button
+            onClick={handleSwap}
+            disabled={!amount || Number(amount) <= 0 || isLoading}
+            className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400"
+          >
+            {isLoading ? "Procesando..." : "Swap"}
+          </button>
         </div>
-        <p className="text-xs text-gray-500 mt-1">
-          Balance:{" "}
-          {isReversed
-            ? monBalance?.formatted || "0"
-            : usdcBalance?.formatted || "0"}{" "}
-          {isReversed ? "MON" : "USDC"}
-        </p>
       </div>
-
-      <button
-        onClick={handleSwap}
-        disabled={!amount || isLoading}
-        className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400"
-      >
-        {isLoading ? "Procesando..." : "Swap"}
-      </button>
     </div>
   )
 }
