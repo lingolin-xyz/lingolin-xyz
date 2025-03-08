@@ -286,10 +286,22 @@ const Swap = () => {
   }
 
   // Invertir dirección del swap
-  const handleReverse = () => {
+  const handleReverse = async () => {
     // Guardar los valores actuales antes de invertir
     const currentAmount = amount
     const currentOutput = estimatedOutput
+
+    // empty the cubes first:
+    setCube1Value({
+      value: 0,
+      label: false as false | string,
+    })
+    setCube2Value({
+      value: 0,
+      label: false as false | string,
+    })
+
+    await new Promise((resolve) => setTimeout(resolve, 10))
 
     setIsReversed(!isReversed)
 
