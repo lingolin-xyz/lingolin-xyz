@@ -120,7 +120,9 @@ const Swap = () => {
 
   useEffect(() => {
     setCube2Value({
-      value: Number(estimatedOutput.charAt(0)),
+      value: Number(
+        (Number(estimatedOutput) * EXAGGERATION).toString().charAt(0)
+      ),
       label: getLabelFromAmount(Number(estimatedOutput)),
     })
   }, [estimatedOutput])
