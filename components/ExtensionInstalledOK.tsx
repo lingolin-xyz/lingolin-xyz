@@ -96,7 +96,20 @@ const ExtensionInstalledOK = () => {
                     </div>
                   </div>
                 ) : (
-                  <></>
+                  <div className="bg-indigo-200 p-8 rounded-2xl text-2xl font-bold pb-7 flex flex-col gap-4 max-w-sm mx-auto w-full">
+                    <div className="text-center text-balance">
+                      Your text-to-speech history is empty.
+                    </div>
+                    <Button
+                      onClick={() => {
+                        toast({
+                          title: "Coming soon!",
+                        })
+                      }}
+                    >
+                      Watch this tutorial to learn how to use it
+                    </Button>
+                  </div>
                 )}
               </div>
               <div className="w-full md:w-1/2 p-2">
@@ -130,7 +143,15 @@ const ExtensionInstalledOK = () => {
                     <div className="text-center text-balance">
                       Use the extension to start translating!
                     </div>
-                    <Button>Watch Mini Tutorial</Button>
+                    <Button
+                      onClick={() => {
+                        toast({
+                          title: "Coming soon!",
+                        })
+                      }}
+                    >
+                      Watch a Smol Tutorial
+                    </Button>
                   </div>
                 )}
               </div>
