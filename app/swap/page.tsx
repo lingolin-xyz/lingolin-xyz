@@ -25,9 +25,11 @@ import {
 import NumberFlow from "@number-flow/react"
 import axios, { CancelTokenSource } from "axios"
 import Title from "@/components/Title"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import { Input } from "@/components/ui/input"
 import { formatNumber, getLabelFromAmount } from "@/lib/strings"
+import { FaArrowRight, FaArrowRightArrowLeft } from "react-icons/fa6"
+import MiniTitle from "@/components/MiniTitle"
 
 const CONTRACTS = {
   MON: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -63,10 +65,10 @@ const erc20Abi = [
 ]
 
 const Swap = () => {
-  const [amount, setAmount] = useState("")
+  const [amount, setAmount] = useState(0)
   const [price, setThePrice] = useState<any>(null)
   const [isReversed, setIsReversed] = useState(false)
-  const [estimatedOutput, setEstimatedOutput] = useState("")
+  const [estimatedOutput, setEstimatedOutput] = useState("0")
   const [isLoading, setIsLoading] = useState(false)
   const cancelTokenRef = useRef<CancelTokenSource | null>(null)
   const [cube1Value, setCube1Value] = useState({
@@ -125,13 +127,13 @@ const Swap = () => {
 
   const fetchQuote = async (amount: string) => {
     if (amount === "") {
-      setAmount("0")
+      setAmount(0)
       setEstimatedOutput("0")
       return
     }
     if (isNaN(Number(amount))) return
 
-    setAmount(amount)
+    setAmount(Number(amount))
     if (!amount || !address) return
 
     if (Number(amount) <= 0) return
@@ -293,11 +295,11 @@ const Swap = () => {
 
     // Intercambiar los valores
     if (currentOutput && Number(currentOutput) > 0) {
-      setAmount(currentOutput)
-      setEstimatedOutput(currentAmount)
+      setAmount(Number(currentOutput))
+      setEstimatedOutput(amount.toString())
     } else {
-      setAmount("")
-      setEstimatedOutput("")
+      setAmount(0)
+      setEstimatedOutput("0")
     }
   }
 
@@ -319,14 +321,87 @@ const Swap = () => {
         {/* <BallGame value={3} /> */}
         {/* CUBO 1: {cube1Value.value} label:{cube1Value.label} */}
       </div>
-      <div className="max-w-md mx-auto p-6 bg-zinc-100 rounded-lg shadow-md">
+      <div className="max-w-md w-full mx-auto p-6 bg-zinc-100 rounded-lg shadow-md">
         <div className="flex justify-center pb-6">
-          <Title>Swap {isReversed ? "USDC → MON" : "MON → USDC"}</Title>
+          <MiniTitle>
+            <div className="flex items-center gap-2">
+              <span className="">Swap</span>{" "}
+              <AnimatePresence mode="popLayout">
+                <motion.div
+                  key={isReversed ? "usdc-left" : "mon-left"}
+                  id="left-side"
+                  className="w-20 text-center"
+                  initial={{
+                    opacity: 0,
+                    y: 20,
+                    rotate: -5,
+                  }}
+                  animate={{ opacity: 1, y: 0, rotate: 0 }}
+                  exit={{ opacity: 0, y: -20, rotate: -20, scale: 0.6 }}
+                  layout
+                  layoutId={isReversed ? "usdc-left" : "mon-left"}
+                >
+                  {isReversed ? (
+                    <div className="flex items-center justify-center">
+                      <img
+                        src="https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
+                        className="w-4 h-4"
+                      />
+                      <span>USDC</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center">
+                      <img
+                        src="https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
+                        className="w-4 h-4"
+                      />
+                      <span>MON</span>
+                    </div>
+                  )}
+                </motion.div>
+                <FaArrowRight className="text-lg" />
+                <motion.div
+                  key={isReversed ? "mon-right" : "usdc-right"}
+                  id="right-side"
+                  className="w-20 text-center"
+                  initial={{
+                    opacity: 0,
+                    y: 20,
+                    rotate: -5,
+                  }}
+                  animate={{ opacity: 1, y: 0, rotate: 0 }}
+                  exit={{ opacity: 0, y: -20, rotate: -20, scale: 0.6 }}
+                  //   transition={{ duration: 0.3 }}
+                  layout
+                  layoutId={isReversed ? "mon-right" : "usdc-right"}
+                >
+                  {!isReversed ? (
+                    <div className="flex items-center justify-center">
+                      <img
+                        src="https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
+                        className="w-4 h-4"
+                      />
+                      <span>USDC</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center">
+                      <img
+                        src="https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
+                        className="w-4 h-4"
+                      />
+                      <span>MON</span>
+                    </div>
+                  )}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+          </MiniTitle>
         </div>
 
         <div className="px-8">
           <div className="mb-4">
             <label className="block text-lg opacity-70 font-medium mb-1">
+              <DollarSign />
               {isReversed ? "USDC" : "MON"} to send
             </label>
             <div className="flex items-center">
@@ -402,10 +477,11 @@ const Swap = () => {
                 className="w-full text-xl p-3 pb-2 border rounded-lg"
               /> */}
               <span className="ml-2 font-medium">
+                <DollarSign />
                 {isReversed ? "USDC" : "MON"}
               </span>
             </div>
-            <p className="text-xs text-gray-500 mt-1 text-center">
+            <p className="text-xs text-gray-500 mt-1">
               Balance:{" "}
               <NumberFlow
                 value={Number(
@@ -414,6 +490,7 @@ const Swap = () => {
                     : monBalance?.formatted || "0"
                 )}
               />{" "}
+              <DollarSign />
               {isReversed ? "USDC" : "MON"}
             </p>
           </div>
@@ -443,9 +520,14 @@ const Swap = () => {
             </div>
             <p className="text-xs text-gray-500 mt-1">
               Balance:{" "}
-              {isReversed
-                ? monBalance?.formatted || "0"
-                : usdcBalance?.formatted || "0"}{" "}
+              <NumberFlow
+                value={Number(
+                  isReversed
+                    ? monBalance?.formatted || "0"
+                    : usdcBalance?.formatted || "0"
+                )}
+              />{" "}
+              <DollarSign />
               {isReversed ? "MON" : "USDC"}
             </p>
           </div>
@@ -482,3 +564,7 @@ const Swap = () => {
 }
 
 export default Swap
+
+const DollarSign = () => {
+  return <span className="font-mono text-[10px]">$</span>
+}
