@@ -224,6 +224,30 @@ const BallGameComponent: React.FC<{
     })
   }, [label])
 
+  // useEffect para que si el image cambia, se actualice la imagen de las bolas
+  useEffect(() => {
+    if (!engineRef.current) return
+
+    ballsRef.current.forEach((ball) => {
+      //   ball.image = image
+      if (ball.render && ball.render.sprite) {
+        ball.render.sprite.texture = image
+      }
+    })
+  }, [image])
+
+  // useEffect para que si el scaleFactor cambia, se actualice el tamaño de las bolas
+  useEffect(() => {
+    if (!engineRef.current) return
+
+    ballsRef.current.forEach((ball) => {
+      if (ball.render && ball.render.sprite) {
+        ball.render.sprite.xScale = scaleFactor
+        ball.render.sprite.yScale = scaleFactor
+      }
+    })
+  }, [scaleFactor])
+
   return (
     <div
       ref={sceneRef}

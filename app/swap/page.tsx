@@ -307,10 +307,14 @@ const Swap = () => {
     <div className="py-12 w-full flex justify-center items-center gap-6">
       <div className="flex-1 flex justify-center items-center">
         <BallGame
-          scaleFactor={3.5}
+          scaleFactor={isReversed ? 4.2 : 3.5}
           value={cube1Value.value}
           label={cube1Value.label}
-          image="https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
+          image={
+            isReversed
+              ? "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
+              : "https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
+          }
         />
         {/* <BallGame value={3} /> */}
         {/* CUBO 1: {cube1Value.value} label:{cube1Value.label} */}
@@ -465,8 +469,12 @@ const Swap = () => {
         <BallGame
           value={cube2Value.value}
           label={cube2Value.label}
-          scaleFactor={4.2}
-          image="https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
+          scaleFactor={!isReversed ? 4.2 : 3.5}
+          image={
+            isReversed
+              ? "https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
+              : "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
+          }
         />
       </div>
     </div>
