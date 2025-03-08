@@ -2,9 +2,9 @@
 import { IoSwapVertical } from "react-icons/io5"
 import qs from "qs"
 
+const EXAGGERATION = 100000000000
 import BallGame from "@/components/BallGame"
 
-const EXAGGERATION = 100000000000
 import { useState, useRef, useEffect } from "react"
 import {
   useAccount,
@@ -27,7 +27,7 @@ import axios, { CancelTokenSource } from "axios"
 import Title from "@/components/Title"
 import { motion } from "framer-motion"
 import { Input } from "@/components/ui/input"
-import { formatNumber } from "@/lib/strings"
+import { formatNumber, getLabelFromAmount } from "@/lib/strings"
 
 const CONTRACTS = {
   MON: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -106,61 +106,29 @@ const Swap = () => {
   })
 
   useEffect(() => {
-    // cada vexz que cambia amount, quiero el primer digito del numero de amount
-
-    // label quiero que sea false si el numbero es >=0 y <10
-    // label quiero que sea "10" si el numbero es >=10 y <100
-    // label quiero que sea "100" si el numbero es >=100 y <1000
-    // label quiero que sea "0.1" si el numbero es >= 0.1 y < 1
-    // label quiero que sea "0.01" si el numbero es >= 0.01 y < 0.1
-    const theLabel = (amount: number): false | string => {
-      //   console.log("amount", amount)
-
-      const amountbig = amount * EXAGGERATION
-      if (amountbig >= 0 && amountbig < 10) return false
-      if (amountbig >= 0.1 && amountbig < 1) return "0.1"
-      if (amountbig >= 0.01 && amountbig < 0.1) return "0.01"
-      if (amountbig >= 1 && amountbig < 10) return false
-
-      const pow = Math.pow(10, Math.floor(Math.log10(amountbig)))
-      return String(pow >= 10 ? formatNumber(pow / EXAGGERATION) : false)
-    }
     setCube1Value({
-      value: Number(amount.charAt(0)),
-      label: theLabel(Number(amount)),
+      value: Number(
+        Number(Number(amount) * EXAGGERATION)
+          .toString()
+          .charAt(0)
+      ),
+      label: getLabelFromAmount(Number(amount)),
     })
   }, [amount])
 
   useEffect(() => {
-    const theLabel = (amount: number): false | string => {
-      //   console.log("amount", amount)
-      const amountbig = amount * EXAGGERATION
-      if (amountbig >= 0 && amountbig < 10) return false
-      if (amountbig >= 0.1 && amountbig < 1) return "0.1"
-      if (amountbig >= 0.01 && amountbig < 0.1) return "0.01"
-      if (amountbig >= 1 && amountbig < 10) return false
-
-      const pow = Math.pow(10, Math.floor(Math.log10(amountbig)))
-      return String(pow >= 10 ? pow / EXAGGERATION : false)
-    }
-    // cada vexz que cambia amount, quiero el primer digito del numero de amount
     setCube2Value({
       value: Number(estimatedOutput.charAt(0)),
-      label: theLabel(Number(estimatedOutput)),
+      label: getLabelFromAmount(Number(estimatedOutput)),
     })
   }, [estimatedOutput])
 
-  // Función para obtener cotización
   const fetchQuote = async (amount: string) => {
-    // console.log("amount???", amount)
     if (amount === "") {
       setAmount("0")
       setEstimatedOutput("0")
       return
     }
-    // console.log("ole")
-
-    // ignore if the amount (string) is not a valid number :
     if (isNaN(Number(amount))) return
 
     setAmount(amount)
@@ -359,6 +327,11 @@ const Swap = () => {
             </label>
             <div className="flex items-center">
               <Input
+                max={Number(
+                  isReversed
+                    ? usdcBalance?.formatted || "0"
+                    : monBalance?.formatted || "0"
+                )}
                 type="number"
                 min={0}
                 value={amount}
