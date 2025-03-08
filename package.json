@@ -64,6 +64,7 @@
     "@types/cors": "^2.8.17",
     "@types/node": "^20",
     "@types/pg": "^8.11.11",
+    "@types/qs": "^6.9.18",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

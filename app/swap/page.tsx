@@ -23,11 +23,9 @@ import NumberFlow from "@number-flow/react"
 import axios, { CancelTokenSource } from "axios"
 import Title from "@/components/Title"
 import { motion } from "framer-motion"
-import { waitForTransactionReceipt } from "viem/actions"
 
 const CONTRACTS = {
-  //   WMON: "0x760AfE86e5de5fa0Ee542fc7B7B713e1c5425701", // wmon!
-  WMON: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE", // wmon!
+  MON: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
   USDC: USDC_MONAD_TESTNET_CONTRACT_ADDRESS,
 }
 
@@ -73,7 +71,7 @@ const Swap = () => {
 
   // Obtener decimales de los tokens
   const { data: monDecimals } = useReadContract({
-    address: CONTRACTS.WMON as `0x${string}`,
+    address: CONTRACTS.MON as `0x${string}`,
     abi: erc20Abi,
     functionName: "decimals",
   }) as { data: number | undefined }
@@ -87,31 +85,11 @@ const Swap = () => {
   // Obtener balances
   const { data: monBalance } = useBalance({
     address,
-    // token: CONTRACTS.WMON as `0x${string}`,
   })
 
   const { data: usdcBalance } = useBalance({
     address,
     token: CONTRACTS.USDC as `0x${string}`,
-  })
-
-  // Función para aprobar tokens
-  const { writeContractAsync: approveToken } = useWriteContract()
-
-  // Función para simular aprobación
-  const { data: simulateApprove } = useSimulateContract({
-    address: isReversed
-      ? (CONTRACTS.USDC as `0x${string}`)
-      : (CONTRACTS.WMON as `0x${string}`),
-    abi: erc20Abi,
-    functionName: "approve",
-    args: [
-      address as `0x${string}`,
-      parseUnits(
-        isNaN(Number(amount)) ? "0" : amount,
-        isReversed ? Number(usdcDecimals || 6) : Number(monDecimals || 18)
-      ),
-    ],
   })
 
   // Función para obtener cotización
@@ -144,28 +122,15 @@ const Swap = () => {
 
       const sellToken = isReversed
         ? (CONTRACTS.USDC as `0x${string}`)
-        : (CONTRACTS.WMON as `0x${string}`)
+        : (CONTRACTS.MON as `0x${string}`)
       const buyToken = isReversed
-        ? (CONTRACTS.WMON as `0x${string}`)
+        ? (CONTRACTS.MON as `0x${string}`)
         : (CONTRACTS.USDC as `0x${string}`)
       const sellDecimals = isReversed
         ? Number(usdcDecimals || 6)
         : Number(monDecimals || 18)
 
       const sellAmount = parseUnits(amount, sellDecimals).toString()
-
-      const params = new URLSearchParams({
-        chainId: "8453", // ID de la cadena Base
-        sellToken,
-        buyToken,
-        sellAmount,
-        taker: address,
-      })
-
-      console.log("Calling the backend with the values:")
-      console.log({ sellToken })
-      console.log({ buyToken })
-      console.log({ sellAmount })
 
       const res = await axios.post(
         "/api/0x/get-price",
@@ -188,8 +153,8 @@ const Swap = () => {
           ? Number(monDecimals || 18)
           : Number(usdcDecimals || 6)
         setEstimatedOutput(formatUnits(BigInt(buyAmount), buyDecimals))
-        console.log("buyAmount", buyAmount)
-        console.log("formatted", formatUnits(BigInt(buyAmount), buyDecimals))
+        // console.log("buyAmount", buyAmount)
+        // console.log("formatted", formatUnits(BigInt(buyAmount), buyDecimals))
         setThePrice(data.quote)
       }
     } catch (error) {
@@ -213,17 +178,13 @@ const Swap = () => {
     try {
       setIsLoading(true)
 
-      // 1. Aprobar tokens
-      const sellToken = isReversed ? CONTRACTS.USDC : CONTRACTS.WMON
       const sellDecimals = isReversed
         ? Number(usdcDecimals || 6)
         : Number(monDecimals || 18)
       const sellAmount = parseUnits(amount, sellDecimals)
 
-      // EXECUTE SWAP HERE!!
-      // 1. Fetch quote from 0x API
-      const sellTokenAddress = isReversed ? CONTRACTS.USDC : CONTRACTS.WMON
-      const buyTokenAddress = isReversed ? CONTRACTS.WMON : CONTRACTS.USDC
+      const sellTokenAddress = isReversed ? CONTRACTS.USDC : CONTRACTS.MON
+      const buyTokenAddress = isReversed ? CONTRACTS.MON : CONTRACTS.USDC
 
       const params = {
         chainId: TESTNET_CHAIN_ID,
@@ -236,8 +197,8 @@ const Swap = () => {
         swapFeeToken: price.buyToken,
         tradeSurplusRecipient: FEE_RECIPIENT,
       }
+
       // Get quote from API
-      //   const res = await axios.post("/api/0x/get-quote", params)
       const response = await fetch(`/api/0x/get-quote?${qs.stringify(params)}`)
       const quote = await response.json()
 
@@ -276,73 +237,18 @@ const Swap = () => {
 
       //   (3) Submit the transaction with Permit2 signature
 
-      sendTransaction &&
-        sendTransaction({
-          account: address,
-          gas: !!quote?.transaction.gas
-            ? BigInt(quote?.transaction.gas)
-            : undefined,
-          to: quote?.transaction.to,
-          data: quote.transaction.data, // submit
-          value: quote?.transaction.value
-            ? BigInt(quote.transaction.value)
-            : undefined, // value is used for native tokens
-          chainId: TESTNET_CHAIN_ID,
-        })
+      sendTransaction({
+        account: address,
+        gas: quote?.transaction.gas ? BigInt(quote.transaction.gas) : undefined,
+        to: quote.transaction.to as `0x${string}`,
+        data: quote.transaction.data as `0x${string}`,
+        value: quote.transaction.value
+          ? BigInt(quote.transaction.value)
+          : undefined,
+        chainId: TESTNET_CHAIN_ID,
+      })
 
       // ! ENDDD
-
-      //   console.log("quote", quote)
-
-      //   //   return false
-
-      //   // 2. Check if approval is needed for ERC20 tokens (not needed for native MON)
-      //   if (sellTokenAddress !== "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE") {
-      //     // For USDC or other ERC20 tokens, check if approval is needed
-      //     if (quote.allowanceTarget && quote.allowanceTarget !== address) {
-      //       const txHash = await approveToken({
-      //         address: sellTokenAddress as `0x${string}`,
-      //         abi: erc20Abi,
-      //         functionName: "approve",
-      //         args: [quote.allowanceTarget, BigInt(quote.sellAmount)],
-      //       })
-
-      //       // Wait for approval transaction to complete
-      //       await waitForTransactionReceipt(window.ethereum, {
-      //         hash: txHash,
-      //       })
-
-      //       console.log("Approval transaction confirmed:", txHash)
-      //     }
-      //   }
-
-      //   // 3. Execute the swap transaction
-      //   const { to, data, value } = quote.transaction
-
-      //   // Use wagmi's writeContract for the transaction
-      //   const txHash = await window.ethereum.request({
-      //     method: "eth_sendTransaction",
-      //     params: [
-      //       {
-      //         from: address,
-      //         to,
-      //         data,
-      //         value: value ? value : "0x0",
-      //         chainId: TESTNET_CHAIN_ID,
-      //       },
-      //     ],
-      //   })
-
-      //   console.log("Swap transaction sent:", txHash)
-
-      //   // Wait for transaction to complete
-      //   const receipt = await waitForTransactionReceipt(window.ethereum, {
-      //     hash: txHash as `0x${string}`,
-      //   })
-
-      //   console.log("Swap transaction confirmed:", receipt)
-
-      //   alert("¡Swap completado con éxito!")
     } catch (error) {
       console.error("Error al ejecutar swap:", error)
       //   alert("Error al ejecutar swap")
