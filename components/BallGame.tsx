@@ -124,7 +124,13 @@ const BallGameComponent: React.FC<{ value: number }> = ({ value = 1 }) => {
             restitution: 0.7,
             friction: 0.1,
             render: {
-              fillStyle: `hsl(${(ballsRef.current.length + i) * 60}, 70%, 50%)`,
+              // Usar sprite con URL externa
+              sprite: {
+                texture:
+                  "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg",
+                xScale: 4.2, // Ajusta según necesites
+                yScale: 4.2,
+              },
             },
           }
         )
