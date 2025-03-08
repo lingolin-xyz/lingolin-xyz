@@ -30,6 +30,8 @@ import { Input } from "@/components/ui/input"
 import { formatNumber, getLabelFromAmount } from "@/lib/strings"
 import { FaArrowRight, FaArrowRightArrowLeft } from "react-icons/fa6"
 import MiniTitle from "@/components/MiniTitle"
+import Link from "next/link"
+import BlurryEntrance from "@/components/BlurryEntrance"
 
 const CONTRACTS = {
   MON: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -83,7 +85,7 @@ const Swap = () => {
 
   const { data: hash, isPending, error, sendTransaction } = useSendTransaction()
 
-  const { address } = useAccount()
+  const { address, isConnecting } = useAccount()
 
   // Obtener decimales de los tokens
   const { data: monDecimals } = useReadContract({
@@ -327,22 +329,47 @@ const Swap = () => {
       setEstimatedOutput("0")
     }
   }
+  if (isConnecting) {
+    return (
+      <div className="p-12 py-32 w-full flex justify-center items-center">
+        Connecting...
+      </div>
+    )
+  }
 
+  if (!isConnecting && !address) {
+    return (
+      <BlurryEntrance delay={0.8}>
+        <div className="p-12 py-32 w-full flex justify-center items-center">
+          Please,{" "}
+          <Link
+            className="inline-block text-indigo-500 hover:text-indigo-800 font-semibold active:opacity-50 px-1.5"
+            href="/profile"
+          >
+            visit your profile
+          </Link>{" "}
+          and link your wallet first
+        </div>
+      </BlurryEntrance>
+    )
+  }
   //   console.log("estimatedOutput", estimatedOutput)
 
   return (
     <div className="py-12 w-full flex justify-center items-center gap-6">
-      <div className="flex-1 flex justify-center items-center">
-        <BallGame
-          scaleFactor={isReversed ? 4.2 : 3.5}
-          value={cube1Value.value}
-          label={cube1Value.label}
-          image={
-            isReversed
-              ? "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
-              : "https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
-          }
-        />
+      <div className="flex-1 hidden lg:flex justify-center items-center">
+        <BlurryEntrance delay={0.3}>
+          <BallGame
+            scaleFactor={isReversed ? 4.2 : 3.5}
+            value={cube1Value.value}
+            label={cube1Value.label}
+            image={
+              isReversed
+                ? "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
+                : "https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
+            }
+          />
+        </BlurryEntrance>
         {/* <BallGame value={3} /> */}
         {/* CUBO 1: {cube1Value.value} label:{cube1Value.label} */}
       </div>
@@ -572,17 +599,19 @@ const Swap = () => {
           </button>
         </div>
       </div>
-      <div className="flex-1 flex justify-center items-center">
-        <BallGame
-          value={cube2Value.value}
-          label={cube2Value.label}
-          scaleFactor={!isReversed ? 4.2 : 3.5}
-          image={
-            isReversed
-              ? "https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
-              : "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
-          }
-        />
+      <div className="flex-1 hidden lg:flex justify-center items-center">
+        <BlurryEntrance delay={0.55}>
+          <BallGame
+            value={cube2Value.value}
+            label={cube2Value.label}
+            scaleFactor={!isReversed ? 4.2 : 3.5}
+            image={
+              isReversed
+                ? "https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
+                : "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
+            }
+          />
+        </BlurryEntrance>
       </div>
     </div>
   )
