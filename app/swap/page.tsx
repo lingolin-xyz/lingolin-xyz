@@ -488,7 +488,7 @@ const Swap = () => {
           </button>
         </div>
       </div>
-      <div className="flex-1 hello flex justify-center items-center">
+      <div className="flex-1 flex justify-center items-center">
         <BallGame
           value={cube2Value.value}
           label={cube2Value.label}

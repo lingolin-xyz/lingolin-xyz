@@ -37,7 +37,7 @@ const BallGameComponent: React.FC<{
         width: 330,
         height: 420,
         wireframes: false,
-        background: "#f0f0f0",
+        background: "#ffffff",
       },
     })
 
