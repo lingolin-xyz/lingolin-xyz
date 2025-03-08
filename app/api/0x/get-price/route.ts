@@ -25,7 +25,7 @@ export async function POST(req: Request) {
 
   const headers = new Headers({
     "Content-Type": "application/json",
-    "0x-api-key": "a5716be5-c0af-4027-a3aa-8767111dc74e", // Reemplaza con tu API key
+    "0x-api-key": process.env.NEXT_PUBLIC_ZEROEX_API_KEY as string,
     "0x-version": "v2",
   })
 
@@ -39,5 +39,5 @@ export async function POST(req: Request) {
   console.log("quote")
   console.log(quote)
 
-  return NextResponse.json({ buyAmount: quote.buyAmount })
+  return NextResponse.json({ buyAmount: quote.buyAmount, quote })
 }

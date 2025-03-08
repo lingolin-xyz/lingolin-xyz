@@ -16,3 +16,7 @@ export const TESTNET_CHAIN_ID = 10143
 export const FLASH_LATEST = "gemini-2.0-flash-exp"
 
 export const TWITTER_LINK = "https://x.com/hellolingolin"
+
+// ! 0x stuff
+export const AFFILIATE_FEE = 100 // 1% affiliate fee. Denoted in Bps.
+export const FEE_RECIPIENT = "0x75A94931B81d81C7a62b76DC0FcFAC77FbE1e917" // The ETH address that should receive affiliate fees
