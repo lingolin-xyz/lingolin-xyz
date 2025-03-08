@@ -38,12 +38,31 @@ const BallGameComponent: React.FC<{ value: number }> = ({ value = 1 }) => {
     engineRef.current = engine
     renderRef.current = render
 
+    const THICKNESS = 13
     // Crear el suelo
-    const ground = Bodies.rectangle(190, 410, 390, 60, {
+    const ground = Bodies.rectangle(190, 420, 390, THICKNESS, {
       isStatic: true,
       render: {
         fillStyle: "#333",
       },
+      chamfer: { radius: 6 },
+    })
+
+    // Crear paredes laterales
+    const leftWall = Bodies.rectangle(0, 210, THICKNESS, 420, {
+      isStatic: true,
+      render: {
+        fillStyle: "#333",
+      },
+      chamfer: { radius: 4 },
+    })
+
+    const rightWall = Bodies.rectangle(330, 210, THICKNESS, 420, {
+      isStatic: true,
+      render: {
+        fillStyle: "#333",
+      },
+      chamfer: { radius: 4 },
     })
 
     // Añadir control del mouse
@@ -58,8 +77,8 @@ const BallGameComponent: React.FC<{ value: number }> = ({ value = 1 }) => {
       },
     })
 
-    // Añadir el suelo y el control del mouse al mundo
-    World.add(engine.world, [ground, mouseConstraint])
+    // Añadir el suelo, las paredes y el control del mouse al mundo
+    World.add(engine.world, [ground, leftWall, rightWall, mouseConstraint])
 
     // Usar requestAnimationFrame para el loop de animación
     let frameId: number
@@ -100,7 +119,7 @@ const BallGameComponent: React.FC<{ value: number }> = ({ value = 1 }) => {
         return Bodies.circle(
           150 + Math.random() * 30, // Posición X aleatoria cerca del centro
           50, // Posición Y inicial (desde arriba)
-          30, // Radio
+          50, // Radio
           {
             restitution: 0.7,
             friction: 0.1,

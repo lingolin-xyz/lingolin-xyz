@@ -292,8 +292,8 @@ const Swap = () => {
   //   console.log("estimatedOutput", estimatedOutput)
 
   return (
-    <div className="py-12 hello w-full flex justify-center items-center gap-6">
-      <div className="hello flex-1 flex justify-center items-center">
+    <div className="py-12 w-full flex justify-center items-center gap-6">
+      <div className="flex-1 flex justify-center items-center">
         <BallGame value={cube1Value} />
         {/* <BallGame value={3} /> */}
         {/* CUBO 1: {cube1Value} */}
