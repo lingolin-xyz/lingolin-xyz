@@ -29,3 +29,18 @@ export const extractJSONfromString = (input: string) => {
 
   return JSON.parse(inputCleaned[1])
 }
+
+export const formatNumber = (number: number) => {
+  // si es 2000 pues que sea 2K, etc..
+  if (number >= 1000000000) {
+    return (number / 1000000000).toFixed(0) + "B"
+  }
+  if (number >= 1000000) {
+    return (number / 1000000).toFixed(0) + "M"
+  }
+  if (number >= 1000) {
+    return (number / 1000).toFixed(0) + "K"
+  }
+
+  return number
+}

@@ -16,7 +16,9 @@ import dynamic from "next/dynamic"
 const BallGameComponent: React.FC<{
   value: number
   label: false | string
-}> = ({ value = 1, label = false }) => {
+  image: string
+  scaleFactor: number
+}> = ({ value = 1, label = false, image = "", scaleFactor = 1 }) => {
   const sceneRef = useRef<HTMLDivElement>(null)
   const engineRef = useRef<Engine | null>(null)
   const renderRef = useRef<Matter.Render | null>(null)
@@ -119,17 +121,18 @@ const BallGameComponent: React.FC<{
 
           // Add a rounded background
           const textWidth = context.measureText(ball.label).width
-          const padding = 6
-          const bgHeight = 22
+          const padding = 12
+          const bgHeight = 26
+          const bottomPadding = 4 // Add extra padding at the bottom
 
           // Draw rounded background
-          context.fillStyle = "white"
+          context.fillStyle = "#ffffffbb"
           context.beginPath()
           context.roundRect(
             x - textWidth / 2 - padding,
-            y - bgHeight / 2,
+            y - bgHeight / 2 - bottomPadding / 2, // Shift up slightly to center text
             textWidth + padding * 2,
-            bgHeight,
+            bgHeight + bottomPadding, // Increase height with bottom padding
             8 // border radius
           )
           context.fill()
@@ -181,13 +184,12 @@ const BallGameComponent: React.FC<{
             friction: 0.1,
             render: {
               sprite: {
-                texture:
-                  "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg",
-                xScale: 4.2, // Ajusta según necesites
-                yScale: 4.2,
+                texture: image,
+                xScale: scaleFactor, // Ajusta según necesites
+                yScale: scaleFactor,
               },
             },
-            label: `$${i + 1}`,
+            label: `x${label}`,
           }
         )
       })
@@ -211,7 +213,16 @@ const BallGameComponent: React.FC<{
 
     // Actualizar el valor anterior
     prevValueRef.current = currentValue
-  }, [value])
+  }, [value, label])
+
+  // useEffect para que si el label cambia, se actualice el texto de las bolas
+  useEffect(() => {
+    if (!engineRef.current) return
+
+    ballsRef.current.forEach((ball) => {
+      ball.label = `x${label}`
+    })
+  }, [label])
 
   return (
     <div

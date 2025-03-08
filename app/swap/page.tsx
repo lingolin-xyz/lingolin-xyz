@@ -4,6 +4,7 @@ import qs from "qs"
 
 import BallGame from "@/components/BallGame"
 
+const EXAGGERATION = 100000000000
 import { useState, useRef, useEffect } from "react"
 import {
   useAccount,
@@ -26,6 +27,7 @@ import axios, { CancelTokenSource } from "axios"
 import Title from "@/components/Title"
 import { motion } from "framer-motion"
 import { Input } from "@/components/ui/input"
+import { formatNumber } from "@/lib/strings"
 
 const CONTRACTS = {
   MON: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -112,15 +114,16 @@ const Swap = () => {
     // label quiero que sea "0.1" si el numbero es >= 0.1 y < 1
     // label quiero que sea "0.01" si el numbero es >= 0.01 y < 0.1
     const theLabel = (amount: number): false | string => {
-      console.log("amount", amount)
-      const amountbig = amount * 100000000000
+      //   console.log("amount", amount)
+
+      const amountbig = amount * 
       if (amountbig >= 0 && amountbig < 10) return false
       if (amountbig >= 0.1 && amountbig < 1) return "0.1"
       if (amountbig >= 0.01 && amountbig < 0.1) return "0.01"
       if (amountbig >= 1 && amountbig < 10) return false
 
       const pow = Math.pow(10, Math.floor(Math.log10(amountbig)))
-      return String(pow >= 10 ? pow / 100000000000 : false)
+      return String(pow >= 10 ? formatNumber(pow / EXAGGERATION) : false)
     }
     setCube1Value({
       value: Number(amount.charAt(0)),
@@ -130,15 +133,15 @@ const Swap = () => {
 
   useEffect(() => {
     const theLabel = (amount: number): false | string => {
-      console.log("amount", amount)
-      const amountbig = amount * 100000000000
+      //   console.log("amount", amount)
+      const amountbig = amount * EXAGGERATION
       if (amountbig >= 0 && amountbig < 10) return false
       if (amountbig >= 0.1 && amountbig < 1) return "0.1"
       if (amountbig >= 0.01 && amountbig < 0.1) return "0.01"
       if (amountbig >= 1 && amountbig < 10) return false
 
       const pow = Math.pow(10, Math.floor(Math.log10(amountbig)))
-      return String(pow >= 10 ? pow / 100000000000 : false)
+      return String(pow >= 10 ? pow / EXAGGERATION : false)
     }
     // cada vexz que cambia amount, quiero el primer digito del numero de amount
     setCube2Value({
@@ -335,9 +338,14 @@ const Swap = () => {
   return (
     <div className="py-12 w-full flex justify-center items-center gap-6">
       <div className="flex-1 flex justify-center items-center">
-        <BallGame value={cube1Value.value} label={cube1Value.label} />
+        <BallGame
+          scaleFactor={3.5}
+          value={cube1Value.value}
+          label={cube1Value.label}
+          image="https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
+        />
         {/* <BallGame value={3} /> */}
-        CUBO 1: {cube1Value.value} label:{cube1Value.label}
+        {/* CUBO 1: {cube1Value.value} label:{cube1Value.label} */}
       </div>
       <div className="max-w-md mx-auto p-6 bg-zinc-100 rounded-lg shadow-md">
         <div className="flex justify-center pb-6">
@@ -352,11 +360,13 @@ const Swap = () => {
             <div className="flex items-center">
               <Input
                 type="number"
+                min={0}
                 value={amount}
                 onChange={(e) => {
                   setAmount(e.target.value)
                   fetchQuote(e.target.value)
                 }}
+                className="bg-white !text-2xl !h-10 !pb-0 font-semibold"
               />
 
               {/* <input
@@ -468,12 +478,23 @@ const Swap = () => {
             disabled={!amount || Number(amount) <= 0 || isLoading}
             className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 disabled:bg-gray-400"
           >
-            {isLoading ? "Procesando..." : "Swap"}
+            {isLoading ? (
+              <div className="flex justify-center items-center py-0.5">
+                <div className="animate-spin rounded-full h-5 w-5 border-t-2 border-b-2 border-white"></div>
+              </div>
+            ) : (
+              "Swap"
+            )}
           </button>
         </div>
       </div>
       <div className="flex-1 hello flex justify-center items-center">
-        CUBO 2: {cube2Value.value} label:{cube2Value.label}
+        <BallGame
+          value={cube2Value.value}
+          label={cube2Value.label}
+          scaleFactor={4.2}
+          image="https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
+        />
       </div>
     </div>
   )
