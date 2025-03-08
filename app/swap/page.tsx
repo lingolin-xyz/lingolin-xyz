@@ -2,7 +2,9 @@
 import { IoSwapVertical } from "react-icons/io5"
 import qs from "qs"
 
-import { useState, useRef } from "react"
+import BallGame from "@/components/BallGame"
+
+import { useState, useRef, useEffect } from "react"
 import {
   useAccount,
   useBalance,
@@ -64,6 +66,8 @@ const Swap = () => {
   const [estimatedOutput, setEstimatedOutput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const cancelTokenRef = useRef<CancelTokenSource | null>(null)
+  const [cube1Value, setCube1Value] = useState(0)
+  const [cube2Value, setCube2Value] = useState(0)
 
   const { data: hash, isPending, error, sendTransaction } = useSendTransaction()
 
@@ -91,6 +95,16 @@ const Swap = () => {
     address,
     token: CONTRACTS.USDC as `0x${string}`,
   })
+
+  useEffect(() => {
+    // cada vexz que cambia amount, quiero el primer digito del numero de amount
+    setCube1Value(Number(amount.charAt(0)))
+  }, [amount])
+
+  useEffect(() => {
+    // cada vexz que cambia amount, quiero el primer digito del numero de amount
+    setCube2Value(Number(estimatedOutput.charAt(0)))
+  }, [estimatedOutput])
 
   // Función para obtener cotización
   const fetchQuote = async (amount: string) => {
@@ -278,7 +292,11 @@ const Swap = () => {
   //   console.log("estimatedOutput", estimatedOutput)
 
   return (
-    <div className="py-12">
+    <div className="py-12 hello w-full flex justify-center items-center gap-6">
+      <div className="hello flex-1 flex justify-center items-center">
+        <BallGame value={cube1Value} />
+        {/* CUBO 1: {cube1Value} */}
+      </div>
       <div className="max-w-md mx-auto p-6 bg-zinc-100 rounded-lg shadow-md">
         <div className="flex justify-center pb-6">
           <Title>Swap {isReversed ? "USDC → MON" : "MON → USDC"}</Title>
@@ -398,6 +416,9 @@ const Swap = () => {
             {isLoading ? "Procesando..." : "Swap"}
           </button>
         </div>
+      </div>
+      <div className="flex-1 hello flex justify-center items-center">
+        CUBO 2: {cube2Value}
       </div>
     </div>
   )
