@@ -8,11 +8,15 @@ import Matter, {
   Bodies,
   Mouse,
   MouseConstraint,
+  Events,
 } from "matter-js"
 import dynamic from "next/dynamic"
 
 // Create the component first, then wrap it with dynamic
-const BallGameComponent: React.FC<{ value: number }> = ({ value = 1 }) => {
+const BallGameComponent: React.FC<{
+  value: number
+  label: false | string
+}> = ({ value = 1, label = false }) => {
   const sceneRef = useRef<HTMLDivElement>(null)
   const engineRef = useRef<Engine | null>(null)
   const renderRef = useRef<Matter.Render | null>(null)
@@ -92,6 +96,58 @@ const BallGameComponent: React.FC<{ value: number }> = ({ value = 1 }) => {
     // Iniciar la animación
     animate()
 
+    // Add custom rendering for text
+    render.options.wireframes = false
+
+    // Define a more specific type for the renderer
+    interface RenderWithRenderer extends Matter.Render {
+      context: CanvasRenderingContext2D
+    }
+
+    const typedRender = render as RenderWithRenderer
+
+    // Use the render.afterRender callback instead of trying to override the renderer
+    Events.on(render, "afterRender", () => {
+      const context = render.context
+
+      ballsRef.current.forEach((ball) => {
+        if (ball.label) {
+          const { x, y } = ball.position
+
+          // Set text properties
+          context.font = "bold 32px Grandstander"
+
+          // Add a rounded background
+          const textWidth = context.measureText(ball.label).width
+          const padding = 6
+          const bgHeight = 22
+
+          // Draw rounded background
+          context.fillStyle = "white"
+          context.beginPath()
+          context.roundRect(
+            x - textWidth / 2 - padding,
+            y - bgHeight / 2,
+            textWidth + padding * 2,
+            bgHeight,
+            8 // border radius
+          )
+          context.fill()
+
+          // Add border to background
+          context.strokeStyle = "#333"
+          context.lineWidth = 2
+          context.stroke()
+
+          // Draw text
+          context.fillStyle = "#000"
+          context.textAlign = "center"
+          context.textBaseline = "middle"
+          context.fillText(ball.label, x, y)
+        }
+      })
+    })
+
     // Cleanup
     return () => {
       cancelAnimationFrame(frameId)
@@ -124,7 +180,6 @@ const BallGameComponent: React.FC<{ value: number }> = ({ value = 1 }) => {
             restitution: 0.7,
             friction: 0.1,
             render: {
-              // Usar sprite con URL externa
               sprite: {
                 texture:
                   "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg",
@@ -132,6 +187,7 @@ const BallGameComponent: React.FC<{ value: number }> = ({ value = 1 }) => {
                 yScale: 4.2,
               },
             },
+            label: `$${i + 1}`,
           }
         )
       })

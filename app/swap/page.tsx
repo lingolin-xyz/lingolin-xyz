@@ -25,6 +25,7 @@ import NumberFlow from "@number-flow/react"
 import axios, { CancelTokenSource } from "axios"
 import Title from "@/components/Title"
 import { motion } from "framer-motion"
+import { Input } from "@/components/ui/input"
 
 const CONTRACTS = {
   MON: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -66,8 +67,14 @@ const Swap = () => {
   const [estimatedOutput, setEstimatedOutput] = useState("")
   const [isLoading, setIsLoading] = useState(false)
   const cancelTokenRef = useRef<CancelTokenSource | null>(null)
-  const [cube1Value, setCube1Value] = useState(0)
-  const [cube2Value, setCube2Value] = useState(0)
+  const [cube1Value, setCube1Value] = useState({
+    value: 0,
+    label: false as false | string,
+  })
+  const [cube2Value, setCube2Value] = useState({
+    value: 0,
+    label: false as false | string,
+  })
 
   const { data: hash, isPending, error, sendTransaction } = useSendTransaction()
 
@@ -98,23 +105,57 @@ const Swap = () => {
 
   useEffect(() => {
     // cada vexz que cambia amount, quiero el primer digito del numero de amount
-    setCube1Value(Number(amount.charAt(0)))
+
+    // label quiero que sea false si el numbero es >=0 y <10
+    // label quiero que sea "10" si el numbero es >=10 y <100
+    // label quiero que sea "100" si el numbero es >=100 y <1000
+    // label quiero que sea "0.1" si el numbero es >= 0.1 y < 1
+    // label quiero que sea "0.01" si el numbero es >= 0.01 y < 0.1
+    const theLabel = (amount: number): false | string => {
+      console.log("amount", amount)
+      const amountbig = amount * 100000000000
+      if (amountbig >= 0 && amountbig < 10) return false
+      if (amountbig >= 0.1 && amountbig < 1) return "0.1"
+      if (amountbig >= 0.01 && amountbig < 0.1) return "0.01"
+      if (amountbig >= 1 && amountbig < 10) return false
+
+      const pow = Math.pow(10, Math.floor(Math.log10(amountbig)))
+      return String(pow >= 10 ? pow / 100000000000 : false)
+    }
+    setCube1Value({
+      value: Number(amount.charAt(0)),
+      label: theLabel(Number(amount)),
+    })
   }, [amount])
 
   useEffect(() => {
+    const theLabel = (amount: number): false | string => {
+      console.log("amount", amount)
+      const amountbig = amount * 100000000000
+      if (amountbig >= 0 && amountbig < 10) return false
+      if (amountbig >= 0.1 && amountbig < 1) return "0.1"
+      if (amountbig >= 0.01 && amountbig < 0.1) return "0.01"
+      if (amountbig >= 1 && amountbig < 10) return false
+
+      const pow = Math.pow(10, Math.floor(Math.log10(amountbig)))
+      return String(pow >= 10 ? pow / 100000000000 : false)
+    }
     // cada vexz que cambia amount, quiero el primer digito del numero de amount
-    setCube2Value(Number(estimatedOutput.charAt(0)))
+    setCube2Value({
+      value: Number(estimatedOutput.charAt(0)),
+      label: theLabel(Number(estimatedOutput)),
+    })
   }, [estimatedOutput])
 
   // Función para obtener cotización
   const fetchQuote = async (amount: string) => {
-    console.log("amount???", amount)
+    // console.log("amount???", amount)
     if (amount === "") {
       setAmount("0")
       setEstimatedOutput("0")
       return
     }
-    console.log("ole")
+    // console.log("ole")
 
     // ignore if the amount (string) is not a valid number :
     if (isNaN(Number(amount))) return
@@ -294,9 +335,9 @@ const Swap = () => {
   return (
     <div className="py-12 w-full flex justify-center items-center gap-6">
       <div className="flex-1 flex justify-center items-center">
-        <BallGame value={cube1Value} />
+        <BallGame value={cube1Value.value} label={cube1Value.label} />
         {/* <BallGame value={3} /> */}
-        {/* CUBO 1: {cube1Value} */}
+        CUBO 1: {cube1Value.value} label:{cube1Value.label}
       </div>
       <div className="max-w-md mx-auto p-6 bg-zinc-100 rounded-lg shadow-md">
         <div className="flex justify-center pb-6">
@@ -309,12 +350,23 @@ const Swap = () => {
               {isReversed ? "USDC" : "MON"} to send
             </label>
             <div className="flex items-center">
-              <input
+              <Input
+                type="number"
+                value={amount}
+                onChange={(e) => {
+                  setAmount(e.target.value)
+                  fetchQuote(e.target.value)
+                }}
+              />
+
+              {/* <input
                 // increase the value if user pressed arrow down or up u know
                 onKeyDown={(e) => {
                   if (e.key === "ArrowUp") {
                     if (isNaN(Number(amount))) return
-                    const newAmount = Number(amount) + 1
+                    const newAmount = Number(
+                      (Number(amount) + 1).toFixed(6)
+                    ).toString()
                     setAmount(newAmount.toString())
                     // put the cursor at the end of the input
                     setTimeout(() => {
@@ -327,7 +379,9 @@ const Swap = () => {
                 onKeyUp={(e) => {
                   if (e.key === "ArrowDown") {
                     if (isNaN(Number(amount))) return
-                    const newAmount = Number(amount) - 1
+                    const newAmount = Number(
+                      (Number(amount) - 1).toFixed(6)
+                    ).toString()
                     setAmount(newAmount.toString())
                     // put the cursor at the end of the input
                     setTimeout(() => {
@@ -359,7 +413,7 @@ const Swap = () => {
                 }}
                 placeholder="0.0"
                 className="w-full text-xl p-3 pb-2 border rounded-lg"
-              />
+              /> */}
               <span className="ml-2 font-medium">
                 {isReversed ? "USDC" : "MON"}
               </span>
@@ -419,7 +473,7 @@ const Swap = () => {
         </div>
       </div>
       <div className="flex-1 hello flex justify-center items-center">
-        CUBO 2: {cube2Value}
+        CUBO 2: {cube2Value.value} label:{cube2Value.label}
       </div>
     </div>
   )
