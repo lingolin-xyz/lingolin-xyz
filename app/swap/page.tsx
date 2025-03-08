@@ -8,7 +8,7 @@ import {
   useReadContract,
   useSimulateContract,
 } from "wagmi"
-import { parseUnits, formatUnits, parseEther, formatEther } from "viem"
+import { parseUnits, formatUnits } from "viem"
 import {
   TESTNET_CHAIN_ID,
   USDC_MONAD_TESTNET_CONTRACT_ADDRESS,
@@ -95,7 +95,7 @@ const Swap = () => {
     args: [
       "0x_SPENDER_ADDRESS",
       parseUnits(
-        amount || "0",
+        isNaN(Number(amount)) ? "0" : amount,
         isReversed ? Number(usdcDecimals || 6) : Number(monDecimals || 18)
       ),
     ],
@@ -106,6 +106,16 @@ const Swap = () => {
 
   // Función para obtener cotización
   const fetchQuote = async (amount: string) => {
+    console.log("amount???", amount)
+    if (amount === "") {
+      setAmount("0")
+      return
+    }
+    console.log("ole")
+
+    // ignore if the amount (string) is not a valid number :
+    if (isNaN(Number(amount))) return
+
     setAmount(amount)
     if (!amount || !address) return
 
@@ -130,6 +140,7 @@ const Swap = () => {
       const sellDecimals = isReversed
         ? Number(usdcDecimals || 6)
         : Number(monDecimals || 18)
+
       const sellAmount = parseUnits(amount, sellDecimals).toString()
 
       const params = new URLSearchParams({
@@ -228,6 +239,8 @@ const Swap = () => {
     setEstimatedOutput("")
   }
 
+  console.log("estimatedOutput", estimatedOutput)
+
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-6 text-center">
@@ -240,10 +253,47 @@ const Swap = () => {
         </label>
         <div className="flex items-center">
           <input
-            type="number"
+            // increase the value if user pressed arrow down or up u know
+            onKeyDown={(e) => {
+              if (e.key === "ArrowUp") {
+                if (isNaN(Number(amount))) return
+                const newAmount = Number(amount) + 1
+                setAmount(newAmount.toString())
+                // put the cursor at the end of the input
+                setTimeout(() => {
+                  const input = e.target as HTMLInputElement
+                  input.setSelectionRange(amount.length, amount.length)
+                }, 6)
+                fetchQuote(newAmount.toString())
+              }
+            }}
+            onKeyUp={(e) => {
+              if (e.key === "ArrowDown") {
+                if (isNaN(Number(amount))) return
+                const newAmount = Number(amount) - 1
+                setAmount(newAmount.toString())
+                // put the cursor at the end of the input
+                setTimeout(() => {
+                  const input = e.target as HTMLInputElement
+                  input.setSelectionRange(amount.length, amount.length)
+                }, 6)
+                fetchQuote(newAmount.toString())
+              }
+            }}
+            type="text"
             value={amount}
             onChange={(e) => {
-              if (e.target.value) fetchQuote(e.target.value)
+              // Reemplazar comas por puntos y validar que sea un número válido
+              const value = e.target.value.replace(",", ".")
+              if (value === "") {
+                setAmount("0")
+                return
+              }
+              if (!isNaN(parseFloat(value)) || value === "" || value === ".") {
+                if (isNaN(Number(value))) return
+                setAmount(value)
+                if (value && value !== ".") fetchQuote(value)
+              }
             }}
             placeholder="0.0"
             className="w-full p-3 border rounded-lg"
@@ -278,8 +328,10 @@ const Swap = () => {
         <label className="block text-sm font-medium mb-1">
           {isReversed ? "MON" : "USDC"} a recibir (estimado)
         </label>
-        <div className="p-3 border rounded-lg bg-gray-50">
-          <NumberFlow value={Number(estimatedOutput || "0")} />{" "}
+        <div className="rounded-lg font-semibold tracking-tighter tabular-nums text-4xl">
+          <NumberFlow
+            value={Number(Number(estimatedOutput).toFixed(6) || "0")}
+          />{" "}
           {isReversed ? "MON" : "USDC"}
         </div>
         <p className="text-xs text-gray-500 mt-1">
