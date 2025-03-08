@@ -71,6 +71,7 @@ const Swap = () => {
   const [estimatedOutput, setEstimatedOutput] = useState("0")
   const [isLoading, setIsLoading] = useState(false)
   const cancelTokenRef = useRef<CancelTokenSource | null>(null)
+  const currentRequestIdRef = useRef<number>(0)
   const [cube1Value, setCube1Value] = useState({
     value: 0,
     label: false as false | string,
@@ -139,6 +140,11 @@ const Swap = () => {
     if (!amount || !address) return
 
     if (Number(amount) <= 0) return
+
+    // Define requestId outside the try block so it's available in finally
+    const requestId = currentRequestIdRef.current + 1
+    currentRequestIdRef.current = requestId
+
     try {
       setIsLoading(true)
 
@@ -149,6 +155,7 @@ const Swap = () => {
 
       // Create a new cancel token
       cancelTokenRef.current = axios.CancelToken.source()
+      const currentCancelToken = cancelTokenRef.current // Store reference to current token
 
       const sellToken = isReversed
         ? (CONTRACTS.USDC as `0x${string}`)
@@ -191,11 +198,15 @@ const Swap = () => {
       // Don't show error if it was just a cancellation
       if (axios.isCancel(error)) {
         console.log("Request canceled:", error.message)
+        return // Exit early without setting isLoading to false
       } else {
         console.error("Error al obtener cotización:", error)
       }
     } finally {
-      setIsLoading(false)
+      // Solo establecer isLoading a false si esta es la última solicitud iniciada
+      if (currentRequestIdRef.current === requestId) {
+        setIsLoading(false)
+      }
     }
   }
 
