@@ -65,7 +65,7 @@ const erc20Abi = [
 ]
 
 const Swap = () => {
-  const [amount, setAmount] = useState(0)
+  const [amount, setAmount] = useState("0")
   const [price, setThePrice] = useState<any>(null)
   const [isReversed, setIsReversed] = useState(false)
   const [estimatedOutput, setEstimatedOutput] = useState("0")
@@ -127,13 +127,13 @@ const Swap = () => {
 
   const fetchQuote = async (amount: string) => {
     if (amount === "") {
-      setAmount(0)
+      setAmount("0")
       setEstimatedOutput("0")
       return
     }
     if (isNaN(Number(amount))) return
 
-    setAmount(Number(amount))
+    setAmount(amount)
     if (!amount || !address) return
 
     if (Number(amount) <= 0) return
@@ -158,7 +158,7 @@ const Swap = () => {
         ? Number(usdcDecimals || 6)
         : Number(monDecimals || 18)
 
-      const sellAmount = parseUnits(amount, sellDecimals).toString()
+      const sellAmount = parseUnits(amount.toString(), sellDecimals).toString()
 
       const res = await axios.post(
         "/api/0x/get-price",
@@ -209,7 +209,7 @@ const Swap = () => {
       const sellDecimals = isReversed
         ? Number(usdcDecimals || 6)
         : Number(monDecimals || 18)
-      const sellAmount = parseUnits(amount, sellDecimals)
+      const sellAmount = parseUnits(amount.toString(), sellDecimals)
 
       const sellTokenAddress = isReversed ? CONTRACTS.USDC : CONTRACTS.MON
       const buyTokenAddress = isReversed ? CONTRACTS.MON : CONTRACTS.USDC
@@ -295,10 +295,10 @@ const Swap = () => {
 
     // Intercambiar los valores
     if (currentOutput && Number(currentOutput) > 0) {
-      setAmount(Number(currentOutput))
+      setAmount(currentOutput)
       setEstimatedOutput(amount.toString())
     } else {
-      setAmount(0)
+      setAmount("0")
       setEstimatedOutput("0")
     }
   }
