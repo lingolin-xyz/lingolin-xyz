@@ -295,6 +295,7 @@ const Swap = () => {
     <div className="py-12 hello w-full flex justify-center items-center gap-6">
       <div className="hello flex-1 flex justify-center items-center">
         <BallGame value={cube1Value} />
+        {/* <BallGame value={3} /> */}
         {/* CUBO 1: {cube1Value} */}
       </div>
       <div className="max-w-md mx-auto p-6 bg-zinc-100 rounded-lg shadow-md">

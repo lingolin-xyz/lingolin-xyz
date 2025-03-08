@@ -12,10 +12,12 @@ import Matter, {
 import dynamic from "next/dynamic"
 
 // Create the component first, then wrap it with dynamic
-const BallGameComponent: React.FC = () => {
+const BallGameComponent: React.FC<{ value: number }> = ({ value = 1 }) => {
   const sceneRef = useRef<HTMLDivElement>(null)
   const engineRef = useRef<Engine | null>(null)
   const renderRef = useRef<Matter.Render | null>(null)
+  const ballsRef = useRef<Matter.Body[]>([])
+  const prevValueRef = useRef(0)
 
   useEffect(() => {
     if (!sceneRef.current) return
@@ -44,17 +46,6 @@ const BallGameComponent: React.FC = () => {
       },
     })
 
-    // Crear varias bolas
-    const balls = Array.from({ length: 5 }, (_, i) => {
-      return Bodies.circle(100 + i * 150, 50, 30, {
-        restitution: 0.7,
-        friction: 0.1,
-        render: {
-          fillStyle: `hsl(${i * 60}, 70%, 50%)`,
-        },
-      })
-    })
-
     // Añadir control del mouse
     const mouse = Mouse.create(render.canvas)
     const mouseConstraint = MouseConstraint.create(engine, {
@@ -67,8 +58,8 @@ const BallGameComponent: React.FC = () => {
       },
     })
 
-    // Añadir todos los cuerpos al mundo
-    World.add(engine.world, [ground, ...balls, mouseConstraint])
+    // Añadir el suelo y el control del mouse al mundo
+    World.add(engine.world, [ground, mouseConstraint])
 
     // Usar requestAnimationFrame para el loop de animación
     let frameId: number
@@ -89,8 +80,47 @@ const BallGameComponent: React.FC = () => {
       World.clear(engine.world, false)
       Engine.clear(engine)
       render.canvas.remove()
+      ballsRef.current = []
     }
   }, [])
+
+  // Efecto para manejar cambios en el valor
+  useEffect(() => {
+    if (!engineRef.current) return
+
+    const currentValue = value
+    const prevValue = prevValueRef.current
+
+    // Si el valor actual es mayor que el anterior, añadir nuevas bolas
+    if (currentValue > prevValue) {
+      const newBallsCount = currentValue - prevValue
+
+      // Crear nuevas bolas
+      const newBalls = Array.from({ length: newBallsCount }, (_, i) => {
+        return Bodies.circle(
+          150 + Math.random() * 30, // Posición X aleatoria cerca del centro
+          50, // Posición Y inicial (desde arriba)
+          30, // Radio
+          {
+            restitution: 0.7,
+            friction: 0.1,
+            render: {
+              fillStyle: `hsl(${(ballsRef.current.length + i) * 60}, 70%, 50%)`,
+            },
+          }
+        )
+      })
+
+      // Añadir las nuevas bolas al mundo
+      World.add(engineRef.current.world, newBalls)
+
+      // Actualizar la referencia de bolas
+      ballsRef.current = [...ballsRef.current, ...newBalls]
+    }
+
+    // Actualizar el valor anterior
+    prevValueRef.current = currentValue
+  }, [value])
 
   return (
     <div
