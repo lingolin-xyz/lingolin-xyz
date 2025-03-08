@@ -117,6 +117,16 @@ const BallGameComponent: React.FC<{ value: number }> = ({ value = 1 }) => {
       // Actualizar la referencia de bolas
       ballsRef.current = [...ballsRef.current, ...newBalls]
     }
+    // Si el valor actual es menor que el anterior, eliminar bolas
+    else if (currentValue < prevValue) {
+      const ballsToRemove = ballsRef.current.slice(currentValue)
+
+      // Eliminar las bolas del mundo
+      World.remove(engineRef.current.world, ballsToRemove)
+
+      // Actualizar la referencia de bolas
+      ballsRef.current = ballsRef.current.slice(0, currentValue)
+    }
 
     // Actualizar el valor anterior
     prevValueRef.current = currentValue
