@@ -116,7 +116,7 @@ const Swap = () => {
     const theLabel = (amount: number): false | string => {
       //   console.log("amount", amount)
 
-      const amountbig = amount * 
+      const amountbig = amount * EXAGGERATION
       if (amountbig >= 0 && amountbig < 10) return false
       if (amountbig >= 0.1 && amountbig < 1) return "0.1"
       if (amountbig >= 0.01 && amountbig < 0.1) return "0.01"
