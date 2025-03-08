@@ -8,7 +8,8 @@ import {
 } from "@/lib/postgres"
 import { getUserAndCredits } from "@/lib/cachedLayer"
 import { revalidateTag } from "next/cache"
-import { generateAudioFromText } from "@/lib/tts"
+// import { generateAudioFromText } from "@/lib/tts"
+import { elevenTTS } from "@/lib/elevenlabs"
 
 export async function POST(req: Request) {
   const body = await req.json()
@@ -56,9 +57,10 @@ export async function POST(req: Request) {
   console.log(" 🥚 TEXT TO SPEECH API STARTED!", message, language)
 
   try {
-    const audio = await generateAudioFromText({
-      text: message,
-    })
+    const audio = await elevenTTS(message)
+    // const audio = await generateAudioFromText({
+    //   text: message,
+    // })
 
     if (!audio) {
       await postErrorToDiscord("No audio generated")

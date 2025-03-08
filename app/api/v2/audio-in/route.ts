@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     console.log(`🏁Buffer preparation took: ${Date.now() - startTime}ms`)
     const uploadStartTime = Date.now()
 
-    const transcription = await processAudioFile(buffer)
+    let transcription = await processAudioFile(buffer)
 
     console.log(
       `Upload and transcription took: ${Date.now() - uploadStartTime}ms`
@@ -63,6 +63,12 @@ export async function POST(req: Request) {
       userWithCredits._id,
       userWithCredits.credits - 1
     )
+
+    // replace
+    // si acaba por ". P", remove it.
+    if (transcription.endsWith(". P")) {
+      transcription = transcription.slice(0, -2)
+    }
 
     revalidateTag(`user-credits-${userId}`)
 
