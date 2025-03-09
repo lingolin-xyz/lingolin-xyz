@@ -1,12 +1,9 @@
 {
   "name": "50 Credits",
-  "description": "worth 50 uses of the Lingoling Pro features!",
+  "description": "Worth 50 uses of the Lingolin-Pro features!",
   "image": "https://lingolin.xyz/images/50credits.png",
   "external_url": "https://lingolin.xyz",
-  "attributes": [
-    { "trait_type": "Lets", "value": "Fucking Go" },
-    { "trait_type": "Added Credits", "value": "50" }
-  ],
+  "attributes": [{ "trait_type": "Added Credits", "value": "50" }],
   "properties": {
     "files": [
       {
