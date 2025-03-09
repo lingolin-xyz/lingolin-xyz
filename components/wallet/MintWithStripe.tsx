@@ -46,7 +46,11 @@ const MintWithStripe = () => {
       const res = await fetch("/api/stripe/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ quantity: mintAmount, email: userEmail }),
+        body: JSON.stringify({
+          quantity: mintAmount,
+          email: userEmail,
+          userId: user.id,
+        }),
       })
 
       const data = await res.json()

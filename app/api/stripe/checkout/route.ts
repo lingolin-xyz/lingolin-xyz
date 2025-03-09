@@ -3,7 +3,7 @@ import { NextResponse } from "next/server"
 import { stripe } from "@/lib/stripe"
 
 export async function POST(request: Request) {
-  const { quantity, email } = await request.json()
+  const { quantity, email, userId } = await request.json()
 
   if (!quantity || quantity < 1) {
     return NextResponse.json({ error: "Invalid quantity" }, { status: 400 })
@@ -30,6 +30,7 @@ export async function POST(request: Request) {
     customer_email: email,
     metadata: {
       email: email,
+      userId: userId,
     },
   })
 
