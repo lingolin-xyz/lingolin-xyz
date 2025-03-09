@@ -52,7 +52,7 @@ const NFTInProfilePage = ({ tokenId }: { tokenId: number }) => {
   }, [tokenId])
 
   return (
-    <div className="p-3 bg-secondary rounded-md text-sm flex flex-col items-center justify-center min-w-60 aspect-square">
+    <div className="p-3 bg-secondary group rounded-md text-sm hover:scale-105 transition-all duration-300 active:opacity-60 flex flex-col items-center justify-center min-w-60 aspect-square">
       {isLoading ? (
         <BlurryEntrance>
           <div className="w-10 h-10 bg-indigo-100 rounded-full animate-pulse flex items-center justify-center">
@@ -78,9 +78,13 @@ const NFTInProfilePage = ({ tokenId }: { tokenId: number }) => {
               </Tilt>
             </Link>
           )}
-          <h3 className="font-bold">{metadata.name || `NFT #${tokenId}`}</h3>
+          <h3 className="font-bold opacity-40 group-hover:opacity-100 transition-all duration-300">
+            {metadata.name || `NFT #${tokenId}`}
+          </h3>
           {metadata.description && (
-            <p className="text-xs mt-1 text-center">{metadata.description}</p>
+            <p className="text-xs mt-1 text-center opacity-40 group-hover:opacity-100 transition-all duration-300">
+              {metadata.description}
+            </p>
           )}
         </div>
       ) : (

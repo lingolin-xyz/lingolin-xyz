@@ -17,6 +17,7 @@ import BlurryEntrance from "../BlurryEntrance"
 import NFTInProfilePage from "./NFTInProfilePage"
 import { usePrivy } from "@privy-io/react-auth"
 import MintWithERC20 from "./MintWithERC20"
+import MintWithStripe from "./MintWithStripe"
 
 const UserNFTsClientExplorer = () => {
   const { user } = usePrivy()
@@ -110,16 +111,21 @@ const UserNFTsClientExplorer = () => {
   if (!isConnected) return <div>Connect your wallet to view NFTs</div>
 
   return (
-    <div>
-      <h2>Your NFT Balance</h2>
-      <p>You own {nftCount ?? 0} NFTs from this collection</p>
+    <div className="flex flex-col gap-4 flex-1 p-4">
+      {/* <h2>Your NFT Balance</h2> */}
+      {/* <p>You own {nftCount ?? 0} NFTs from this collection</p> */}
 
-      <div>
-        {/* <pre>{JSON.stringify(tokenOfOwnerByIndexData, null, 2)}</pre> */}
+      <div className="w-full flex justify-center gap-4">
+        <div className="bg-zinc-100 p-4 lg:p-9 rounded-2xl max-w-sm flex justify-center">
+          <MintWithStripe />
+        </div>
+        <div className="bg-zinc-100 p-4 lg:p-9 rounded-2xl max-w-sm flex justify-center">
+          <MintWithERC20 />
+        </div>
       </div>
       {tokenIds.length > 0 && (
         <div className="mt-4">
-          <SmolTitle>Your Token IDs</SmolTitle>
+          <SmolTitle>Your NFTs:</SmolTitle>
           <div className="mt-2 flex flex-wrap gap-4">
             {tokenIds.map((id) => (
               <NFTInProfilePage key={id} tokenId={id} />
@@ -128,34 +134,33 @@ const UserNFTsClientExplorer = () => {
         </div>
       )}
 
-      <div className="mt-6 space-y-4">
-        <h3 className="text-lg font-medium">Mint New NFTs</h3>
-        <div className="flex items-center space-x-2 justify-center select-none">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={handleDecrement}
-            disabled={mintAmount <= 1}
-          >
-            <Minus className="h-4 w-4" />
+      {/* <div className="mt-6 space-y-4">
+          <h3 className="text-lg font-medium">Mint New NFTs</h3>
+          <div className="flex items-center space-x-2 justify-center select-none">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={handleDecrement}
+              disabled={mintAmount <= 1}
+            >
+              <Minus className="h-4 w-4" />
+            </Button>
+
+            <Title>
+              <div className="min-w-16 text-center">
+                <NumberFlow value={mintAmount} />
+              </div>
+            </Title>
+
+            <Button variant="outline" size="icon" onClick={handleIncrement}>
+              <Plus className="h-4 w-4" />
+            </Button>
+          </div>
+
+          <Button onClick={handleMint} className="w-full">
+            MINT NOW!
           </Button>
-
-          <Title>
-            <div className="min-w-16 text-center">
-              <NumberFlow value={mintAmount} />
-            </div>
-          </Title>
-
-          <Button variant="outline" size="icon" onClick={handleIncrement}>
-            <Plus className="h-4 w-4" />
-          </Button>
-        </div>
-
-        <Button onClick={handleMint} className="w-full">
-          MINT NOW!
-        </Button>
-      </div>
-      <MintWithERC20 />
+        </div> */}
     </div>
   )
 }

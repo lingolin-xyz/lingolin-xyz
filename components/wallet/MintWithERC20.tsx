@@ -3,7 +3,7 @@ import { Plus } from "lucide-react"
 import { Minus } from "lucide-react"
 import { Button } from "../ui/button"
 import NumberFlow from "@number-flow/react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 import {
   NFT_CREDITS_CONTRACT_ADDRESS,
@@ -94,11 +94,15 @@ const MintWithERC20 = () => {
   }
 
   const PRICE_PER_MINT = 0.0002
-  const totalPrice = Number(PRICE_PER_MINT * mintAmount).toFixed(5)
+  const [totalPrice, setTotalPrice] = useState(0)
+
+  useEffect(() => {
+    setTotalPrice(Number(Number(PRICE_PER_MINT * mintAmount).toFixed(5)))
+  }, [mintAmount])
 
   return (
-    <div className="mt-6 space-y-4">
-      <h3 className="text-lg font-medium">Mint New NFTs</h3>
+    <div className="space-y-4">
+      <h3 className="text-lg font-medium text-center">Buy Credits as NFTs</h3>
       {isError && (
         <div className="text-red-500 text-sm">
           Error: {error?.message || "Failed to mint"}
@@ -115,7 +119,7 @@ const MintWithERC20 = () => {
         </Button>
 
         <Title>
-          <div className="min-w-16 text-center">
+          <div className="min-w-16 text-center translate-y-1">
             <NumberFlow value={mintAmount} />
           </div>
         </Title>
@@ -146,10 +150,11 @@ const MintWithERC20 = () => {
             "MINTING..."
           )
         ) : (
-          <div className="flex items-center space-x-0">
+          <div className="flex items-center space-x-0 min-w-52 justify-center">
             <span>MINT NOW! (</span>
             <span className="tabular-nums font-bold tracking-tighter">
-              ${totalPrice} USDC
+              {/* <NumberFlow value={Number(totalPrice)} /> USDC */}$
+              {totalPrice} USDC
             </span>
             <span>)</span>
           </div>
