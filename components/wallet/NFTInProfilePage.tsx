@@ -28,13 +28,20 @@ const NFTInProfilePage = ({ tokenId }: { tokenId: number }) => {
         )
 
         // Fetch tokenURI
-        const uri = await nftContract.tokenURI(tokenId)
+        console.log(" OK gonna call for tokenId:", tokenId)
 
-        // Fetch metadata from the URI
-        const response = await fetch(uri)
-        const data = await response.json()
+        try {
+          const uri = await nftContract.tokenURI(tokenId)
 
-        setMetadata(data)
+          // Fetch metadata from the URI
+          const response = await fetch(uri)
+          const data = await response.json()
+
+          setMetadata(data)
+        } catch (error) {
+          // console.error("Error fetching NFT metadata:", error)
+        }
+
         setIsLoading(false)
       } catch (error) {
         console.error("Error fetching NFT metadata:", error)
