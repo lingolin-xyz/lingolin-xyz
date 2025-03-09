@@ -8,6 +8,7 @@ import { BrowserProvider, Contract } from "ethers"
 import { NFT_CREDITS_CONTRACT_ADDRESS } from "@/lib/constants"
 import { Tilt } from "../Tilt"
 import Link from "next/link"
+import SmolTitle from "../SmolTitle"
 
 const NFTInProfilePage = ({ tokenId }: { tokenId: number }) => {
   const [isLoading, setIsLoading] = useState(true)
@@ -78,11 +79,13 @@ const NFTInProfilePage = ({ tokenId }: { tokenId: number }) => {
               </Tilt>
             </Link>
           )}
-          <h3 className="font-bold opacity-40 group-hover:opacity-100 transition-all duration-300">
-            {metadata.name || `NFT #${tokenId}`}
-          </h3>
+          <SmolTitle>
+            <div className="opacity-40 group-hover:opacity-100 transition-all duration-300">
+              {metadata.name || `NFT #${tokenId}`}
+            </div>
+          </SmolTitle>
           {metadata.description && (
-            <p className="text-xs mt-1 text-center opacity-40 group-hover:opacity-100 transition-all duration-300">
+            <p className="text-xs max-w-[160px] mt-1 text-center opacity-40 group-hover:opacity-100 transition-all duration-300">
               {metadata.description}
             </p>
           )}
