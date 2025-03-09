@@ -30,8 +30,7 @@ import { Input } from "@/components/ui/input"
 import { formatNumber, getLabelFromAmount } from "@/lib/strings"
 import { FaArrowRight, FaArrowRightArrowLeft } from "react-icons/fa6"
 import MiniTitle from "@/components/MiniTitle"
-import Link from "next/link"
-import BlurryEntrance from "@/components/BlurryEntrance"
+import { useToast } from "@/hooks/use-toast"
 
 const CONTRACTS = {
   MON: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -85,7 +84,18 @@ const Swap = () => {
 
   const { data: hash, isPending, error, sendTransaction } = useSendTransaction()
 
-  const { address, isConnecting } = useAccount()
+  const { toast } = useToast()
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Error sending transaction :( ",
+        description: "Please make sure you're on the Monad Testnet!!",
+      })
+      console.log(" ERROR TX??", error)
+    }
+  }, [error, toast])
+
+  const { address } = useAccount()
 
   // Obtener decimales de los tokens
   const { data: monDecimals } = useReadContract({
@@ -143,7 +153,7 @@ const Swap = () => {
 
     if (Number(amount) <= 0) return
 
-    // Define requestId outside the try block so it's available in finally
+    // Define requestId outside the try block so it's accessible in finally
     const requestId = currentRequestIdRef.current + 1
     currentRequestIdRef.current = requestId
 
@@ -205,7 +215,7 @@ const Swap = () => {
         console.error("Error al obtener cotización:", error)
       }
     } finally {
-      // Solo establecer isLoading a false si esta es la última solicitud iniciada
+      // Now requestId is in scope
       if (currentRequestIdRef.current === requestId) {
         setIsLoading(false)
       }
@@ -252,6 +262,8 @@ const Swap = () => {
 
       // On click, (1) Sign the Permit2 EIP-712 message returned from quote
       if (quote.permit2?.eip712) {
+        console.log(" step 1")
+
         let signature: Hex | undefined
         try {
           signature = await signTypedDataAsync(quote.permit2.eip712)
@@ -276,7 +288,11 @@ const Swap = () => {
         } else {
           throw new Error("Failed to obtain signature or transaction data")
         }
+      } else {
+        console.log(" step 2")
       }
+
+      console.log(" sending transaction....", quote)
 
       //   (3) Submit the transaction with Permit2 signature
 
@@ -329,47 +345,22 @@ const Swap = () => {
       setEstimatedOutput("0")
     }
   }
-  if (isConnecting) {
-    return (
-      <div className="p-12 py-32 w-full flex justify-center items-center">
-        Connecting...
-      </div>
-    )
-  }
 
-  if (!isConnecting && !address) {
-    return (
-      <BlurryEntrance delay={0.8}>
-        <div className="p-12 py-32 w-full flex justify-center items-center">
-          Please,{" "}
-          <Link
-            className="inline-block text-indigo-500 hover:text-indigo-800 font-semibold active:opacity-50 px-1.5"
-            href="/profile"
-          >
-            visit your profile
-          </Link>{" "}
-          and link your wallet first
-        </div>
-      </BlurryEntrance>
-    )
-  }
   //   console.log("estimatedOutput", estimatedOutput)
 
   return (
     <div className="py-12 w-full flex justify-center items-center gap-6">
-      <div className="flex-1 hidden lg:flex justify-center items-center">
-        <BlurryEntrance delay={0.3}>
-          <BallGame
-            scaleFactor={isReversed ? 4.2 : 3.5}
-            value={cube1Value.value}
-            label={cube1Value.label}
-            image={
-              isReversed
-                ? "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
-                : "https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
-            }
-          />
-        </BlurryEntrance>
+      <div className="flex-1 flex justify-center items-center">
+        <BallGame
+          scaleFactor={isReversed ? 4.2 : 3.5}
+          value={cube1Value.value}
+          label={cube1Value.label}
+          image={
+            isReversed
+              ? "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
+              : "https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
+          }
+        />
         {/* <BallGame value={3} /> */}
         {/* CUBO 1: {cube1Value.value} label:{cube1Value.label} */}
       </div>
@@ -599,19 +590,17 @@ const Swap = () => {
           </button>
         </div>
       </div>
-      <div className="flex-1 hidden lg:flex justify-center items-center">
-        <BlurryEntrance delay={0.55}>
-          <BallGame
-            value={cube2Value.value}
-            label={cube2Value.label}
-            scaleFactor={!isReversed ? 4.2 : 3.5}
-            image={
-              isReversed
-                ? "https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
-                : "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
-            }
-          />
-        </BlurryEntrance>
+      <div className="flex-1 flex justify-center items-center">
+        <BallGame
+          value={cube2Value.value}
+          label={cube2Value.label}
+          scaleFactor={!isReversed ? 4.2 : 3.5}
+          image={
+            isReversed
+              ? "https://cdn.prod.website-files.com/667c57e6f9254a4b6d914440/667d7104644c621965495f6e_LogoMark.svg"
+              : "https://raw.githubusercontent.com/maticnetwork/polygon-token-assets/main/assets/tokenAssets/usdc.svg"
+          }
+        />
       </div>
     </div>
   )
