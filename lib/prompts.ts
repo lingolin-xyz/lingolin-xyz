@@ -24,6 +24,11 @@ ${message}
     },
   ] as CoreMessage[]
 
+  // const resFromLLM = await askNillionSecretLLM({
+  //   messages,
+  //   // useCase: "translate",
+  //   temperature: 0,
+  // })
   const resFromLLM = await askAnyLLM({
     messages,
     useCase: "translate",
