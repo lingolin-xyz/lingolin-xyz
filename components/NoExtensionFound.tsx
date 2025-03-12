@@ -9,6 +9,7 @@ import ChromeStoreImageLink from "./ChromeStoreImageLink"
 import { FaXTwitter } from "react-icons/fa6"
 import { Button } from "./ui/button"
 import MiniTitle from "./MiniTitle"
+import { TWITTER_LINK } from "@/lib/constants"
 
 const NoExtensionFound = () => {
   return (
@@ -77,7 +78,7 @@ const NoExtensionFound = () => {
         </div>
 
         <div>
-          <Link href="https://twitter.com/hellolingolin" target="_blank">
+          <Link href={TWITTER_LINK} target="_blank">
             <Button variant="outline" className="group">
               <div className="flex items-center gap-2">
                 <FaXTwitter className="w-6 h-6 -translate-y-[1.3px] group-hover:rotate-[360deg] transition-all duration-500 group-active:scale-[60%] group-active:rotate-[720deg] group-active:duration-300" />

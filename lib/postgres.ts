@@ -10,7 +10,8 @@ CREATE TABLE lingolin_events (
   extra2 text,
   extra3 text,
   extra4 text,
-  created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+  extra5 text,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -82,6 +83,7 @@ process.on("SIGTERM", async () => {
     pool = null
   }
 })
+
 export const logEvent = async ({
   event_type,
   userId,
@@ -89,6 +91,7 @@ export const logEvent = async ({
   extra2,
   extra3,
   extra4,
+  extra5,
 }: {
   event_type: string
   userId: string
@@ -96,8 +99,9 @@ export const logEvent = async ({
   extra2?: string
   extra3?: string
   extra4?: string
+  extra5?: string
 }) => {
-  const query = `INSERT INTO lingolin_events (user_id, event_type, extra, extra2, extra3, extra4) VALUES ($1, $2, $3, $4, $5, $6)`
+  const query = `INSERT INTO lingolin_events (user_id, event_type, extra, extra2, extra3, extra4, extra5) VALUES ($1, $2, $3, $4, $5, $6, $7)`
   const params = [
     userId,
     event_type,
@@ -105,6 +109,7 @@ export const logEvent = async ({
     extra2 || null,
     extra3 || null,
     extra4 || null,
+    extra5 || null,
   ]
   await executeQuery(query, params)
   await postToDiscord("🥚🥚🥚🥚🥚🥚 EVENT LOGGED: " + event_type)
@@ -114,7 +119,7 @@ export const getRecentTranslationsByUserId = async (userId: string) => {
   const query = `SELECT id, event_type, extra, extra2, extra3, extra4, created_at
     FROM lingolin_events 
     WHERE user_id = $1 
-    AND (event_type = 'translation_missed' OR event_type = 'translation_hit') 
+    AND (event_type = 'translation_missed' OR event_type = 'translation_hit' or event_type = 'save_voice_note') 
     ORDER BY created_at DESC 
     LIMIT 50`
   const params = [userId]
@@ -129,4 +134,30 @@ export const deleteTranslationFromLogsById = async (translationId: string) => {
   await postToDiscord(
     "🔴🔴🔴🔴 DELETED TRANSLATION FROM LOGS: " + translationId
   )
+}
+
+export const getRecentActivity = async () => {
+  const query = `SELECT * FROM lingolin_events ORDER BY created_at DESC LIMIT 50`
+  const res = await executeQuery(query)
+  return res.rows
+}
+
+export const getTranslatedAudioByMessageAndLanguage = async ({
+  message,
+  language,
+}: {
+  message: string
+  language: string
+}) => {
+  const query = `SELECT * FROM lingolin_events WHERE event_type = 'tts_generated' AND extra = $1 AND extra2 = $2`
+  const params = [message, language]
+  const res = await executeQuery(query, params)
+  return res.rows[0]
+}
+
+export const getRecentTTsByUserId = async (userId: string) => {
+  const query = `SELECT * FROM lingolin_events WHERE event_type = 'tts_generated' AND user_id = $1 ORDER BY created_at DESC LIMIT 50`
+  const params = [userId]
+  const res = await executeQuery(query, params)
+  return res.rows
 }

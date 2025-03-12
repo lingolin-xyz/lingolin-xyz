@@ -1,6 +1,8 @@
 // @ts-expect-error - secretvaults is not typed
 import { SecretVaultWrapper } from "secretvaults"
 import { orgConfig } from "./orgConfig"
+import { postToDiscord } from "../discord"
+import { revalidateTag } from "next/cache"
 
 export async function writeCredits({
   userid,
@@ -48,7 +50,65 @@ export async function readCredits(userIdFilter?: string | null) {
   const filter = userIdFilter ? { userid: userIdFilter } : ({} as any)
 
   const dataRead = await collection.readFromNodes(filter)
-  return dataRead && dataRead.length > 0 ? dataRead[0] : null
+
+  if (userIdFilter) {
+    if (dataRead && dataRead.length > 0) {
+      const formatted = dataRead.map((item: any) => ({
+        userid: item.userid,
+        credits: parseInt(item.credits),
+        _id: item._id,
+      }))
+      return formatted[0]
+    } else {
+      return null
+    }
+  } else {
+    return dataRead.map((item: any) => ({
+      userid: item.userid,
+      credits: parseInt(item.credits),
+      _id: item._id,
+    }))
+  }
+}
+
+export const updateCreditsValueById = async (
+  recordId: string,
+  credits: number
+) => {
+  const collection = new SecretVaultWrapper(
+    orgConfig.nodes,
+    orgConfig.orgCredentials,
+    process.env.CREDITS_SECRET_VAULT_SCHEMA_ID!
+  )
+  await collection.init()
+
+  const readDataFiltered = await collection.readFromNodes({ _id: recordId })
+
+  if (readDataFiltered) {
+    const recordUpdate = readDataFiltered[0]
+    const clearRecord = {
+      userid: recordUpdate.userid,
+      credits: credits,
+    }
+
+    // console.log(
+    //   " stepppo 3 📗  FROM",
+    //   recordUpdate.credits,
+    //   " to be updated to ",
+    //   clearRecord.credits
+    // )
+
+    await collection.updateDataToNodes(clearRecord, {
+      _id: recordId,
+    })
+
+    revalidateTag(`user-credits-${clearRecord.userid}`)
+    await postToDiscord(
+      `New credits for User...: ${clearRecord.userid} ${credits}`
+    )
+  } else {
+    console.error("❌ Failed to use SecretVaultWrapper updateCreditsValueById:")
+  }
 }
 
 export const flushTranslationsData = async () => {

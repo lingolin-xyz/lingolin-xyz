@@ -13,7 +13,21 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "userId is required" }, { status: 400 })
     }
 
-    const { credits, tier } = await getUserAndCredits(userId)
+    const userAndCredits = await getUserAndCredits(userId)
+    if (!userAndCredits) {
+      await postErrorToDiscord("------ userAndCredits not found!!")
+      console.log("------ userAndCredits not found!!")
+      return NextResponse.json(
+        { error: "userAndCredits not found" },
+        { status: 400 }
+      )
+    }
+
+    const { credits, tier } = userAndCredits
+
+    console.log("------ userId: " + userId)
+    console.log("------ credits: " + credits)
+    console.log("------ tier: " + tier)
 
     return NextResponse.json(
       {

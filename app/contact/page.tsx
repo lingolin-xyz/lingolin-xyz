@@ -2,6 +2,7 @@
 
 import BlurryEntrance from "@/components/BlurryEntrance"
 import { useToast } from "@/hooks/use-toast"
+import { TWITTER_LINK } from "@/lib/constants"
 
 const Contact = () => {
   const { toast } = useToast()
@@ -44,7 +45,7 @@ const Contact = () => {
                   Twitter (Official account):{" "}
                 </span>
                 <a
-                  href="https://twitter.com/hellolingolin"
+                  href={TWITTER_LINK}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 hover:text-blue-800"

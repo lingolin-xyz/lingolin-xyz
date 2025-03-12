@@ -120,7 +120,15 @@ export async function POST(req: Request) {
         },
       }
     )
-  } catch (error) {
+  } catch (error: any) {
+    await postErrorToDiscord(
+      "Translation API Error: " +
+        JSON.stringify({
+          text,
+          userId,
+          error: error.toString().slice(0, 220),
+        })
+    )
     console.error("Translation API Error:", error)
     return new Response(
       JSON.stringify({ error: "Failed to translate message" }),

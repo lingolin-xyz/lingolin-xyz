@@ -1,4 +1,4 @@
-import type { Config } from "tailwindcss";
+import type { Config } from "tailwindcss"
 
 export default {
   darkMode: ["class"],
@@ -10,6 +10,8 @@ export default {
   theme: {
     extend: {
       colors: {
+        monad: "#7a66e8",
+        accent: "#47ec93",
         claude: "#d97757",
         background: "var(--background)",
         foreground: "var(--foreground)",
@@ -25,4 +27,4 @@ export default {
     },
   },
   plugins: [require("tailwindcss-animate"), require("tailwind-scrollbar")],
-} satisfies Config;
+} satisfies Config
