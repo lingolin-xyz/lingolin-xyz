@@ -1,11 +1,11 @@
 "use client"
 
+import { SPOTIFY_ALBUM_URL } from "@/lib/constants"
 import { useEffect } from "react"
 
 const MusicPage = () => {
   useEffect(() => {
-    window.location.href =
-      "https://distrokid.com/hyperfollow/0xjavi/lingolin-monad-hackathon-march-2025"
+    window.location.href = SPOTIFY_ALBUM_URL
   }, [])
   return <div></div>
 }
