@@ -69,8 +69,6 @@ const MintWithStripe = () => {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium">Buy Credits with your Credit Card</h3>
-
       <div className="flex items-center space-x-2 justify-center select-none">
         <Button
           variant="outline"
@@ -92,17 +90,23 @@ const MintWithStripe = () => {
         </Button>
       </div>
 
-      <Button onClick={handleCheckout} className="w-full" disabled={isPending}>
+      <Button
+        size="lg"
+        onClick={handleCheckout}
+        className="w-full"
+        disabled={isPending}
+      >
         {isPending ? (
           "Processing..."
         ) : (
           <div className="flex items-center space-x-0">
-            <span>Pay with Stripe (</span>
-            <span className="tabular-nums font-bold tracking-tighter">
+            <span>
+              Buy <NumberFlow value={50 * mintAmount} /> credits for{" "}
+            </span>
+            <span className="tabular-nums font-bold tracking-tighter pl-1.5 text-yellow-200 text-2xl">
               $<NumberFlow value={mintAmount * 1} /> USD
               {/* ${mintAmount * 1} USD */}
             </span>
-            <span>)</span>
           </div>
         )}
       </Button>

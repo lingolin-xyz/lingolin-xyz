@@ -102,7 +102,6 @@ const MintWithERC20 = () => {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-medium text-center">Buy Credits as NFTs</h3>
       {isError && (
         <div className="text-red-500 text-sm">
           Error: {error?.message || "Failed to mint"}
@@ -132,6 +131,7 @@ const MintWithERC20 = () => {
       <Button
         onClick={handleMint}
         className="w-full"
+        size="lg"
         disabled={
           Boolean(isLoading) ||
           Boolean(isPending) ||
@@ -151,12 +151,12 @@ const MintWithERC20 = () => {
           )
         ) : (
           <div className="flex items-center space-x-0 min-w-52 justify-center">
-            <span>MINT NOW! (</span>
-            <span className="tabular-nums font-bold tracking-tighter">
-              {/* <NumberFlow value={Number(totalPrice)} /> USDC */}$
-              {totalPrice} USDC
+            <span className="pr-1.5">
+              MINT NOW! → Get <NumberFlow value={mintAmount * 50} /> Credits for
             </span>
-            <span>)</span>
+            <span className="font-bold tracking-tighter text-purple-200">
+              {totalPrice} $USDC
+            </span>
           </div>
         )}
       </Button>

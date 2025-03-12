@@ -1,4 +1,3 @@
-import Title from "@/components/Title"
 import { PRIVY_APP_ID } from "@/lib/constants"
 import { PrivyClient } from "@privy-io/server-auth"
 import { cookies } from "next/headers"
@@ -6,9 +5,9 @@ import PrivyLogoutButtonWrapper from "@/components/auth/PrivyLogoutButtonWrapper
 import { redirect } from "next/navigation"
 import UserWalletClientExplorer from "@/components/wallet/UserWalletClientExplorer"
 import UserNFTsClientExplorer from "@/components/wallet/UserNFTsClientExplorer"
-import HugeTitle from "@/components/HugeTitle"
 import BigTitle from "@/components/BigTitle"
-
+import ProfilePageClient from "@/components/profile/ProfilePageClient"
+import { getUserAndCredits } from "@/lib/cachedLayer"
 const ProfilePage = async () => {
   const cookieStore = await cookies()
   // Get a specific cookie by name
@@ -30,21 +29,23 @@ const ProfilePage = async () => {
     // return <div>No user found :( </div>
   }
 
-  return (
-    <div>
-      <div className="flex justify-between items-center py-6">
-        <BigTitle>My Account</BigTitle>
-        <PrivyLogoutButtonWrapper />
-      </div>
-      <div className="flex justify-between items-start gap-8">
-        <UserWalletClientExplorer />
-        <UserNFTsClientExplorer />
-      </div>
-      {/* <div>
-        <pre className="text-xs">{JSON.stringify(user, null, 2)}</pre>
-      </div> */}
-    </div>
-  )
+  const userAndCredits = await getUserAndCredits(user.id)
+
+  if (!userAndCredits) {
+    redirect("/")
+  }
+
+  return <ProfilePageClient user={user} userObject={userAndCredits} />
+  // <div>
+  //   <div className="flex justify-between items-center py-6">
+  //     <BigTitle>My Account</BigTitle>
+  //     <PrivyLogoutButtonWrapper />
+  //   </div>
+  //   <div className="flex justify-between items-start gap-8">
+  //     <UserWalletClientExplorer />
+  //     <UserNFTsClientExplorer />
+  //   </div>
+  // </div>
 }
 
 export default ProfilePage
