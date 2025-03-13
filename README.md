@@ -34,7 +34,8 @@ barriers disappear.
 - Gemini AI,
 - Nil AI,
 - 0x for Swaps,
-- Stripe integration
+- Stripe integration,
+- Alchemy, as a secondary RPC if the official one is down,
 - Deployed on Vercel
 
 ## Main features:
