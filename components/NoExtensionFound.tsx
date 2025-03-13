@@ -35,9 +35,6 @@ const NoExtensionFound = () => {
               <div className="text-lg md:text-xl text-balance">
                 Please install the Lingolin extension to use the app.
               </div>
-              <div className="text-lg md:text-xl text-balance pt-6">
-                You can download it from the Chrome Web Store.
-              </div>
               <ChromeStoreImageLink />
             </BlurryEntrance>
           </div>
@@ -94,10 +91,6 @@ const NoExtensionFound = () => {
 
             <iframe
               src={`https://open.spotify.com/embed/album/1cED2PbzswE1h5TBilRcN7`}
-              // width="300"
-              // height="380"
-              // frameBorder="0"
-              allowTransparency={true}
               allow="encrypted-media"
               className="w-full h-[640px]"
             ></iframe>
