@@ -9,7 +9,9 @@ barriers disappear.
 
 [![Lingolin Demo](https://lingolin.xyz/thumbnail.png)](https://lingolin.xyz/videos/final-demo.mp4)
 
-### [🎬🍿 Watch the video demo here!](https://lingolin.xyz/videos/final-demo.mp4)
+### [🎬🍿 Watch the video demo here](https://lingolin.xyz/videos/final-demo.mp4)
+
+### [📊 Read our pitch deck here](https://lingolin.xyz/lingolin-deck.pdf)
 
 ## 🚀 This is the website & backend Repo!!
 
