@@ -31,6 +31,7 @@ import { formatNumber, getLabelFromAmount } from "@/lib/strings"
 import { FaArrowRight, FaArrowRightArrowLeft } from "react-icons/fa6"
 import MiniTitle from "@/components/MiniTitle"
 import { useToast } from "@/hooks/use-toast"
+import SuccessModal from "@/components/SuccessModal"
 
 const CONTRACTS = {
   MON: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
@@ -119,6 +120,14 @@ const Swap = () => {
     address,
     token: CONTRACTS.USDC as `0x${string}`,
   })
+
+  const [successModal, setSuccessModal] = useState<false | string>(false)
+
+  useEffect(() => {
+    if (hash) {
+      setSuccessModal(hash)
+    }
+  }, [hash, toast])
 
   useEffect(() => {
     setCube1Value({
@@ -350,6 +359,10 @@ const Swap = () => {
 
   return (
     <div className="py-12 w-full flex justify-center items-center gap-6">
+      <SuccessModal
+        successModal={successModal}
+        setSuccessModal={setSuccessModal}
+      />
       <div className="flex-1 flex justify-center items-center">
         <BallGame
           scaleFactor={isReversed ? 4.2 : 3.5}
