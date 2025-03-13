@@ -13,7 +13,7 @@ barriers disappear.
 
 ### [📊 Read our pitch deck here](https://lingolin.xyz/lingolin-deck.pdf)
 
-## 🚀 This is the website & backend Repo!!
+### Note: This is the website & backend Repo!!
 
 - If you're interested in the Chrome Extension's code, please go to
   [The Extension Repo](https://github.com/lingolin-xyz/lingolin-extension)
