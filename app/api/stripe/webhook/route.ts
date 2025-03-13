@@ -26,10 +26,18 @@ export async function POST(request: Request) {
 
   switch (event.type) {
     case "checkout.session.completed":
-      const session = event.data.object as Stripe.Checkout.Session
+      const session = (await stripe.checkout.sessions.retrieve(
+        event.data.object.id,
+        {
+          expand: ["line_items"],
+        }
+      )) as Stripe.Checkout.Session
 
       const userId = session.metadata?.userId
       const quantity = session.line_items?.data[0]?.quantity ?? 1
+
+      console.log("session.line_items 👀 👀 👀 👀 👀 👀 👀 ")
+      console.log(session.line_items, quantity)
 
       console.log(
         `🔔 Compra completada para usuario ${userId}: ${quantity * 50} créditos`
@@ -47,10 +55,6 @@ export async function POST(request: Request) {
 }
 
 async function updateUserCredits(userId: string, credits: number) {
-  await postToDiscord(
-    `🔔 Compra completada para usuario ${userId}: ${credits} créditos`
-  )
-
   console.log(
     `DB actualizada: Usuario ${userId} ha recibido ${credits} créditos.`
   )
@@ -70,5 +74,5 @@ async function updateUserCredits(userId: string, credits: number) {
     userWithCredits.credits + credits
   )
 
-  await postToDiscord(`🔔 Usuario ${userId} ha recibido ${credits} créditos.`)
+  await postToDiscord(`🔔 Usuario ${userId} ha comprado ${credits} créditos.`)
 }
