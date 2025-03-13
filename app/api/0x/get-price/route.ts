@@ -29,15 +29,21 @@ export async function POST(req: Request) {
     "0x-version": "v2",
   })
 
-  const priceResponse = await fetch(
-    "https://api.0x.org/swap/permit2/price?" + priceParams.toString(),
-    { headers }
-  )
+  try {
+    const priceResponse = await fetch(
+      "https://api.0x.org/swap/permit2/price?" + priceParams.toString(),
+      { headers }
+    )
 
-  const quote = await priceResponse.json()
+    const quote = await priceResponse.json()
 
-  console.log("quote")
-  console.log(quote)
+    console.log("quote")
+    console.log(quote)
 
-  return NextResponse.json({ buyAmount: quote.buyAmount, quote })
+    return NextResponse.json({ buyAmount: quote.buyAmount, quote })
+  } catch (error) {
+    console.error(error)
+
+    return NextResponse.json({ error: "Error fetching price" }, { status: 500 })
+  }
 }
