@@ -1,4 +1,4 @@
-import { Plus } from "lucide-react"
+import { Loader2, Plus } from "lucide-react"
 
 import { Minus } from "lucide-react"
 import { Button } from "../ui/button"
@@ -16,6 +16,9 @@ import { parseUnits } from "viem"
 import { useToast } from "@/hooks/use-toast"
 
 import USDC_CONTRACT_ABI from "@/lib/abi/USDCABI.json"
+import BlurryEntranceFaster from "../BlurryEntranceFaster"
+import axios from "axios"
+import { useUser } from "@privy-io/react-auth"
 
 const MintWithERC20 = () => {
   const { address } = useAccount()
@@ -27,9 +30,10 @@ const MintWithERC20 = () => {
     isPending: isLoading,
     isError,
     error,
+    data: mintResult,
   } = useContractWrite()
 
-  const { data: usdcBalance } = useContractRead({
+  const { data: usdcBalance, isLoading: isLoadingBalance } = useContractRead({
     address: USDC_MONAD_TESTNET_CONTRACT_ADDRESS,
     abi: USDC_CONTRACT_ABI,
     functionName: "balanceOf",
@@ -55,6 +59,31 @@ const MintWithERC20 = () => {
   }
 
   const { toast } = useToast()
+
+  const { user } = useUser()
+
+  useEffect(() => {
+    if (!user) return
+
+    if (mintResult) {
+      console.log("  💚  Minting result:", mintResult)
+
+      // call backend to update the credits:
+      axios.post("/api/v2/update-credits", {
+        address: address,
+        amount: mintAmount,
+        txHash: mintResult,
+        units: mintAmount,
+        userId: user?.id,
+      })
+
+      toast({
+        title: "Minting Successful!",
+        description: `Transaction Hash: ${mintResult}`,
+      })
+    }
+  }, [mintResult, toast, user, address, mintAmount])
+
   const handleMint = async () => {
     toast({
       title: "Minting...",
@@ -88,6 +117,11 @@ const MintWithERC20 = () => {
       })
     } catch (err) {
       console.error("Minting failed:", err)
+      toast({
+        title: "Error",
+        description: "Failed to mint NFTs",
+        variant: "destructive",
+      })
     } finally {
       setIsPending(false)
     }
@@ -100,67 +134,96 @@ const MintWithERC20 = () => {
     setTotalPrice(Number(Number(PRICE_PER_MINT * mintAmount).toFixed(5)))
   }, [mintAmount])
 
-  return (
-    <div className="space-y-4">
-      {isError && (
-        <div className="text-red-500 text-sm">
-          Error: {error?.message || "Failed to mint"}
+  let canMint = false
+
+  if (usdcBalance) {
+    if (Number(usdcBalance?.toString()) > Number(PRICE_PER_MINT * mintAmount)) {
+      canMint = true
+    }
+  }
+
+  if (isLoadingBalance)
+    return (
+      <div className="flex items-center space-x-2 justify-center select-none py-12">
+        <div>Reading your balance...</div>
+        <div>
+          <Loader2 className="h-4 w-4 animate-spin" />
         </div>
-      )}
-      <div className="flex items-center space-x-2 justify-center select-none">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={handleDecrement}
-          disabled={mintAmount <= 1}
-        >
-          <Minus className="h-4 w-4" />
-        </Button>
-
-        <Title>
-          <div className="min-w-16 text-center translate-y-1">
-            <NumberFlow value={mintAmount} />
-          </div>
-        </Title>
-
-        <Button variant="outline" size="icon" onClick={handleIncrement}>
-          <Plus className="h-4 w-4" />
-        </Button>
       </div>
+    )
 
-      <Button
-        onClick={handleMint}
-        className="w-full"
-        size="lg"
-        disabled={
-          Boolean(isLoading) ||
-          Boolean(isPending) ||
-          Boolean(isApproving) ||
-          Boolean(
-            usdcBalance &&
-              BigInt(usdcBalance.toString()) <
-                parseUnits((PRICE_PER_MINT * mintAmount).toString(), 6)
-          )
-        }
-      >
-        {isLoading || isPending || isApproving ? (
-          isApproving ? (
-            "APPROVING USDC..."
-          ) : (
-            "MINTING..."
-          )
-        ) : (
-          <div className="flex items-center space-x-0 min-w-52 justify-center">
-            <span className="pr-1.5">
-              MINT NOW! → Get <NumberFlow value={mintAmount * 50} /> Credits for
-            </span>
-            <span className="font-bold tracking-tighter text-purple-200">
-              {totalPrice} $USDC
-            </span>
+  if (!canMint) {
+    return (
+      <div className="text-red-500 text-sm">
+        You don&apos;t have enough USDC to mint
+      </div>
+    )
+  }
+
+  return (
+    <BlurryEntranceFaster>
+      <div className="space-y-4">
+        {isError && (
+          <div className="text-red-500 text-sm">
+            Error: {error?.message || "Failed to mint"}
           </div>
         )}
-      </Button>
-    </div>
+        <div className="flex items-center space-x-2 justify-center select-none">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleDecrement}
+            disabled={mintAmount <= 1}
+          >
+            <Minus className="h-4 w-4" />
+          </Button>
+
+          <Title>
+            <div className="min-w-16 text-center translate-y-1">
+              <NumberFlow value={mintAmount} />
+            </div>
+          </Title>
+
+          <Button variant="outline" size="icon" onClick={handleIncrement}>
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
+
+        <Button
+          onClick={handleMint}
+          className="w-full"
+          size="lg"
+          disabled={
+            Boolean(isLoading) ||
+            Boolean(isPending) ||
+            Boolean(isApproving) ||
+            Boolean(
+              usdcBalance &&
+                BigInt(usdcBalance.toString()) <
+                  parseUnits((PRICE_PER_MINT * mintAmount).toString(), 6)
+            )
+          }
+        >
+          {isLoading || isPending || isApproving ? (
+            isApproving ? (
+              "APPROVING USDC..."
+            ) : (
+              "MINTING..."
+            )
+          ) : (
+            <div className="flex items-center space-x-0 min-w-52 justify-center">
+              <span className="pr-1.5">
+                MINT NOW! → Get <NumberFlow value={mintAmount * 50} /> Credits
+                for
+              </span>
+              <span className="font-bold tracking-tighter text-purple-200">
+                {totalPrice} $USDC
+              </span>
+            </div>
+          )}
+        </Button>
+      </div>
+    </BlurryEntranceFaster>
   )
 }
 

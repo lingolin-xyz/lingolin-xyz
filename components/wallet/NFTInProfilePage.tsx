@@ -29,7 +29,7 @@ const NFTInProfilePage = ({ tokenId }: { tokenId: number }) => {
         )
 
         // Fetch tokenURI
-        console.log(" OK gonna call for tokenId:", tokenId)
+        console.log("Fetching tokenURI for tokenId:", tokenId)
 
         try {
           const uri = await nftContract.tokenURI(tokenId)
