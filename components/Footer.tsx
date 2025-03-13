@@ -40,6 +40,15 @@ const Footer = () => {
             <div>
               <Link
                 className="text-indigo-500 font-semibold hover:text-indigo-400 active:opacity-60 transition-all duration-100"
+                href="/music"
+              >
+                Music
+              </Link>
+            </div>
+            <div>·</div>
+            <div>
+              <Link
+                className="text-indigo-500 font-semibold hover:text-indigo-400 active:opacity-60 transition-all duration-100"
                 href="/contact"
               >
                 Contact Us
@@ -51,7 +60,7 @@ const Footer = () => {
                 className="text-indigo-500 font-semibold hover:text-indigo-400 active:opacity-60 transition-all duration-100"
                 href="/terms-and-conditions"
               >
-                Terms and Conditions
+                Terms of Use
               </Link>
             </div>
             <div>·</div>
