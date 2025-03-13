@@ -2,13 +2,10 @@
 
 import { useEffect, useState } from "react"
 import { usePrivy } from "@privy-io/react-auth"
-
 import LoginScreen from "./LoginScreen"
-import BigTitle from "./BigTitle"
 import { Button } from "./ui/button"
 import { useToast } from "@/hooks/use-toast"
 import axios from "axios"
-import Title from "./Title"
 import TranslationInRecentList from "./TranslationInRecentList"
 import PlaygroundAndDragImage from "./PlaygroundAndDragImage"
 import { getEmailAddressFromPrivyUserObject } from "@/lib/privy-utils-client"
@@ -172,6 +169,9 @@ const ExtensionInstalledOK = () => {
           </div>
         </div>
       )}
+      <div className="max-w-3xl mx-auto my-20">
+        <InfoSection />
+      </div>
     </div>
   )
 }
