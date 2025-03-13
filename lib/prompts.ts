@@ -24,14 +24,8 @@ ${message}
     },
   ] as CoreMessage[]
 
-  // const resFromLLM = await askNillionSecretLLM({
-  //   messages,
-  //   // useCase: "translate",
-  //   temperature: 0,
-  // })
   const resFromLLM = await askAnyLLM({
     messages,
-    useCase: "translate",
     model: "gemini-2.0-flash-exp",
     temperature: 0,
   })
@@ -62,15 +56,8 @@ ${sentence}
 
   const resFromLLM = await askNillionSecretLLM({
     messages,
-    // useCase: "identify-language",
     temperature: 0,
   })
-  // const resFromLLM = await askAnyLLM({
-  //   messages,
-  //   useCase: "identify-language",
-  //   model: "gemini-2.0-flash-exp",
-  //   temperature: 0,
-  // })
 
   if (!resFromLLM) {
     await postErrorToDiscord("no res from llm!")
