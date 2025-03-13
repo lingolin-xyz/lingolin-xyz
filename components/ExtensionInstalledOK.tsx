@@ -15,6 +15,7 @@ import { getEmailAddressFromPrivyUserObject } from "@/lib/privy-utils-client"
 import SmolTitle from "./SmolTitle"
 import MiniTitle from "./MiniTitle"
 import MiniAudioPlayer from "./MiniAudioPlayer"
+import InfoSection from "./InfoSection"
 
 const ExtensionInstalledOK = () => {
   const { user } = usePrivy()
@@ -159,7 +160,17 @@ const ExtensionInstalledOK = () => {
           </div>
         </div>
       ) : (
-        <LoginScreen />
+        <div>
+          <LoginScreen />
+          <div className="max-w-3xl mx-auto my-20 ">
+            <div className="pb-6 text-center">
+              <SmolTitle>
+                Lingolin is a project for the Monad Hackathon, March 2025
+              </SmolTitle>
+            </div>
+            <InfoSection />
+          </div>
+        </div>
       )}
     </div>
   )

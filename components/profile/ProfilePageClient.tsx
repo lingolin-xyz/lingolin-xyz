@@ -11,6 +11,7 @@ import Link from "next/link"
 import MonadMintDialog from "./MonadMintDialog"
 import PrettyWallet from "./PrettyWallet"
 import NFTsViewer from "./NFTsViewer"
+import PrivyLogoutButtonWrapper from "../auth/PrivyLogoutButtonWrapper"
 
 type DialogType = "stripe" | "monad" | "linking" | "monadModal" | null
 
@@ -57,6 +58,9 @@ const ProfilePageClient = ({
         open={activeDialog === "monadModal"}
         onClose={() => setActiveDialog(null)}
       />
+      <div className="flex justify-end w-full">
+        <PrivyLogoutButtonWrapper />
+      </div>
       <Title>You have {userObject.credits} credits</Title>
       <div className="flex items-center justify-center gap-4">
         <Button size="lg" onClick={() => setActiveDialog("stripe")}>

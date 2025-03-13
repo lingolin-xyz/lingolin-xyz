@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import BigTitle from "./BigTitle"
 import BlurryEntrance from "./BlurryEntrance"
+import InfoSection from "./InfoSection"
 import Link from "next/link"
 import Title from "./Title"
 import ChromeStoreImageLink from "./ChromeStoreImageLink"
@@ -52,50 +53,8 @@ const NoExtensionFound = () => {
           </div>
         </div>
 
-        <div className="flex flex-col gap-4 bg-gradient-to-br from-indigo-50 to-indigo-200 p-4 rounded-xl">
-          <MiniTitle>Final Submission Video</MiniTitle>
-          <BlurryEntrance delay={0.5}>
-            <div className="flex justify-center items-center">
-              <div className="w-full flex justify-center items-center border-4 border-black max-w-2xl rounded-xl overflow-hidden">
-                <video
-                  src="/videos/final-demo.mp4"
-                  controls
-                  className="scale-[101%]"
-                />
-              </div>
-            </div>
-          </BlurryEntrance>
-        </div>
+        <InfoSection />
 
-        <div className="py-12">
-          <div className="flex flex-col gap-4 bg-gradient-to-br from-yellow-50 to-yellow-200 p-4 rounded-xl">
-            <MiniTitle>Previous Demo Video</MiniTitle>
-
-            <BlurryEntrance delay={0.5}>
-              <div className="flex justify-center items-center">
-                <div className="w-full flex justify-center items-center border-4 border-black max-w-2xl rounded-xl overflow-hidden">
-                  <video
-                    src="/videos/lingolin-demo-1.mp4"
-                    controls
-                    className="scale-[101%]"
-                  />
-                </div>
-              </div>
-            </BlurryEntrance>
-          </div>
-        </div>
-
-        <div className="py-12">
-          <div className="flex flex-col gap-4 bg-gradient-to-br from-purple-50 to-purple-200 p-4 rounded-xl">
-            <MiniTitle>Our Hatckathon Sountrack</MiniTitle>
-
-            <iframe
-              src={`https://open.spotify.com/embed/album/1cED2PbzswE1h5TBilRcN7`}
-              allow="encrypted-media"
-              className="w-full h-[640px]"
-            ></iframe>
-          </div>
-        </div>
         <MiniTitle>
           <BlurryEntrance delay={0.3}>
             <div className="pt-24">Install the extension to get started!</div>
