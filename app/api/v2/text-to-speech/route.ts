@@ -50,7 +50,7 @@ export async function POST(req: Request) {
     await postErrorToDiscord("User has no credits!! " + userId)
     return NextResponse.json({
       finished: false,
-      error: "User has no credits",
+      error: "You have no credits left :(",
     })
   }
 
