@@ -6,13 +6,12 @@ import { stripe } from "@/lib/stripe"
 
 // Next.js provides searchParams prop for server components
 const SuccessPage = async ({
-  searchParams,
+  params,
 }: {
-  searchParams: { session_id: string }
+  params: Promise<{ session_id: string }>
 }) => {
-  const sessionId = searchParams.session_id
-
-  const session = await stripe.checkout.sessions.retrieve(sessionId, {
+  const { session_id } = await params
+  const session = await stripe.checkout.sessions.retrieve(session_id, {
     expand: ["line_items"],
   })
 
