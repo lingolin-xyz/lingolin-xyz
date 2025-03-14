@@ -1,11 +1,12 @@
 import { getUserAndCredits } from "@/lib/cachedLayer"
-import { postErrorToDiscord } from "@/lib/discord"
+import { postErrorToDiscord, postToDiscord } from "@/lib/discord"
 import { updateCreditsValueById } from "@/lib/nillion/utils"
+import { revalidateTag } from "next/cache"
 import { NextResponse } from "next/server"
 
 export async function POST(req: Request) {
   const body = await req.json()
-  const { address, amount, txHash, units, userId } = body
+  const { units, userId } = body
 
   const userWithCredits = await getUserAndCredits(userId)
   if (!userWithCredits) {
@@ -21,4 +22,17 @@ export async function POST(req: Request) {
     userWithCredits._id,
     userWithCredits.credits + 50 * units
   )
+
+  await postToDiscord(
+    `Added ${50 * units} credits to user ${userId}. New total: ${
+      userWithCredits.credits + 50 * units
+    }`
+  )
+
+  revalidateTag(`user-credits-${userId}`)
+
+  return NextResponse.json({
+    finished: true,
+    message: "Credits updated successfully",
+  })
 }

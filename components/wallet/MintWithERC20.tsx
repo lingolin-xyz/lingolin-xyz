@@ -63,24 +63,23 @@ const MintWithERC20 = () => {
   const { user } = useUser()
 
   useEffect(() => {
-    if (!user) return
-
-    if (mintResult) {
-      console.log("  💚  Minting result:", mintResult)
-
-      // call backend to update the credits:
-      axios.post("/api/v2/update-credits", {
+    const callToMint = async () => {
+      if (!user) return
+      await axios.post("/api/v2/update-credits", {
         address: address,
         amount: mintAmount,
         txHash: mintResult,
         units: mintAmount,
-        userId: user?.id,
+        userId: user.id,
       })
-
       toast({
         title: "Minting Successful!",
         description: `Transaction Hash: ${mintResult}`,
       })
+    }
+
+    if (mintResult) {
+      callToMint()
     }
   }, [mintResult, toast, user, address, mintAmount])
 
