@@ -205,7 +205,7 @@ const Swap = () => {
 
       const data = res.data
 
-      console.log("data::::", data)
+      console.log("data::::", data.quote)
       if (data.quote.name === "INTERNAL_SERVER_ERROR") {
         toast({
           title: "Error fetching quote from the 0x API",
