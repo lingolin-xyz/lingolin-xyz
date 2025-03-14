@@ -23,18 +23,16 @@ barriers disappear.
 
 ## Website Stack:
 
-- NextJS,
-- TailwindCSS,
-- Shadcnui,
-- Framer-motion,
-- Wagmi,
-- Privy,
-- Nillion,
-- App Router,
-- Gemini AI,
-- Nil AI,
-- 0x for Swaps,
-- Stripe integration,
+- Frontend stuff with NextJS, TailwindCSS, Shadcnui, Framer-motion
+- Wagmi for contracts interaction and wallate balance reading
+- Privy: auth, social login, user management, wallet linking
+- Nillion's SecretVault as the database: Credits are _secret_ and all
+  translations are stored there too.
+- NextJS App Router for POST and GET API endpoints
+- Gemini Flash: speech-to-text, transcriptions, vision to read images
+- Nil AI: as part of the translation process
+- 0x for Swaps between $MON and $USDC
+- Stripe integration for non-crypto natives
 - Alchemy, as a secondary RPC if the official one is down,
 - Deployed on Vercel
 
@@ -50,14 +48,15 @@ barriers disappear.
 - Drag to Transcribe: drag an image and get the translaction (using the chrome
   extension too!)
 - Your previos tts and regular text translations, that you can delete
-- Dashboard for admins with a Nillion playground, activity tracking, list of
-  users and some stats.
+- Dashboard (for limited admin email addresses) including a Nillion playground,
+  activity tracking, list of users and some very basic stats.
 
 ### to install it and run it locally:
 
 - clone the repo
 - run `npm i --force`
 - run `npm run dev`
+- set up the env variables following the exampoe at `.env.local.example`
 
 ### Contact us
 
