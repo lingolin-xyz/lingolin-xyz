@@ -204,16 +204,26 @@ const Swap = () => {
       )
 
       const data = res.data
-      const { buyAmount } = data
 
-      if (buyAmount) {
-        const buyDecimals = isReversed
-          ? Number(monDecimals || 18)
-          : Number(usdcDecimals || 6)
-        setEstimatedOutput(formatUnits(BigInt(buyAmount), buyDecimals))
-        // console.log("buyAmount", buyAmount)
-        // console.log("formatted", formatUnits(BigInt(buyAmount), buyDecimals))
-        setThePrice(data.quote)
+      console.log("data::::", data)
+      if (data.quote.name === "INTERNAL_SERVER_ERROR") {
+        toast({
+          title: "Error fetching quote from the 0x API",
+          description:
+            "Please try again later.. we're so sorry! Other days this was working! SORRY!!",
+        })
+      } else {
+        const { buyAmount } = data
+
+        if (buyAmount) {
+          const buyDecimals = isReversed
+            ? Number(monDecimals || 18)
+            : Number(usdcDecimals || 6)
+          setEstimatedOutput(formatUnits(BigInt(buyAmount), buyDecimals))
+          // console.log("buyAmount", buyAmount)
+          // console.log("formatted", formatUnits(BigInt(buyAmount), buyDecimals))
+          setThePrice(data.quote)
+        }
       }
     } catch (error) {
       // Don't show error if it was just a cancellation
