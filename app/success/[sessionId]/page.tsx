@@ -8,10 +8,12 @@ import { stripe } from "@/lib/stripe"
 const SuccessPage = async ({
   params,
 }: {
-  params: Promise<{ session_id: string }>
+  params: Promise<{ sessionId: string }>
 }) => {
-  const { session_id } = await params
-  const session = await stripe.checkout.sessions.retrieve(session_id, {
+  const { sessionId } = await params
+  // console.log("sessionId::::", sessionId)
+  // return <div>Success {sessionId}</div>
+  const session = await stripe.checkout.sessions.retrieve(sessionId, {
     expand: ["line_items"],
   })
 
