@@ -1,4 +1,5 @@
 import { TESTNET_CHAIN_ID } from "@/lib/constants"
+import { postToDiscord } from "@/lib/discord"
 import { updateCreditsValueById } from "@/lib/nillion/utils"
 import { headers } from "next/headers"
 import { NextResponse } from "next/server"
@@ -39,6 +40,8 @@ export async function POST(req: Request) {
 
     console.log("quote")
     console.log(quote)
+
+    await postToDiscord("0x Price called!")
 
     return NextResponse.json({ buyAmount: quote.buyAmount, quote })
   } catch (error) {
