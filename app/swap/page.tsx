@@ -211,6 +211,7 @@ const Swap = () => {
           title: "Error fetching quote from the 0x API",
           description:
             "Please try again later.. we're so sorry! Other days this was working! SORRY!!",
+          variant: "destructive",
         })
       } else {
         const { buyAmount } = data
