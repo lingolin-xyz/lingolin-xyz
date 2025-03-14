@@ -19,6 +19,7 @@ import USDC_CONTRACT_ABI from "@/lib/abi/USDCABI.json"
 import BlurryEntranceFaster from "../BlurryEntranceFaster"
 import axios from "axios"
 import { useUser } from "@privy-io/react-auth"
+import Link from "next/link"
 
 const MintWithERC20 = () => {
   const { address } = useAccount()
@@ -153,8 +154,13 @@ const MintWithERC20 = () => {
 
   if (!canMint) {
     return (
-      <div className="text-red-500 text-sm">
-        You don&apos;t have enough USDC to mint
+      <div>
+        <div className="text-red-500 text-xl">
+          You don&apos;t have enough USDC to mint
+        </div>
+        <Link href="/swap">
+          <Button>Swap using 0x</Button>
+        </Link>
       </div>
     )
   }
