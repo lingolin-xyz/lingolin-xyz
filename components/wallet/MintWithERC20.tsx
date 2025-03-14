@@ -20,6 +20,7 @@ import BlurryEntranceFaster from "../BlurryEntranceFaster"
 import axios from "axios"
 import { useUser } from "@privy-io/react-auth"
 import Link from "next/link"
+import SmolTitle from "../SmolTitle"
 
 const MintWithERC20 = () => {
   const { address } = useAccount()
@@ -48,8 +49,11 @@ const MintWithERC20 = () => {
     args: [address as `0x${string}` | undefined, NFT_CREDITS_CONTRACT_ADDRESS],
   })
 
-  const { writeContract: approveUsdc, isPending: isApproving } =
-    useContractWrite()
+  const {
+    writeContract: approveUsdc,
+    isPending: isApproving,
+    data: approveResult,
+  } = useContractWrite()
 
   const handleDecrement = () => {
     setMintAmount(mintAmount - 1)
@@ -63,19 +67,20 @@ const MintWithERC20 = () => {
 
   const { user } = useUser()
 
+  const [showMintingSuccess, setShowMintingSuccess] = useState<string | null>(
+    null
+  )
+
   useEffect(() => {
     const callToMint = async () => {
       if (!user) return
+      setShowMintingSuccess(mintResult ? mintResult : null)
       await axios.post("/api/v2/update-credits", {
         address: address,
         amount: mintAmount,
         txHash: mintResult,
         units: mintAmount,
         userId: user.id,
-      })
-      toast({
-        title: "Minting Successful!",
-        description: `Transaction Hash: ${mintResult}`,
       })
     }
 
@@ -84,14 +89,30 @@ const MintWithERC20 = () => {
     }
   }, [mintResult, toast, user, address, mintAmount])
 
+  useEffect(() => {
+    const callToMint = async () => {
+      await new Promise((resolve) => setTimeout(resolve, 1500))
+      await writeContract({
+        address: NFT_CREDITS_CONTRACT_ADDRESS,
+        abi: NFT_CREDITS_CONTRACT_ABI,
+        functionName: "mintNFTWithToken",
+        args: [mintAmount],
+      })
+    }
+
+    if (approveResult) {
+      console.log("approveResult", approveResult)
+      callToMint()
+    }
+  }, [approveResult, writeContract, mintAmount])
+
   const handleMint = async () => {
-    toast({
-      title: "Minting...",
-      description: "Minting your NFTs..." + address,
-    })
+    // toast({
+    //   title: "Minting...",
+    //   description: "Minting your NFTs..." + address,
+    // })
     try {
       setIsPending(true)
-
       const requiredAmount = parseUnits(
         (PRICE_PER_MINT * mintAmount).toString(),
         6
@@ -108,13 +129,6 @@ const MintWithERC20 = () => {
           args: [NFT_CREDITS_CONTRACT_ADDRESS, requiredAmount],
         })
       }
-
-      await writeContract({
-        address: NFT_CREDITS_CONTRACT_ADDRESS,
-        abi: NFT_CREDITS_CONTRACT_ABI,
-        functionName: "mintNFTWithToken",
-        args: [mintAmount],
-      })
     } catch (err) {
       console.error("Minting failed:", err)
       toast({
@@ -167,6 +181,25 @@ const MintWithERC20 = () => {
 
   return (
     <BlurryEntranceFaster>
+      {showMintingSuccess && (
+        <div className="p-4 bg-emerald-100 flex flex-col items-center justify-center gap-2">
+          <SmolTitle>Minting successful!</SmolTitle>
+          <div className="flex items-center gap-2 flex-col justify-center">
+            <Link
+              href={`https://testnet.monadexplorer.com/tx/${showMintingSuccess}`}
+              target="_blank"
+              className="flex items-center gap-2 flex-col justify-center"
+            >
+              <div>see the transaction:</div>
+              <Button variant="ghost">
+                <div>
+                  <img src="/explorer.svg" />
+                </div>
+              </Button>
+            </Link>
+          </div>
+        </div>
+      )}
       <div className="space-y-4">
         {isError && (
           <div className="text-red-500 text-sm">
