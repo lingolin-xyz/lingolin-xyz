@@ -62,7 +62,7 @@ const InfoSection = () => {
 
       <div className="py-12">
         <div className="flex flex-col gap-4 bg-gradient-to-br from-purple-50 to-purple-200 p-4 rounded-xl">
-          <MiniTitle>Our Hatckathon Sountrack</MiniTitle>
+          <MiniTitle>Our Hackathon Soundtrack</MiniTitle>
 
           <iframe
             src={`https://open.spotify.com/embed/album/1cED2PbzswE1h5TBilRcN7`}
