@@ -12,6 +12,7 @@ import MonadMintDialog from "./MonadMintDialog"
 import PrettyWallet from "./PrettyWallet"
 import NFTsViewer from "./NFTsViewer"
 import PrivyLogoutButtonWrapper from "../auth/PrivyLogoutButtonWrapper"
+import BlurryEntrance from "../BlurryEntrance"
 
 type DialogType = "stripe" | "monad" | "linking" | "monadModal" | null
 
@@ -61,22 +62,28 @@ const ProfilePageClient = ({
       <div className="flex justify-end w-full">
         <PrivyLogoutButtonWrapper />
       </div>
-      <Title>You have {userObject.credits} credits</Title>
-      <div className="flex items-center justify-center gap-4">
-        <Button size="lg" onClick={() => setActiveDialog("stripe")}>
-          Buy using Stripe
-        </Button>
-        <Button size="lg" onClick={() => setActiveDialog("monad")}>
-          Buy using your wallet on MONAD
-        </Button>
-        {isConnected && (
-          <Link href="/swap">
-            <Button size="lg">Swap $MON↔️$USDC</Button>
-          </Link>
-        )}
-      </div>
-      {address && <PrettyWallet />}
-      <NFTsViewer />
+      <>
+        <Title>You have {userObject.credits} credits</Title>
+      </>
+      <>
+        <div className="flex items-center justify-center gap-4">
+          <Button size="lg" onClick={() => setActiveDialog("stripe")}>
+            Buy using Stripe
+          </Button>
+          <Button size="lg" onClick={() => setActiveDialog("monad")}>
+            Buy using your wallet on MONAD
+          </Button>
+          {isConnected && (
+            <Link href="/swap">
+              <Button size="lg">Swap $MON↔️$USDC</Button>
+            </Link>
+          )}
+        </div>
+      </>
+      <BlurryEntrance delay={0.4}>{address && <PrettyWallet />}</BlurryEntrance>
+      <BlurryEntrance delay={0.6}>
+        <NFTsViewer />
+      </BlurryEntrance>
       {/* <div>
         <pre>{JSON.stringify(userObject, null, 2)}</pre>
         <pre>{JSON.stringify(user, null, 2)}</pre>
